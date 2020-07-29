@@ -1,8 +1,19 @@
 import React from 'react';
+import { hot } from 'react-hot-loader/root';
 import logo from './logo.svg';
 import './App.css';
+import AuthService from './services/auth.service';
+
 
 function App() {
+  const data = {
+    username: 'hello@world.pl',
+    password: 'zaq1@WSX'
+  };
+
+  AuthService.login(data).then(function (res) {
+    console.log(res);
+  });
   return (
     <div className="App">
       <header className="App-header">
@@ -23,4 +34,4 @@ function App() {
   );
 }
 
-export default App;
+export default hot(App);
