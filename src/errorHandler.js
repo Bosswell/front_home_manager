@@ -1,4 +1,13 @@
 export const errorHandler = (error) => {
+    if (error.response.status === 401) {
+        return {
+            'message': 'Invalid credentials',
+            'code': 401,
+            'data': [],
+            'errors': []
+        }
+    }
+
     if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
