@@ -1,6 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
-import './App.css';
+import './scss/form.scss';
+import './scss/global.scss';
+
 import AuthService from './services/auth.service';
 import {
     Route,
@@ -10,7 +12,7 @@ import {
     useHistory,
     useLocation
 } from 'react-router-dom'
-import LoginForm from "./LoginForm";
+import LoginPage from "./LoginPage";
 import HomePage from "./HomePage";
 import Dashboard from "./Dashboard";
 import PrivateRoute from "./PrivateRoute";
@@ -41,14 +43,17 @@ class App extends React.Component {
         // let user = localStorage.getItem('user')
 
         return (
-            <div>
+            <div className={'container'}>
                 {/*<ul>*/}
                 {/*  <li> <Link to="/">Home</Link> </li>*/}
                 {/*  <li> <Link to="/login">Login</Link> </li>*/}
                 {/*</ul>*/}
+                <div>
+                    <h1 className={'text-center'}>Cash manager</h1>
+                </div>
                 <Switch>
                     <Route exact path="/" component={HomePage}/>
-                    <Route exact path="/login" component={LoginForm}/>
+                    <Route exact path="/login" component={LoginPage}/>
                     <Route exact path="/register" component={RegisterForm}/>
 
                     <PrivateRoute authed={!!this.state.user} path='/dashboard' component={Dashboard} />

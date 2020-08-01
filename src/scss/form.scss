@@ -1,0 +1,40 @@
+.form {
+  font-size: 15px;
+  padding: 5px;
+
+  .input-group {
+    margin-top: 7px;
+    margin-bottom: 7px;
+  }
+
+  input {
+    width: calc(100% - 22px);
+    padding: 5px 10px;
+    border: 1px solid #0003;
+    border-radius: 3px;
+    outline: none;
+  }
+
+  button {
+    margin-top: 5px;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #0003;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button.--btn-standard {
+    width: 150px;
+  }
+
+  button.--btn-full {
+    width: 100%;
+  }
+}
+
+.form.--vertical {
+  label {
+    display: block;
+  }
+}

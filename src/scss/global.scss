@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;1,300;1,400&display=swap');
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+}
+
+h1 {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 40px;
+}
+
+small {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.--bg-charcoal {
+  color: #fff;
+  background: #373737;
+}
+
+.--bg-green {
+  background: #8c0;
+}
