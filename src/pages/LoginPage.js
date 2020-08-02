@@ -1,70 +1,49 @@
 import React from 'react';
 import '../scss/login-page.scss';
 import LoginForm from '../components/LoginForm';
-import AuthService from '../services/auth.service';
-import {Redirect, Route, useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import AuthService from '../services/auth.service'
 
-class LoginPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: ''
-        };
+function LoginPage() {
+    const history = useHistory();
+    let errors = [];
+    let inputData = {
+        email: '',
+        password: ''
+    };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
+    function handleInputChange(event) {
+        const target = event.target;
+
+        inputData[target.name] = target.value;
     }
 
-    handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault();
-        let errors = [];
 
-        if (this.state.email === '') {
+        if (inputData.email === '') {
             errors.push('Address email is empty');
         }
 
-        if (this.state.password === '') {
+        if (inputData.password === '') {
             errors.push('You did not enter your password');
         }
 
         if (errors.length === 0) {
             AuthService.login({
-                username: this.state.email,
-                password: this.state.password
+                username: inputData.email,
+                password: inputData.password
             }).then((response) => {
-                if (response === true) {
-                    this.setState({logged: true});
-                } else {
-                    this.setState({errors: response.errors});
-                }
+                history.push('/dashboard');
             })
         }
-
-        this.setState({errors: errors});
     }
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-
-        this.setState({ [name]: value });
-    }
-
-    render() {
-        if (this.state.logged === true) {
-            return (
-                <Route render={(props) => <Redirect to='/dashboard' />} />
-            )
-        }
-
-        return (
-            <div className={'login-page'}>
-                <LoginForm errors={this.state.errors} handleSubmit={this.handleSubmit} handleInputChange={this.handleInputChange}/>
-            </div>
-        );
-    }
+    return (
+        <div className={'login-page'}>
+            <LoginForm errors={errors} handleSubmit={handleSubmit} handleInputChange={handleInputChange}/>
+        </div>
+    );
 }
 
 export default LoginPage;

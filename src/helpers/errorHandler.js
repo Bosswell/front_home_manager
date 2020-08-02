@@ -1,8 +1,16 @@
-export const errorHandler = (error) => {
+import AuthService from '../services/auth.service';
+import { useHistory } from 'react-router-dom';
+
+export const ErrorHandler = (error) => {
+    const history = useHistory();
+
     if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.status === 401) {
+            AuthService.logout();
+            history.push('/login');
+
             return {
                 'message': 'Invalid credentials',
                 'code': 401,

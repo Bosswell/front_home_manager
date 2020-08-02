@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { host } from '../config'
-import { errorHandler } from '../helpers/errorHandler'
+import { ErrorHandler } from '../helpers/errorHandler'
 
 class AuthService {
     login(data) {
@@ -24,7 +24,7 @@ class AuthService {
 
                 return true;
             })
-            .catch(errorHandler);
+            .catch(ErrorHandler);
     }
 
     register() {
@@ -32,7 +32,7 @@ class AuthService {
     }
 
     logout() {
-
+        localStorage.removeItem('user');
     }
 }
 
