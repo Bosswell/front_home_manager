@@ -5,59 +5,41 @@ import './scss/global.scss';
 
 import AuthService from './services/auth.service';
 import {
-    Route,
     Link,
     Switch,
     Redirect,
     useHistory,
     useLocation
 } from 'react-router-dom'
-import LoginPage from "./LoginPage";
-import HomePage from "./HomePage";
-import Dashboard from "./Dashboard";
-import PrivateRoute from "./PrivateRoute";
-import RegisterForm from "./RegisterForm";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import Dashboard from "./pages/Dashboard";
+import Route from "./components/PrivateRoute";
+import RegisterPage from "./pages/RegisterPage";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 
 class App extends React.Component {
-    constructor(params) {
-        super(params);
+    constructor(props) {
+        super(props);
 
-        this.state = {
-            user: JSON.parse(localStorage.getItem('user'))
-        };
-
-        const data = {
-            username: 'hello@world.p',
-            password: 'zaq1@WSX'
-        };
-
-        // AuthService.login(data).then(function (res) {
-        //   console.log(res);
-        // });
+        this.authed = JSON.parse(localStorage.getItem('user'));
     }
 
     render() {
-        // let history = useHistory();
-        //
-        // let user = localStorage.getItem('user')
-
         return (
             <div className={'container'}>
-                {/*<ul>*/}
-                {/*  <li> <Link to="/">Home</Link> </li>*/}
-                {/*  <li> <Link to="/login">Login</Link> </li>*/}
-                {/*</ul>*/}
                 <div>
                     <h1 className={'text-center'}>Cash manager</h1>
                 </div>
                 <Switch>
-                    <Route exact path="/" component={HomePage}/>
-                    <Route exact path="/login" component={LoginPage}/>
-                    <Route exact path="/register" component={RegisterForm}/>
+                    <UnauthenticatedRoute exact path="/" component={HomePage}/>
+                    <UnauthenticatedRoute exact path="/login" component={LoginPage}/>
+                    <UnauthenticatedRoute exact path="/register" component={RegisterPage}/>
+                    <PrivateRoute path='/dashboard' component={Dashboard} />
 
-                    <PrivateRoute authed={!!this.state.user} path='/dashboard' component={Dashboard} />
-                    <Route path="*" component={NoMatch}/>
+                    <Route path="*" component={NoMatch}/>*/}
                 </Switch>
             </div>
         );

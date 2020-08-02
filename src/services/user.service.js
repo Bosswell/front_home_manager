@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {host} from "../config";
-import {errorHandler} from "../errorHandler";
+import {errorHandler} from "../helpers/errorHandler";
 
 class UserService {
     getUser() {

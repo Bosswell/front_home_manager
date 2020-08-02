@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { host } from '../config'
-import { errorHandler } from '../errorHandler'
+import { errorHandler } from '../helpers/errorHandler'
 
 class AuthService {
     login(data) {
@@ -22,7 +22,7 @@ class AuthService {
                     }));
                 }
 
-                return response.data;
+                return true;
             })
             .catch(errorHandler);
     }
