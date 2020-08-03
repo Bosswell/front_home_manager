@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import AuthService from '../services/auth.service';
 
-function Dashboard() {
+function Dashboard(props) {
     const history = useHistory();
 
     function handleLogout() {

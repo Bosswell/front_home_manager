@@ -2,8 +2,9 @@ import React from 'react';
 import { hot } from 'react-hot-loader/root';
 import './scss/form.scss';
 import './scss/global.scss';
+import { css } from "@emotion/core";
 
-import AuthService from './services/auth.service';
+
 import {
     Link,
     Switch,
@@ -21,12 +22,6 @@ import PrivateRoute from "./components/PrivateRoute";
 
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.authed = JSON.parse(localStorage.getItem('user'));
-    }
-
     render() {
         return (
             <div className={'container'}>
@@ -36,7 +31,7 @@ class App extends React.Component {
                 <Switch>
                     <UnauthenticatedRoute exact path="/" component={HomePage}/>
                     <UnauthenticatedRoute exact path="/login" component={LoginPage}/>
-                    <UnauthenticatedRoute exact path="/register" component={RegisterPage}/>
+                    <UnauthenticatedRoute exact path="/register" component={RegisterPage} />
                     <PrivateRoute path='/dashboard' component={Dashboard} />
 
                     <Route path="*" component={NoMatch}/>*/}

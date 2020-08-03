@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route as ReactRoute, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 class UnauthenticatedRoute extends Component {
     constructor(props) {
@@ -11,7 +11,7 @@ class UnauthenticatedRoute extends Component {
         const { component: Component, ...props } = this.props
 
         return (
-            <ReactRoute
+            <Route
                 {...props}
                 render={props => (
                     this.authed ?
