@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import '../scss/login-page.scss';
-import LoginForm from '../components/LoginForm';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react'
+import LoginForm from '../components/LoginForm'
+import { useHistory } from 'react-router-dom'
 import AuthService from '../services/auth.service'
-import { ClipLoader } from "react-spinners";
+import Loader from '../components/Loader'
+import '../scss/login-page.scss'
+
 
 function LoginPage() {
     const history = useHistory();
@@ -14,13 +15,14 @@ function LoginPage() {
         password: ''
     });
 
+
     function handleInputChange(event) {
         const target = event.target;
 
         setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         let tmpErrors = [];
 
@@ -32,38 +34,31 @@ function LoginPage() {
             tmpErrors.push(['You did not enter your password']);
         }
 
-        setErrors(tmpErrors);
-
-        if (tmpErrors.length === 0) {
-            setLoading(true);
-
-            AuthService.login({
-                username: inputData.email,
-                password: inputData.password
-            }).then((response) => {
-                if (response.errors) {
-                    setErrors(response.errors);
-                }
-
-                history.push('/dashboard');
-            }).finally(() => {
-                setLoading(false);
-            })
+        if (tmpErrors.length !== 0) {
+            await setErrors(tmpErrors);
+            return;
         }
 
+        setLoading(true);
 
-    }
+        let response = await AuthService.login({
+            username: inputData.email,
+            password: inputData.password
+        });
 
-    if (loading) {
-        return (
-            <div className={'loader-container'}>
-                <ClipLoader size={100} loading={loading}/>
-            </div>
-        )
+        setLoading(false);
+
+        if (response.errors) {
+            await setErrors(response.errors);
+            return;
+        }
+
+        history.push('/dashboard');
     }
 
     return (
         <div className={'login-page'}>
+            {loading && <Loader loading={loading}/>}
             <LoginForm errors={errors} handleSubmit={handleSubmit} handleInputChange={handleInputChange}/>
         </div>
     );
