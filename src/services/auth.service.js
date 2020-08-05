@@ -27,8 +27,17 @@ class AuthService {
             .catch(ErrorHandler);
     }
 
-    register() {
+    register(data) {
+        const options = {
+            headers: { 'Content-Type': 'application/json' },
+        };
 
+        return axios
+            .post(host + '/user', data, options)
+            .then(response => {
+                return response.data;
+            })
+            .catch(ErrorHandler);
     }
 
     logout() {
