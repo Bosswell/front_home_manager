@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import InputGroup from './InputGroup';
-import ErrorList from "./ErrorList";
+import InputGroup from '../components/InputGroup';
+import ErrorList from "../components/ErrorList";
 
 class RegisterForm extends React.Component {
     render() {
@@ -25,4 +25,3 @@ class RegisterForm extends React.Component {
 }
 
 export default RegisterForm;
-

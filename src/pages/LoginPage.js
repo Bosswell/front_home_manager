@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import LoginForm from '../components/LoginForm'
+import LoginForm from '../forms/LoginForm'
 import { useHistory } from 'react-router-dom'
 import AuthService from '../services/auth.service'
 import Loader from '../components/Loader'

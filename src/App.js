@@ -2,23 +2,22 @@ import React from 'react';
 import { hot } from 'react-hot-loader/root';
 import './scss/form.scss';
 import './scss/global.scss';
-import { css } from "@emotion/core";
-
 
 import {
     Link,
     Switch,
     Redirect,
     useHistory,
-    useLocation
+    useLocation,
+    Route
 } from 'react-router-dom'
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import Dashboard from "./pages/Dashboard";
-import Route from "./components/PrivateRoute";
+
 import RegisterPage from "./pages/RegisterPage";
-import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
-import PrivateRoute from "./components/PrivateRoute";
+import UnauthenticatedRoute from "./hoc/UnauthenticatedRoute";
+import PrivateRoute from "./hoc/PrivateRoute";
 
 
 class App extends React.Component {
