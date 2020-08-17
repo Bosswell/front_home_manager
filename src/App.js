@@ -9,35 +9,35 @@ import {
     Redirect,
     useHistory,
     useLocation,
-    Route
+    Route,
+    useRoutes
 } from 'react-router-dom'
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import Dashboard from "./pages/Dashboard";
 
 import RegisterPage from "./pages/RegisterPage";
-import UnauthenticatedRoute from "./hoc/UnauthenticatedRoute";
-import PrivateRoute from "./hoc/PrivateRoute";
+import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
+import NotFound from "./pages/NotFound";
 
 
-class App extends React.Component {
-    render() {
-        return (
-            <div className={'container'}>
-                <div>
-                    <h1 className={'text-center'}>Cash manager</h1>
-                </div>
-                <Switch>
-                    <UnauthenticatedRoute exact path="/" component={HomePage}/>
-                    <UnauthenticatedRoute exact path="/login" component={LoginPage}/>
-                    <UnauthenticatedRoute exact path="/register" component={RegisterPage} />
-                    <PrivateRoute path='/dashboard' component={Dashboard} />
+function App() {
 
-                    <Route path="*" component={NoMatch}/>*/}
-                </Switch>
+    return (
+        <div className={'container'}>
+            <div>
+                <h1 className={'text-center'}>Cash manager</h1>
             </div>
-        );
-    }
+            <Switch>
+                <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/" component={HomePage}/>
+                <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/login" component={LoginPage}/>
+                <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
+                <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
+
+                <Route path="*" component={NotFound}/>
+            </Switch>
+        </div>
+    );
 }
 
 function NoMatch() {

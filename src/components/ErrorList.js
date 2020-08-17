@@ -1,16 +1,13 @@
 import React from 'react';
-import ErrorItem from "./ErrorItem";
 
-class ErrorList extends React.Component {
-    render() {
-        return (
-            <ol className={'error-container'}>
-                {this.props.errors.map((error) => {
-                    return <ErrorItem error={error} key={error.toString()}/>
-                })}
-            </ol>
-        )
-    }
+function ErrorList({ errors }) {
+    return (
+        <ol className={'error-container'}>
+            {errors.map((error) => {
+                return <li>{error}</li>
+            })}
+        </ol>
+    )
 }
 
 export default ErrorList;
