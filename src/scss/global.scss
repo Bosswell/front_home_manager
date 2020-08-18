@@ -17,7 +17,12 @@ small {
   margin-bottom: 15px;
 }
 
+.page {
+  padding: 5px;
+}
+
 .loader-container {
+  z-index: 999;
   position: fixed;
   top: 0;
   left: 0;
@@ -44,4 +49,22 @@ small {
 
 .--bg-green {
   background: #8c0;
+}
+
+.alert {
+  padding: 10px 15px;
+  border-radius: 3px;
+  font-size: 15px;
+}
+
+.alert-success {
+  background: #8c0;
+}
+
+.alert-failure {
+  background: #FE4A49;
+}
+
+.alert-info {
+  background: #009FB7;
 }

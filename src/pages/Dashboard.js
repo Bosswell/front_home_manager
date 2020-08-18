@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import AuthService from '../services/auth.service';
+import AddTransactionForm from "../forms/AddTransactionForm";
+import Loader from "../components/Loader";
+import Alert, {SUCCESS_ALERT} from "../components/Alert";
 
-function Dashboard(props) {
+function Dashboard() {
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState('');
+
     const history = useHistory();
 
     function handleLogout() {
@@ -11,8 +17,14 @@ function Dashboard(props) {
     }
 
     return (
-        <div>
+        <div className={'page dashboard'}>
+            {loading && <Loader loading={loading}/>}
             <h1>Dashboard</h1>
+            <AddTransactionForm
+                setLoading={setLoading}
+                setAlert={setAlert}
+            />
+            {alert && <Alert type={SUCCESS_ALERT} message={alert}/>}
             <button onClick={handleLogout}>Logout</button>
         </div>
     );

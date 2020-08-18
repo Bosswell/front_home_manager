@@ -1,27 +1,82 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import InputGroup from '../components/InputGroup';
 import ErrorList from "../components/ErrorList";
+import AuthService from "../services/auth.service";
 
-class RegisterForm extends React.Component {
-    render() {
-        return (
-            <div className={'register-form'}>
-                <h3 className={'text-center'}>Create account in Cash Manager</h3>
-                <form className={'form --vertical'} onSubmit={this.props.handleSubmit}>
-                    <InputGroup onChange={this.props.handleInputChange} name={'email'} type={'email'} label={'Address email'}/>
-                    <InputGroup onChange={this.props.handleInputChange} name={'fullName'} type={'text'} label={'Your name'}/>
-                    <InputGroup onChange={this.props.handleInputChange} name={'password'} type={'password'} label={'Password'}/>
-                    <InputGroup onChange={this.props.handleInputChange} name={'confirmPassword'} type={'password'} label={'Confirm password'}/>
+function RegisterForm({ setIsOk, setLoading }) {
+    const [inputData, setInputData] = useState({
+        'fullName': '',
+        'email': '',
+        'password': '',
+        'confirmPassword': ''
+    });
+    const [errors, setErrors] = useState([]);
 
-                    <Link to={'/login'}><small className={'text-right'}>Already have an account? Click to sign in!</small></Link>
+    function handleInputChange(event) {
+        const target = event.target;
 
-                    <button className={'--bg-charcoal --btn-full'}>Create account</button>
-                </form>
-                <ErrorList errors={this.props.errors ?? []} />
-            </div>
-        );
+        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
     }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        let tmpErrors = [];
+
+        if (inputData.fullName === '') {
+            tmpErrors.push(['You did not enter your name ']);
+        }
+
+        if (inputData.email === '') {
+            tmpErrors.push(['Address email is empty']);
+        }
+
+        if (inputData.password === '') {
+            tmpErrors.push(['You did not enter your password']);
+        }
+
+        if (inputData.confirmPassword === '') {
+            tmpErrors.push(['You did not confirmed your password']);
+        }
+
+        if (inputData.confirmPassword !== inputData.password) {
+            tmpErrors.push(['Your confirmed password is not the same as given password']);
+        }
+
+        if (tmpErrors.length !== 0) {
+            await setErrors(tmpErrors);
+            return;
+        }
+
+        setLoading(true);
+
+        let response = await AuthService.register(inputData);
+
+        setLoading(false);
+
+        if (response.errors.length !== 0) {
+            await setErrors(response.errors);
+        } else {
+            await setIsOk(true);
+        }
+    }
+
+    return (
+        <div className={'register-form'}>
+            <h3 className={'text-center'}>Create account in Cash Manager</h3>
+            <form className={'form --vertical'} onSubmit={handleSubmit}>
+                <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'}/>
+                <InputGroup onChange={handleInputChange} name={'fullName'} type={'text'} label={'Your name'}/>
+                <InputGroup onChange={handleInputChange} name={'password'} type={'password'} label={'Password'}/>
+                <InputGroup onChange={handleInputChange} name={'confirmPassword'} type={'password'} label={'Confirm password'}/>
+
+                <Link to={'/login'}><small className={'text-right'}>Already have an account? Click to sign in!</small></Link>
+
+                <button className={'--bg-charcoal --btn-full'}>Create account</button>
+            </form>
+            <ErrorList errors={errors} />
+        </div>
+    );
 }
 
 export default RegisterForm;

@@ -8,6 +8,7 @@ export const ErrorHandler = (error) => {
             AuthService.logout();
 
             return {
+                'hasError': true,
                 'message': 'Invalid credentials',
                 'code': 401,
                 'data': [],
@@ -15,10 +16,12 @@ export const ErrorHandler = (error) => {
             }
         }
 
+        error.response.data.hasError = true;
         return error.response.data;
     } else if (error.request) {
         // The request was made but no response was received
         return {
+            'hasError': true,
             'message': 'No response was received from the server',
             'code': 500,
             'data': [],
@@ -27,6 +30,7 @@ export const ErrorHandler = (error) => {
     } else {
         // Something happened in setting up the request that triggered an Error
         return {
+            'hasError': true,
             'message': 'Invalid request [front error]',
             'code': 500,
             'data': [],

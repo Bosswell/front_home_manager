@@ -5,7 +5,7 @@ function NotFound() {
     let location = useLocation();
 
     return (
-        <div>
+        <div className={'page'}>
             <h3>
                 No match for <code>{location.pathname}</code>
             </h3>
