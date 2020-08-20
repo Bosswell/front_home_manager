@@ -3,13 +3,12 @@ import { hot } from 'react-hot-loader/root';
 import './scss/form.scss';
 import './scss/global.scss';
 
-import { Switch, Route,} from 'react-router-dom'
+import { Switch, Route} from 'react-router-dom'
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
 import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
-
 
 function App() {
     return (

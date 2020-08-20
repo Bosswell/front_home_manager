@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import AuthService from '../services/auth.service';
 import AddTransactionForm from "../forms/AddTransactionForm";
 import Loader from "../components/Loader";
@@ -19,7 +19,9 @@ function Dashboard() {
     return (
         <div className={'page dashboard'}>
             {loading && <Loader loading={loading}/>}
-            <h1>Dashboard</h1>
+            <div>
+                <Link to={'/login'}>Transaction list</Link>
+            </div>
             <AddTransactionForm
                 setLoading={setLoading}
                 setAlert={setAlert}
