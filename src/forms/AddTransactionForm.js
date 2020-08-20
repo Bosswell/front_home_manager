@@ -9,6 +9,7 @@ function AddTransactionForm({setAlert, setLoading}) {
     const [transactionTypes, setTransactionTypes] = useState([]);
     const [inputData, setInputData] = useState({
         amount: 0,
+        description: '',
         transactionTypeId: null
     });
 
@@ -54,8 +55,9 @@ function AddTransactionForm({setAlert, setLoading}) {
         <div className={'add-transaction-form'}>
             <h3 className={'text-center'}>Create transaction</h3>
             <form className={'form --vertical'} onSubmit={handleSubmit}>
-                <Select onChange={handleSelectChange} options={transactionTypes} />
-                <InputGroup onChange={handleInputChange} name={'amount'} type={'number'} label={'Amount'}/>
+                <Select onChange={handleSelectChange} options={transactionTypes} placeholder={'Transaction type'}/>
+                <InputGroup onChange={handleInputChange} name={'amount'} type={'number'} label={'Amount (PLN)'}/>
+                <InputGroup onChange={handleInputChange} name={'description'} type={'text'} label={'Description'}/>
 
                 <button className={'--bg-charcoal --btn-full'}>Add transaction</button>
             </form>

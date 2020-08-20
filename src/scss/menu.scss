@@ -1,0 +1,21 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 15px;
+
+  .menu-left {
+    display: flex;
+    justify-items: flex-start;
+  }
+
+  .menu-right {
+    display: flex;
+    justify-items: flex-end;
+  }
+
+  .menu-item {
+    cursor: pointer;
+  }
+}

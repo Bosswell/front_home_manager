@@ -20,10 +20,14 @@ function RegisterPage() {
     }
 
     return (
-        <div className={'page register-page'}>
-            {loading && <Loader loading={loading}/>}
-            {isOk && renderSuccess()}
-            {!isOk && <RegisterForm setLoading={setLoading} setIsOk={setIsOk}/>}
+        <div>
+            <h1 className={'text-center'}>Cash manager</h1>
+
+            <div className={'page register-page'}>
+                {loading && <Loader loading={loading}/>}
+                {isOk && renderSuccess()}
+                {!isOk && <RegisterForm setLoading={setLoading} setIsOk={setIsOk}/>}
+            </div>
         </div>
     );
 }

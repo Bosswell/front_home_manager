@@ -8,9 +8,13 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     return (
-        <div className={'page login-page'}>
-            {loading && <Loader loading={loading}/>}
-            <LoginForm setLoading={setLoading}/>
+        <div>
+            <h1 className={'text-center'}>Cash manager</h1>
+
+            <div className={'page login-page'}>
+                {loading && <Loader loading={loading}/>}
+                <LoginForm setLoading={setLoading}/>
+            </div>
         </div>
     );
 }

@@ -13,9 +13,6 @@ import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./
 function App() {
     return (
         <div className={'container'}>
-            <div>
-                <h1 className={'text-center'}>Cash manager</h1>
-            </div>
             <Switch>
                 <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
                 <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
