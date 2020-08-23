@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import InputGroup from '../components/InputGroup';
 import ErrorList from "../components/ErrorList";
-import AuthService from "../services/auth.service";
+import {AuthContext} from "../AuthContext";
+import authProvider from "../providers/authProvider";
 
 function LoginForm({setLoading}) {
+    const { authed, setAuthed } = useContext(AuthContext);
     const history = useHistory();
     const [errors, setErrors] = useState([]);
     const [inputData, setInputData] = useState({
@@ -37,19 +39,18 @@ function LoginForm({setLoading}) {
 
         setLoading(true);
 
-        let response = await AuthService.login({
+        await authProvider.login({
             username: inputData.email,
             password: inputData.password
-        });
+        }).then(response => {
+            setLoading(false);
 
-        setLoading(false);
-
-        if (response.errors) {
-            await setErrors(response.errors);
-            return;
-        }
-
-        history.push('/dashboard');
+            if (response && response.hasError) {
+                setErrors(response.errors);
+            } else {
+                setAuthed(true);
+            }
+        })
     }
 
     return (

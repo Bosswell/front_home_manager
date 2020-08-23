@@ -69,3 +69,17 @@ small {
 .alert-info {
   background: #009FB7;
 }
+
+.alert-warning {
+  background: #E09F3E;
+}
+
+.error-container {
+  padding-left: 20px;
+  padding-right: 20px;
+
+  li {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}

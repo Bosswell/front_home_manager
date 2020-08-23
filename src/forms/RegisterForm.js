@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import InputGroup from '../components/InputGroup';
 import ErrorList from "../components/ErrorList";
-import AuthService from "../services/auth.service";
+import AuthService from "../services/user.service";
 
 function RegisterForm({ setIsOk, setLoading }) {
     const [inputData, setInputData] = useState({

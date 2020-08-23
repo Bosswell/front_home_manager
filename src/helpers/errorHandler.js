@@ -1,11 +1,13 @@
-import AuthService from '../services/auth.service';
+import AuthService from '../services/user.service';
+import {useContext} from "react";
+import {AuthContext} from "../App";
 
 export const ErrorHandler = (error) => {
     if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.status === 401) {
-            AuthService.logout();
+            localStorage.removeItem('token');
 
             return {
                 'hasError': true,

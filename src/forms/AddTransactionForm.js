@@ -3,10 +3,12 @@ import InputGroup from "../components/InputGroup";
 import ErrorList from "../components/ErrorList";
 import Select from "react-select";
 import {addTransaction, getTransactionTypes} from "../services/transaction.service";
+import Alert, {SUCCESS_ALERT} from "../components/Alert";
 
-function AddTransactionForm({setAlert, setLoading}) {
+function AddTransactionForm({setLoading}) {
     const [errors, setErrors] = useState([]);
     const [transactionTypes, setTransactionTypes] = useState([]);
+    const [alert, setAlert] = useState('');
     const [inputData, setInputData] = useState({
         amount: 0,
         description: '',
@@ -62,6 +64,8 @@ function AddTransactionForm({setAlert, setLoading}) {
                 <button className={'--bg-charcoal --btn-full'}>Add transaction</button>
             </form>
             <ErrorList errors={errors} />
+            <br/>
+            {alert && <Alert type={SUCCESS_ALERT} message={alert}/>}
         </div>
     );
 }

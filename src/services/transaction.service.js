@@ -3,12 +3,8 @@ import { host } from '../config';
 import { ErrorHandler } from '../helpers/errorHandler';
 
 export const getTransactionTypes = () => {
-    const options = {
-        headers: getBasicHeaders(),
-    };
-
     return axios
-        .get(host + '/transaction/types/list', options)
+        .get(host + '/transaction/types/list')
         .then(response => {
             if (response.status < 200 || response.status >= 300) {
                 return Promise.reject(response);
@@ -24,12 +20,8 @@ export const getTransactionTypes = () => {
 }
 
 export const addTransaction = (data) => {
-    const options = {
-        headers: getBasicHeaders(),
-    };
-
     return axios
-        .post(host + '/transaction', data, options)
+        .post(host + '/transaction', data)
         .then(response => {
             if (response.status < 200 || response.status >= 300) {
                 return Promise.reject(response);
@@ -42,14 +34,4 @@ export const addTransaction = (data) => {
             return Promise.reject(response);
         })
         .catch(ErrorHandler);
-}
-
-function getBasicHeaders() {
-    const user = localStorage.getItem('user');
-    const token = user ? JSON.parse(user).token : '';
-
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-    };
 }
