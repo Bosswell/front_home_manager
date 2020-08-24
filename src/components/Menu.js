@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react";
-import "../scss/menu.scss";
 import MenuLeft from "./MenuLeft";
 import HamburgerMenu from "react-hamburger-menu";
 import MenuItem from "./MenuItem";
@@ -7,6 +6,9 @@ import MenuRight from "./MenuRight";
 import { AuthContext } from "../AuthContext";
 import { useHistory } from 'react-router-dom'
 import authProvider from "../providers/authProvider";
+import { CgLogOut } from "react-icons/cg";
+import "../scss/menu.scss";
+
 
 function Menu({ children }) {
     // const { toggleMenu } = useContext(MenuContext);
@@ -45,7 +47,7 @@ function Menu({ children }) {
                 <MenuItem name={'Cash Manager'} handleClick={handleCashManager}/>
             </MenuLeft>
             <MenuRight>
-                <MenuItem name={'Logout'} handleClick={handleLogout}/>
+                <MenuItem name={'Logout'} handleClick={handleLogout} icon={<CgLogOut/>}/>
             </MenuRight>
         </div>
     )

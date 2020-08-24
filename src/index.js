@@ -14,7 +14,6 @@ axios.interceptors.request.use(function (config) {
     return config;
 });
 
-
 ReactDOM.render(
     <App />,   
     document.getElementById('root')

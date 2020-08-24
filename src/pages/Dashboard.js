@@ -8,17 +8,14 @@ function Dashboard() {
     const [loading, setLoading] = useState(false);
 
     return (
-        <div>
-            <div className={'page dashboard'}>
-                {loading && <Loader loading={loading}/>}
-                <div>
-                    <Link to={'/login'}>Transaction list</Link>
-                </div>
-                <AddTransactionForm
-                    setLoading={setLoading}
-                />
-
+        <div className={'page dashboard'}>
+            {loading && <Loader loading={loading}/>}
+            <div>
+                <Link to={'/login'}>Transaction list</Link>
             </div>
+            <AddTransactionForm
+                setLoading={setLoading}
+            />
         </div>
     );
 }

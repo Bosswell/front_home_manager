@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import AddTransactionForm from "../forms/AddTransactionForm";
 import Loader from "../components/Loader";
 

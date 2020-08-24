@@ -10,7 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
 import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
 import authProvider from "./providers/authProvider";
-import {AuthContext} from "./AuthContext";
+import { AuthContext } from "./AuthContext";
 import Menu from "./components/Menu";
 import SideMenu from "./components/SideMenu";
 
@@ -21,7 +21,7 @@ function App() {
         <div className={'container'}>
             <AuthContext.Provider value={{ authed, setAuthed }}>
                 {authed && <Menu/>}
-                {authed && <SideMenu/>}
+
                 <BrowserRouter>
                     <Switch>
                         <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
@@ -31,7 +31,7 @@ function App() {
                         <Route path="*" component={NotFound}/>
                     </Switch>
                 </BrowserRouter>
-            </AuthContext.Provider>,
+            </AuthContext.Provider>
         </div>
     );
 }

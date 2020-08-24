@@ -1,11 +1,19 @@
-import React, {useContext} from "react";
-import { MenuContext } from 'react-flexible-sliding-menu';
+import React from "react";
+import MenuItem from "./MenuItem";
+import { GrTransaction } from "react-icons/gr";
+import { AiOutlineOrderedList } from "react-icons/ai";
+import { useHistory } from "react-router-dom";
 
 function SideMenu() {
-    // const { toggleMenu } = useContext(MenuContext);
+    const history = useHistory(); 
 
-    // return <button onClick={toggleMenu}>Close</button>;
-    return 'Side menu';
+    return (
+        <div className={'side-menu'}>
+            
+            <MenuItem name={'Add transaction'} handleClick={() => history.push('/dashboard')} icon={<GrTransaction/>}/>
+            <MenuItem name={'List transactions'} handleClick={() => history.push('/dashboard')} icon={<AiOutlineOrderedList/>}/>
+        </div>
+    )
 }
 
 export default SideMenu;

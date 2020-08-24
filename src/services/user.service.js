@@ -4,12 +4,8 @@ import { ErrorHandler } from '../helpers/errorHandler'
 
 class UserService {
     register(data) {
-        const options = {
-            headers: { 'Content-Type': 'application/json' },
-        };
-
         return axios
-            .post(host + '/user', data, options)
+            .post(host + '/user', data)
             .then(response => {
                 return response.data;
             })

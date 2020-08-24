@@ -19,6 +19,7 @@ small {
 }
 
 .page {
+  width: 100%;
   padding: 5px;
 }
 
@@ -82,4 +83,8 @@ small {
     margin-top: 4px;
     margin-bottom: 4px;
   }
+}
+
+.middle {
+  display: flex;
 }

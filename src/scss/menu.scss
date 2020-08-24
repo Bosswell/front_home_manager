@@ -1,8 +1,10 @@
+$menuHeight: 50px;
+
 .menu {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
+  height: $menuHeight;
   padding: 0 15px;
 
   .menu-left {
@@ -14,8 +16,31 @@
     display: flex;
     justify-items: flex-end;
   }
+}
+
+.side-menu {
+  width: 300px;
+  height: calc(100vh - #{$menuHeight});
+  background: #0001;
 
   .menu-item {
+    margin-left: 15px;
+    margin-top: 15px;
+  }
+}
+
+.side-menu, .menu {
+  .icon {
+    margin-right: 5px;
+  }
+
+  .menu-item {
+    display: flex;
+    font-size: 15px;
     cursor: pointer;
+  }
+
+  .menu-item:hover .menu-text {
+    color: #0009;
   }
 }

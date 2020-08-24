@@ -1,7 +1,3 @@
-import AuthService from '../services/user.service';
-import {useContext} from "react";
-import {AuthContext} from "../App";
-
 export const ErrorHandler = (error) => {
     if (error.response) {
         // The request was made and the server responded with a status code
