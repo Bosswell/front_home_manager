@@ -20,8 +20,6 @@ function App() {
     return (
         <div className={'container'}>
             <AuthContext.Provider value={{ authed, setAuthed }}>
-                {authed && <Menu/>}
-
                 <BrowserRouter>
                     <Switch>
                         <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>

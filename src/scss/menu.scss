@@ -10,6 +10,10 @@ $menuHeight: 50px;
   .menu-left {
     display: flex;
     justify-items: flex-start;
+
+    .menu-item {
+      align-items: center;
+    }
   }
 
   .menu-right {
@@ -21,11 +25,18 @@ $menuHeight: 50px;
 .side-menu {
   width: 300px;
   height: calc(100vh - #{$menuHeight});
-  background: #0001;
+  background: #eee;
+  z-index: 999;
 
   .menu-item {
     margin-left: 15px;
     margin-top: 15px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .side-menu {
+    position: fixed;
   }
 }
 
@@ -43,4 +54,9 @@ $menuHeight: 50px;
   .menu-item:hover .menu-text {
     color: #0009;
   }
+}
+
+.side-menu.hidden {
+  width: 0;
+  overflow: hidden;
 }

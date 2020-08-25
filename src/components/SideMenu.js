@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MenuItem from "./MenuItem";
 import { GrTransaction } from "react-icons/gr";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
 
-function SideMenu() {
+function SideMenu({ isOpen }) {
     const history = useHistory(); 
 
     return (
-        <div className={'side-menu'}>
-            
+        <div className={'side-menu' + (!isOpen ? ' hidden' : '')}>
             <MenuItem name={'Add transaction'} handleClick={() => history.push('/dashboard')} icon={<GrTransaction/>}/>
             <MenuItem name={'List transactions'} handleClick={() => history.push('/dashboard')} icon={<AiOutlineOrderedList/>}/>
         </div>

@@ -8,7 +8,7 @@ function Dashboard() {
     const [loading, setLoading] = useState(false);
 
     return (
-        <div className={'page dashboard'}>
+        <div className={'dashboard'}>
             {loading && <Loader loading={loading}/>}
             <div>
                 <Link to={'/login'}>Transaction list</Link>

@@ -1,15 +1,22 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import SideMenu from './components/SideMenu';
+import Menu from './components/Menu';
+import { isMobile } from 'react-device-detect';
 
 
 function PrivateLayout({ children }) {
-    const [loading, setLoading] = useState(false);
+    const [isOpen, setOpen] = useState(!isMobile);
 
     return (
-        <div className={'middle'}>
-            <SideMenu />
-            { children }
-        </div>
+        <menu>
+            <Menu isOpen={isOpen} setOpen={setOpen}/>
+            <aside className={'middle-section'}>
+                <SideMenu isOpen={isOpen} />
+                <section className={'content'}>
+                    { children }
+                </section>
+            </aside>
+        </menu>
     );
 }
 

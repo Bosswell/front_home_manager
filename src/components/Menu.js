@@ -1,20 +1,18 @@
 import React, {useContext, useState} from "react";
 import MenuLeft from "./MenuLeft";
-import HamburgerMenu from "react-hamburger-menu";
+import { Spin as Hamburger } from 'hamburger-react'
 import MenuItem from "./MenuItem";
 import MenuRight from "./MenuRight";
 import { AuthContext } from "../AuthContext";
 import { useHistory } from 'react-router-dom'
 import authProvider from "../providers/authProvider";
 import { CgLogOut } from "react-icons/cg";
+import { isMobile } from 'react-device-detect';
 import "../scss/menu.scss";
 
 
-function Menu({ children }) {
-    // const { toggleMenu } = useContext(MenuContext);
-    const [isOpen, setIsOpen] = useState(false);
-    const {setAuthed} = useContext(AuthContext);
-
+function Menu({ isOpen, setOpen, showHamburger }) {
+    const { setAuthed } = useContext(AuthContext);
     const history = useHistory();
 
     function handleCashManager() {
@@ -26,24 +24,10 @@ function Menu({ children }) {
         setAuthed(false);
     }
 
-    function handleHamburger() {
-        setIsOpen(!isOpen);
-    }
-
     return (
         <div className={'menu --bg-charcoal'}>
             <MenuLeft>
-                <HamburgerMenu
-                    isOpen={isOpen}
-                    menuClicked={handleHamburger}
-                    width={18}
-                    height={15}
-                    strokeWidth={1}
-                    rotate={0}
-                    color='white'
-                    borderRadius={0}
-                    animationDuration={0.4}
-                />
+                {isMobile && <Hamburger toggled={isOpen} toggle={setOpen} size={18}/>}
                 <MenuItem name={'Cash Manager'} handleClick={handleCashManager}/>
             </MenuLeft>
             <MenuRight>
