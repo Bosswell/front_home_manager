@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import SideMenu from './components/SideMenu';
 import Menu from './components/Menu';
 import { isMobile } from 'react-device-detect';

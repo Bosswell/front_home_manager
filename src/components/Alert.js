@@ -1,24 +1,31 @@
 import React from "react";
+import { Alert as ReactAlert } from "react-bootstrap";
 
-export const SUCCESS_ALERT = 'SUCCESS_ALERT';
-export const FAILURE_ALERT = 'FAILURE_ALERT';
-
-function Alert({ type, message }) {
-    function renderAlertTypeClass() {
-        switch (type) {
-            case SUCCESS_ALERT:
-                return 'alert-success';
-            case FAILURE_ALERT:
-                return 'alert-failure';
-            default:
-                return 'alert-info';
+/**
+ * Param messages can also be a string
+ */
+function Alert({ type, messages, headMsg }) {
+    function renderAlertBody() {
+        if (Array.isArray(messages)) {
+            return (
+                <ol>
+                    {messages.map(message => {
+                        return (
+                            <li> { message } </li>
+                        );
+                    })}
+                </ol>
+            );
         }
+
+        return messages;
     }
 
     return (
-        <div className={'alert ' + renderAlertTypeClass()}>
-            {message}
-        </div>
+        <ReactAlert variant={type}>
+            {headMsg && <ReactAlert.Heading>{ headMsg }</ReactAlert.Heading>}
+            { renderAlertBody() }
+        </ReactAlert>
     )
 }
 

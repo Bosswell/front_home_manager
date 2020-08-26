@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
-import InputGroup from '../components/InputGroup';
-import ErrorList from "../components/ErrorList";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
+import InputGroup from "../components/InputGroup";
 import AuthService from "../services/user.service";
+import Alert from "../components/Alert";
+
 
 function RegisterForm({ setIsOk, setLoading }) {
     const [inputData, setInputData] = useState({
@@ -74,7 +75,9 @@ function RegisterForm({ setIsOk, setLoading }) {
 
                 <button className={'--bg-charcoal --btn-full'}>Create account</button>
             </form>
-            <ErrorList errors={errors} />
+            <br/>
+
+            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occured" messages={errors}/>}
         </div>
     );
 }

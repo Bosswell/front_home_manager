@@ -1,11 +1,11 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import AddTransactionForm from "../forms/AddTransactionForm";
 import Loader from "../components/Loader";
-import { getTransactionsSummary } from '../services/transaction.service';
-import { Container, Row, Col, Alert, Card, CardDeck } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { getTransactionsSummary } from "../services/transaction.service";
+import { Container, Row, Col } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
+import PanelAlert from '../components/Alert';
 
 
 function Dashboard() {
@@ -21,18 +21,14 @@ function Dashboard() {
             }
     
             setMonthlySummary(response.data);
+        }).finally(() => {
             setLoading(false);
         })
     }, []);
 
     return (
-        <Container className={'dashboard'} fluid={true}>
-            {error && <Alert variant="danger">
-                            <Alert.Heading>An error has occured</Alert.Heading>
-                            <p>
-                                { error }
-                            </p>
-                        </Alert>}
+        <Container fluid={true}>
+            {error && <PanelAlert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
 
             {loading && <Loader loading={loading}/>}
             <h3>Monthly expenses</h3>
@@ -47,16 +43,12 @@ function Dashboard() {
                                 <div className={'item-body'}>
                                     <div>{ item.amount } { item.currency}</div>
                                     <Link to={'/dashboard'}><CgDetailsMore/> details</Link>
-                                </div>
-                                
+                                </div>        
                             </div>
                         </Col>
                     )
                 })}
             </Row>
-            {/* <AddTransactionForm
-                setLoading={setLoading}
-            /> */}
         </Container>
     );
 }

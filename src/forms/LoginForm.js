@@ -1,9 +1,10 @@
 import React, {useContext, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import InputGroup from '../components/InputGroup';
-import ErrorList from "../components/ErrorList";
 import {AuthContext} from "../AuthContext";
 import authProvider from "../providers/authProvider";
+import Alert from "../components/Alert";
+
 
 function LoginForm({setLoading}) {
     const { authed, setAuthed } = useContext(AuthContext);
@@ -63,7 +64,8 @@ function LoginForm({setLoading}) {
 
                 <button className={'--bg-charcoal --btn-full'}>Sign in</button>
             </form>
-            <ErrorList errors={errors} />
+            <br/>
+            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occured" messages={errors}/>}
         </div>
     );
 

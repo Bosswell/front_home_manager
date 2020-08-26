@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/form.scss';
 import './scss/global.scss';
 
@@ -11,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
 import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
+import AddTransactionPage from './pages/AddTransactionPage';
 
 
 function App() {
@@ -23,6 +25,7 @@ function App() {
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>

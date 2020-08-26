@@ -10,6 +10,16 @@ h1 {
   font-weight: 400;
   font-style: italic;
   font-size: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-bottom: 30px;
+}
+
+h4, .h4 {
+  font-size: 18px;
 }
 
 small {
@@ -65,22 +75,6 @@ menu {
   padding: 10px 15px;
   border-radius: 3px;
   font-size: 15px;
-}
-
-.alert-success {
-  background: #8c0;
-}
-
-.alert-failure {
-  background: #FE4A49;
-}
-
-.alert-info {
-  background: #009FB7;
-}
-
-.alert-warning {
-  background: #E09F3E;
 }
 
 .error-container {
