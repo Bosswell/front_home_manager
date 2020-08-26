@@ -35,3 +35,19 @@ export const addTransaction = (data) => {
         })
         .catch(ErrorHandler);
 }
+
+export const getTransactionsSummary = () => {
+    return axios
+        .get(host + '/transaction/summary')
+        .then(response => {
+            if (response.status < 200 || response.status >= 300) {
+                return Promise.reject(response);
+            }
+
+            if (response.data) {
+                return response.data;
+            }
+
+            return Promise.reject(response);
+        }).catch(ErrorHandler);
+}

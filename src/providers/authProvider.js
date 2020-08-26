@@ -5,14 +5,9 @@ import jwt_decode from "jwt-decode";
 
 
 const authProvider = {
-    test: true,
     login: ({ username, password }) => {
-        const options = {
-            headers: { 'Content-Type': 'application/json' },
-        };
-
         return axios
-            .post(host + '/login_check', { username, password }, options)
+            .post(host + '/login_check', { username, password })
             .then(response => {
                 if (response.status < 200 || response.status >= 300 || !response.data.token) {
                     return Promise.reject(response);

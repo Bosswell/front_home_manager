@@ -57,6 +57,10 @@ menu {
   background: #8c0;
 }
 
+.--bg-blue {
+  background: #b0d2ff;
+}
+
 .alert {
   padding: 10px 15px;
   border-radius: 3px;
@@ -96,4 +100,16 @@ menu {
 .content {
   width: 100%;
   margin: 10px;
+}
+
+.item {
+  padding: 15px;
+
+  .item-title {
+    font-size: 17px;
+  }
+
+  .item-body {
+    font-size: 14px;
+  }
 }
