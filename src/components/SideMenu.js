@@ -10,7 +10,7 @@ function SideMenu({ isOpen }) {
     return (
         <div className={'side-menu' + (!isOpen ? ' hidden' : '')}>
             <MenuItem name={'Add transaction'} handleClick={() => history.push('/addTransaction')} icon={<GrTransaction/>}/>
-            <MenuItem name={'List transactions'} handleClick={() => history.push('/dashboard')} icon={<AiOutlineOrderedList/>}/>
+            <MenuItem name={'List transactions'} handleClick={() => history.push('/listTransactions')} icon={<AiOutlineOrderedList/>}/>
         </div>
     )
 }

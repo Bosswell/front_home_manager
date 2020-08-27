@@ -7,6 +7,7 @@ import './scss/global.scss';
 import { Switch, Route, BrowserRouter, useHistory} from 'react-router-dom';
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
+import TransactionsListPage from "./pages/TransactionsListPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
 import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
@@ -26,6 +27,7 @@ function App() {
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/listTransactions' component={TransactionsListPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>

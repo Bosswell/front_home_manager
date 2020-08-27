@@ -1,14 +1,13 @@
-import React, {useContext, useState} from 'react';
-import {Link, useHistory} from 'react-router-dom';
-import InputGroup from '../components/InputGroup';
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import InputGroup from "../components/InputGroup";
 import {AuthContext} from "../AuthContext";
 import authProvider from "../providers/authProvider";
 import Alert from "../components/Alert";
 
 
-function LoginForm({setLoading}) {
-    const { authed, setAuthed } = useContext(AuthContext);
-    const history = useHistory();
+function LoginForm({ setLoading }) {
+    const { setAuthed } = useContext(AuthContext);
     const [errors, setErrors] = useState([]);
     const [inputData, setInputData] = useState({
         email: '',

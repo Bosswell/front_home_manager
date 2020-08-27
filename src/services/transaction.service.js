@@ -51,3 +51,19 @@ export const getTransactionsSummary = () => {
             return Promise.reject(response);
         }).catch(ErrorHandler);
 }
+
+export const getTransactionsList = () => {
+    return axios
+        .get(host + '/transaction/list')
+        .then(response => {
+            if (response.status < 200 || response.status >= 300) {
+                return Promise.reject(response);
+            }
+
+            if (response.data) {
+                return response.data;
+            }
+
+            return Promise.reject(response);
+        }).catch(ErrorHandler);
+}

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AddTransactionForm from "../forms/AddTransactionForm";
 import Loader from "../components/Loader";
 import { getTransactionsSummary } from "../services/transaction.service";
 import { Container, Row, Col } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
-import PanelAlert from '../components/Alert';
+import Alert from '../components/Alert';
 
 
 function Dashboard() {
@@ -28,7 +27,7 @@ function Dashboard() {
 
     return (
         <Container fluid={true}>
-            {error && <PanelAlert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
+            {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
 
             {loading && <Loader loading={loading}/>}
             <h3>Monthly expenses</h3>
