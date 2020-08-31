@@ -40,7 +40,7 @@ function Dashboard() {
                                     { item.name }
                                 </div>
                                 <div className={'item-body'}>
-                                    <div>{ item.amount } { item.currency}</div>
+                                    <div>{ item.amount } PLN</div>
                                     <Link to={'/dashboard'}><CgDetailsMore/> details</Link>
                                 </div>        
                             </div>

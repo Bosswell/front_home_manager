@@ -52,9 +52,18 @@ export const getTransactionsSummary = () => {
         }).catch(ErrorHandler);
 }
 
-export const getTransactionsList = () => {
+export const getTransactionsList = (page, transactionTypeId) => {
+    let params = {};
+    if (page) {
+        params.page = page;
+    }
+
+    if (transactionTypeId) {
+        params.transactionTypeId = transactionTypeId;
+    }
+
     return axios
-        .get(host + '/transaction/list')
+        .get(host + '/transaction/list', { params })
         .then(response => {
             if (response.status < 200 || response.status >= 300) {
                 return Promise.reject(response);

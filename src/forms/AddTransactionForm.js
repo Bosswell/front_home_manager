@@ -45,8 +45,25 @@ function AddTransactionForm({setLoading, transactionTypes}) {
         <div className={'add-transaction-form'}>
             <form className={'form --vertical'} onSubmit={handleSubmit}>
                 <Select onChange={handleSelectChange} options={transactionTypes} placeholder={'Transaction type'}/>
-                <InputGroup onChange={handleInputChange} name={'amount'} type={'number'} label={'Amount (PLN)'}/>
-                <InputGroup onChange={handleInputChange} name={'description'} type={'text'} label={'Description'}/>
+                <div className={'input-group'}>
+                    <label htmlFor={'amount'}>Amount (PLN)</label>
+                    <input
+                        onChange={handleInputChange}
+                        type={'number'}
+                        id={'amount'}
+                        name={'amount'}
+                        step={'0.01'}
+                    />
+                </div>
+                <div className={'input-group'}>
+                    <label htmlFor={'amount'}>Description</label>
+                    <input
+                        onChange={handleInputChange}
+                        type={'text'}
+                        id={'description'}
+                        name={'description'}
+                    />
+                </div>
 
                 <button className={'--bg-charcoal --btn-full'}>Add transaction</button>
             </form>
