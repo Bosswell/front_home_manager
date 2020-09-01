@@ -27,14 +27,24 @@ $menuHeight: 50px;
 }
 
 .side-menu {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 300px;
-  height: calc(100vh - #{$menuHeight});
+  height: 100vh;
   background: #eee;
   z-index: 999;
 
   .menu-item {
+    position: relative;
     margin-left: 15px;
     margin-top: 15px;
+  }
+
+  .menu-text {
+    position: absolute;
+    left: 25px;
+    bottom: -2px;
   }
 
   .menu-item:hover .menu-text {

@@ -107,3 +107,22 @@ menu {
     font-size: 14px;
   }
 }
+
+.list-filters {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sorting-select {
+  width: 300px;
+}
+
+@media (max-width: 768px) {
+  .list-filters {
+    flex-direction: column;
+  }
+}
+
+.filter--select {
+  width: 300px;
+}

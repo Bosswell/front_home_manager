@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import SideMenu from './components/SideMenu';
 import Menu from './components/Menu';
 import { isMobile } from 'react-device-detect';
@@ -6,6 +6,11 @@ import { isMobile } from 'react-device-detect';
 
 function PrivateLayout({ children }) {
     const [isOpen, setOpen] = useState(!isMobile);
+
+    useEffect(() => {
+        console.log('aa');
+        window.scrollTo(0, 0);
+    });
 
     return (
         <menu>

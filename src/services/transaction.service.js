@@ -52,16 +52,7 @@ export const getTransactionsSummary = () => {
         }).catch(ErrorHandler);
 }
 
-export const getTransactionsList = (page, transactionTypeId) => {
-    let params = {};
-    if (page) {
-        params.page = page;
-    }
-
-    if (transactionTypeId) {
-        params.transactionTypeId = transactionTypeId;
-    }
-
+export const getTransactionsList = (params) => {
     return axios
         .get(host + '/transaction/list', { params })
         .then(response => {
