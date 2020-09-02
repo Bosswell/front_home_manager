@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import AddTransactionForm from "../forms/AddTransactionForm";
 import Loader from "../components/Loader";
 import { Container, Row, Col } from 'react-bootstrap';
@@ -11,7 +11,7 @@ function AddTransactionPage() {
     const [transactionTypes, setTransactionTypes] = useState([{}]);
     const [errors, setErrors] = useState([]);
 
-    useState(() => {
+    useEffect(() => {
         getTransactionTypes().then(response => {
             if (response.hasError) {
                 setErrors(response.errors.length ? response.errors : [response.message]);

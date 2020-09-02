@@ -1,102 +1,123 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
 import Loader from "../components/Loader";
-import { getTransactionsList } from "../services/transaction.service";
+import {getTransactionsList, getTransactionTypes} from "../services/transaction.service";
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import Alert from '../components/Alert';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router-dom'
 import Select from "react-select";
+import {normalizeResponseErrors} from "../helpers/normalizers";
 
-const filterOptions = [
+const sortingOptions = [
     {
-        label: 'Artykuły spożywcze',
-        value: 1
-    }
+        label: "Amount - Ascending",
+        value: "t.amount,asc"
+    },
+    {
+        label: "Amount - Descending",
+        value: "t.amount,desc"
+    },
+    {
+        label: "Creation date - Ascending",
+        value: "t.createdAt"
+    },
+    {
+        label: "Creation date - Descending",
+        value: "t.createdAt,desc"
+    },
+    {
+        label: "Position number - Ascending",
+        value: "t.id,asc"
+    },
+    {
+        label: "Position number - Descending",
+        value: "t.id, desc"
+    },
+    {
+        label: "Transaction type - Ascending",
+        value: "tt.name,asc"
+    },
+    {
+        label: "Transaction type - Descending",
+        value: "tt.name,desc"
+    },
 ]
 
 function TransactionsListPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [transactionTypes, setTransactionTypes] = useState([]);
     const query = useQuery();
     const history = useHistory();
+    const [params, setParams] = useState(JSON.parse(query.get("options")) ?? {});
 
     const [transListInfo, setTransListInfo] = useState({
-        nbPage: parseInt(query.get('page')) ?? 1,
         nbPages: 0,
-        sortBy: {},
-        filterBy: {
-            transactionTypeId: parseInt(query.get('transactionTypeId'))
-        },
         results: []
     });
-    let params = {
-        page: 1,
-        sortBy: {},
-        filterBy: {}
-    };
+
+    useEffect(() => {
+        getTransactionTypes().then(response => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+            } else {
+                setTransactionTypes(response.data);
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        setLoading(true);
+        getTransactionsList(params).then(response => {
+            if (response.hasError) {
+                setError(response.errors);
+                return;
+            }
+
+            const {nbPages, results} = response.data;
+            setTransListInfo({
+                nbPages: nbPages,
+                results: results,
+            });
+        }).finally(() => {
+            setLoading(false);
+            history.push({
+                location: 'listTransactions',
+                search: '?options=' + JSON.stringify(params)
+            })
+        })
+
+    }, [params])
 
     function handlePageChange({ selected }) {
-        setLoading(true);
-
-        getTransactionsList(transListInfo.nbPage, transListInfo.filterBy.transactionTypeId).then(response => {
-            if (response.hasError) {
-                setError(response.errors);
-                return;
-            }
-
-            setTransListInfo({
-                nbPage: selected - 1,
-                nbPages: response.data.nbPages,
-                filterBy: {
-                    transactionTypeId: null
-                },
-                sortBy: {},
-                results: response.data.results
-            })
-        }).finally(() => {
-            setLoading(false);
-        })
-
-        if (Number.isNaN(selected)) {
-            return;
-        }
-
-        let options = {
-            page: selected + 1
-        };
-
-        history.push({
-            pathname: '/listTransactions',
-            search: '?options=' + JSON.stringify(options)
-        });
+        setParams(prevState => ({
+            ...prevState,
+            nbPage: !Number.isNaN(selected) ? (selected - 1) : 1
+        }));
     }
 
-    function handleFilterSelectChange({ value }) {
-        params.filterBy.transactionTypeId = value;
-
-        getTransactionsList(1, params).then(response => {
-            if (response.hasError) {
-                setError(response.errors);
-                return;
+    function handleTransactionTypeFilterChange({ value }) {
+        setParams(prevState => ({
+            ...prevState,
+            nbPage: 1,
+            filterBy: {
+                transactionTypeId: value
             }
-
-            const {nbPages, filterBy, sortBy, results} = response.data;
-
-            setTransListInfo({
-                nbPage: 1,
-                nbPages: nbPages,
-                filterBy: filterBy,
-                sortBy:  sortBy,
-                results: results
-            })
-        }).finally(() => {
-            setLoading(false);
-        })
+        }));
     }
 
-    function handleSortingSelectChange() {
+    function handleSortingSelectChange({ value }) {
+        const [name, direction] = value.split(',');
 
+        setParams(prevState => ({
+            ...prevState,
+            nbPage: 1,
+            sortBy: {
+                name: name,
+                direction: direction
+            }
+        }));
     }
 
     return (
@@ -109,11 +130,11 @@ function TransactionsListPage() {
                 <div>
                     <div>Filters</div>
                     <div className={'filter--select'}>
-                        <Select onChange={handleFilterSelectChange} options={filterOptions} placeholder={'Transaction type'}/>
+                        <Select onChange={handleTransactionTypeFilterChange} options={transactionTypes} placeholder={'Transaction type'}/>
                     </div>
                 </div>
                 <div className={'sorting-select'}>
-                    <Select onChange={handleSortingSelectChange} options={[]} placeholder={'Sort by'}/>
+                    <Select onChange={handleSortingSelectChange} options={sortingOptions} placeholder={'Sort by'}/>
                 </div>
             </div>
             <ListGroup variant="flush">

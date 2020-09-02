@@ -5,6 +5,7 @@ import { getTransactionsSummary } from "../services/transaction.service";
 import { Container, Row, Col } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
 import Alert from '../components/Alert';
+import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 function Dashboard() {
@@ -15,7 +16,7 @@ function Dashboard() {
     useEffect(() => {
         getTransactionsSummary().then(response => {
             if (response.hasError) {
-                setError(response.message);
+                setError(normalizeResponseErrors(response));
                 return;
             }
     

@@ -29,6 +29,7 @@ function AddTransactionForm({setLoading, transactionTypes}) {
         event.preventDefault();
 
         setLoading(true);
+        inputData.amount = parseFloat(inputData.amount)
         const response = await addTransaction(inputData);
 
         if (response.hasError) {
@@ -53,6 +54,7 @@ function AddTransactionForm({setLoading, transactionTypes}) {
                         id={'amount'}
                         name={'amount'}
                         step={'0.01'}
+                        required={true}
                     />
                 </div>
                 <div className={'input-group'}>

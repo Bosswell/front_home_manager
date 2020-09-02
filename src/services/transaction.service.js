@@ -54,7 +54,11 @@ export const getTransactionsSummary = () => {
 
 export const getTransactionsList = (params) => {
     return axios
-        .get(host + '/transaction/list', { params })
+        .get(host + '/transaction/list', {
+            params: {
+                options: params
+            }
+        })
         .then(response => {
             if (response.status < 200 || response.status >= 300) {
                 return Promise.reject(response);
