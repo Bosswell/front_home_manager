@@ -8,7 +8,6 @@ function PrivateLayout({ children }) {
     const [isOpen, setOpen] = useState(!isMobile);
 
     useEffect(() => {
-        console.log('aa');
         window.scrollTo(0, 0);
     });
 
