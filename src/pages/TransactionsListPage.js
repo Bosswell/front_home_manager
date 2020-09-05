@@ -102,6 +102,7 @@ function TransactionsListPage() {
                 setError(normalizeResponseErrors(response));
                 return;
             }
+            setError(null);
 
             const {nbPages, results} = response.data;
             setTransListInfo({
@@ -173,7 +174,7 @@ function TransactionsListPage() {
         <Container fluid={true}>
             <Row>
                 <Col lg={12}>
-                    {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
+                    {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
 
                     {loading && <Loader loading={loading}/>}
                     <h3>Transaction list</h3>
