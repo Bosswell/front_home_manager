@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
 import Loader from "../components/Loader";
 import {getTransactionsList, getTransactionTypes} from "../services/transaction.service";
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 import Alert from '../components/Alert';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router-dom'
@@ -18,9 +18,17 @@ function TransactionsListPage() {
     const history = useHistory();
     const [params, setParams] = useState(JSON.parse(query.get("options")) ?? {});
     const [transactionTypes, setTransactionTypes] = useState([]);
-    const [filterTransactionType, setFilterTransactionType] = useState('');
-    const [filterDateFrom, setFilterDateFrom] = useState('');
     const [sortingWay, setSortingWay] = useState('');
+    const [filters, setFilters] = useState({
+        transactionType: {
+            id: null,
+            obj: ''
+        },
+        dateFrom: {
+            lastDays: null,
+            obj: ''
+        }
+    });
 
     const [transListInfo, setTransListInfo] = useState({
         nbPages: 0,
@@ -40,22 +48,37 @@ function TransactionsListPage() {
     useEffect(() => {
         const filterBy = params.filterBy;
 
-        setFilterTransactionType(() => {
-            if (!filterBy || !filterBy.transactionTypeId) {
-                return '';
+        setFilters((prevState) => {
+            if (!filterBy) {
+                return prevState;
             }
 
-            return transactionTypes.find(obj => obj.value === params.filterBy.transactionTypeId);
-        });
+            let filters = {};
 
-        setFilterDateFrom(() => {
-            if (!filterBy || !filterBy.lastDays) {
-                return '';
+            if (filterBy) {
+                if (filterBy.transactionTypeId) {
+                    const transTypeObj = transactionTypes.find(obj => obj.value === params.filterBy.transactionTypeId);
+                    filters.transactionType = {
+                        id: filterBy.transactionTypeId,
+                        obj: transTypeObj ?? ''
+                    };
+                }
+
+                if (filterBy.lastDays) {
+                    const dateFromObj = filterDateFromOptions.find(obj => obj.value === params.filterBy.lastDays);
+                    filters.dateFrom = {
+                        lastDays: filterBy.lastDays,
+                        obj: dateFromObj ?? ''
+                    };
+                }
             }
 
-            return filterDateFromOptions.find(obj => obj.value === params.filterBy.lastDays);
-        });
-    }, [transactionTypes, params.filterBy])
+            return {
+                ...prevState,
+                ...filters
+            }
+        })
+    }, [transactionTypes])
 
     useEffect(() => {
         setSortingWay(() => {
@@ -103,12 +126,22 @@ function TransactionsListPage() {
     }
 
     function handleTransactionTypeFilterChange(selected) {
-        setParams(prevState => ({
+        setFilters(prevState => ({
             ...prevState,
-            nbPage: 1,
-            filterBy: Object.assign({}, prevState.filterBy, {
-                transactionTypeId: selected ? selected.value : null
-            })
+            transactionType: {
+                id: selected ? selected.value : null,
+                obj: selected
+            }
+        }));
+    }
+
+    function handleDateFromFilterChange(selected) {
+        setFilters(prevState => ({
+            ...prevState,
+            dateFrom: {
+                lastDays: selected ? selected.value : null,
+                obj: selected
+            }
         }));
     }
 
@@ -125,13 +158,14 @@ function TransactionsListPage() {
         }));
     }
 
-    function handleDateFromFilterChange(selected) {
+    function handleApplyFilters() {
         setParams(prevState => ({
             ...prevState,
             nbPage: 1,
-            filterBy: Object.assign({}, prevState.filterBy, {
-                lastDays: selected ? selected.value : null
-            })
+            filterBy: {
+                ...(filters.transactionType.id && {transactionTypeId: filters.transactionType.id}),
+                ...(filters.dateFrom.lastDays && {lastDays: filters.dateFrom.lastDays})
+            }
         }));
     }
 
@@ -144,25 +178,26 @@ function TransactionsListPage() {
                     {loading && <Loader loading={loading}/>}
                     <h3>Transaction list</h3>
                     <div className={'list-filters'}>
-                        <div>
-                            <div>Filters</div>
-                            <div className={'filter--select'}>
+                        <div className={'filters'}>
+                            <div className={'filters--select'}>
                                 <Select
-                                    value={filterTransactionType}
+                                    value={filters.transactionType.obj}
                                     onChange={handleTransactionTypeFilterChange}
                                     options={transactionTypes}
                                     placeholder={'Transaction type'}
                                     isClearable={true}
                                 />
-                                <br/>
+                            </div>
+                            <div className={'filters--select'}>
                                 <Select
-                                    value={filterDateFrom}
+                                    value={filters.dateFrom.obj}
                                     onChange={handleDateFromFilterChange}
                                     options={filterDateFromOptions}
                                     placeholder={'Date from'}
                                     isClearable={true}
                                 />
                             </div>
+                            <Button className={'filters--button'} onClick={handleApplyFilters} variant="outline-dark">Apply filters</Button>
                         </div>
                         <div className={'sorting-select'}>
                             <Select onChange={handleSortingSelectChange} value={sortingWay} options={sortingOptions} placeholder={'Sort by'}/>

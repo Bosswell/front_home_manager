@@ -113,18 +113,36 @@ menu {
   justify-content: space-between;
 }
 
-.sorting-select {
+.sorting-select, .filters--select {
   width: 300px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 450px) {
+  .sorting-select, .filters--select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 660px) {
   .list-filters {
     flex-direction: column;
   }
 }
 
-.filter--select {
-  width: 300px;
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 660px) {
+  .filters {
+    margin-bottom: 10px;
+  }
+}
+
+.filters--button {
+  width: 130px;
 }
 
 .transaction-list {
