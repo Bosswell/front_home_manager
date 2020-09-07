@@ -4,6 +4,7 @@ export const ErrorHandler = (error) => {
         // that falls out of the range of 2xx
         if (error.response.status === 401) {
             localStorage.removeItem('token');
+            window.location.href = '/';
 
             return {
                 'hasError': true,

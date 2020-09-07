@@ -7,11 +7,10 @@ import { AuthContext } from "../AuthContext";
 import { useHistory } from 'react-router-dom'
 import authProvider from "../providers/authProvider";
 import { CgLogOut } from "react-icons/cg";
-import { isMobile } from 'react-device-detect';
 import "../scss/menu.scss";
 
 
-function Menu({ isOpen, setOpen, showHamburger }) {
+function Menu({ isOpen, setOpen, isMobile, showHamburger }) {
     const { setAuthed } = useContext(AuthContext);
     const history = useHistory();
 
@@ -20,6 +19,7 @@ function Menu({ isOpen, setOpen, showHamburger }) {
     }
 
     function handleLogout() {
+        setOpen(false);
         authProvider.logout();
         setAuthed(false);
     }

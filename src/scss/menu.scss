@@ -54,7 +54,12 @@ $menuHeight: 50px;
 
 @media (max-width: 1024px) {
   .side-menu {
-    position: fixed;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: calc(100% + 50px);
+    background: #eee;
+    overflow: auto;
   }
 }
 

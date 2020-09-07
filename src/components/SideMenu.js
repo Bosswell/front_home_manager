@@ -5,14 +5,14 @@ import { AiOutlineOrderedList } from "react-icons/ai";
 import { MdDashboard } from "react-icons/md";
 import { useHistory } from "react-router-dom";
 
-function SideMenu({ isOpen }) {
+function SideMenu({ isOpen, setOpen, isMobile }) {
     const history = useHistory(); 
 
     return (
         <div className={'side-menu' + (!isOpen ? ' hidden' : '')}>
-            <MenuItem name={'Dashboard'} handleClick={() => history.push('/dashboard')} icon={<MdDashboard/>}/>
-            <MenuItem name={'Add transaction'} handleClick={() => history.push('/addTransaction')} icon={<GrTransaction/>}/>
-            <MenuItem name={'List transactions'} handleClick={() => history.push('/listTransactions')} icon={<AiOutlineOrderedList/>}/>
+            <MenuItem name={'Dashboard'} handleClick={() => { isMobile && setOpen(false); history.push('/dashboard') }} icon={<MdDashboard/>}/>
+            <MenuItem name={'Add transaction'} handleClick={() => { isMobile && setOpen(false); history.push('/addTransaction') }} icon={<GrTransaction/>}/>
+            <MenuItem name={'List transactions'} handleClick={() => { isMobile && setOpen(false); history.push('/listTransactions') }} icon={<AiOutlineOrderedList/>}/>
         </div>
     )
 }

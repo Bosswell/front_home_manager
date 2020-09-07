@@ -9,11 +9,11 @@ export const sortingOptions = [
     },
     {
         label: "Creation date - Ascending",
-        value: "t.createdAt"
+        value: "t.created_at"
     },
     {
         label: "Creation date - Descending",
-        value: "t.createdAt,desc"
+        value: "t.created_at,desc"
     },
     {
         label: "Position number - Ascending",
@@ -34,8 +34,8 @@ export const sortingOptions = [
 ]
 
 export const defaultSorting = {
-    label: "Position number - Descending",
-    value: "t.id, desc"
+    label: "Creation date - Descending",
+    value: "t.created_at,desc"
 };
 
 export const filterDateFromOptions = [

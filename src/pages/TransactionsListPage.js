@@ -170,6 +170,10 @@ function TransactionsListPage() {
         }));
     }
 
+    function handleOnClick(params) {
+        console.log(params.key)
+    }
+
     return (
         <Container fluid={true}>
             <Row>
@@ -208,11 +212,15 @@ function TransactionsListPage() {
                     <ListGroup className={'transaction-list'} variant="flush">
                         {transListInfo.results.map((item) => {
                             return (
-                                <ListGroup.Item>
+                                <ListGroup.Item key={item.id} onClick={handleOnClick}>
                                     <div>Type: {item.name}</div>
                                     <div>Amount: { item.amount } PLN</div>
                                     <div>Created at: { item.created_at }</div>
-                                    <div>Desc: { item.description }</div>
+                                    {item.description && <div>Desc: { item.description }</div>}
+
+                                    <a href={'/#'} className={'text-danger'}>delete</a>
+                                    <span> | </span>
+                                    <a href={'/#'} className={'text-warning'}>edit</a>
                                 </ListGroup.Item>
                             )
                         })}
@@ -223,7 +231,7 @@ function TransactionsListPage() {
                         disableInitialCallback={true}
                         pageCount={transListInfo.nbPages}
                         initialPage={transListInfo.nbPage - 1}
-                        pageRangeDisplayed={4}
+                        pageRangeDisplayed={2}
                         marginPagesDisplayed={2}
                         containerClassName={'pagination justify-content-end'}
                         pageClassName={'page-item'}

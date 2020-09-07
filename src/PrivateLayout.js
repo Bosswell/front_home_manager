@@ -13,9 +13,9 @@ function PrivateLayout({ children }) {
 
     return (
         <menu>
-            <Menu isOpen={isOpen} setOpen={setOpen}/>
+            <Menu isOpen={isOpen} setOpen={setOpen} isMobile={isMobile}/>
             <aside className={'middle-section'}>
-                <SideMenu isOpen={isOpen} />
+                <SideMenu isOpen={isOpen} setOpen={setOpen} isMobile={isMobile}/>
                 <section className={'content'}>
                     { children }
                 </section>

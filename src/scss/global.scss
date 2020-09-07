@@ -152,6 +152,8 @@ menu {
 .date-picker {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
   max-width: 420px;
 }
