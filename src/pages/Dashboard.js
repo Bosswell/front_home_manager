@@ -6,15 +6,20 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
 import Alert from '../components/Alert';
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [monthlySummary, setMonthlySummary] = useState([]);
     const [error, setError] = useState(null);
+    const [startDate, setStartDate] = useState(new Date((new Date()).setDate(1)));
+    const [endDate, setEndDate] = useState(new Date());
 
     useEffect(() => {
-        getTransactionsSummary().then(response => {
+        setLoading(true);
+        getTransactionsSummary(startDate, endDate).then(response => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -24,16 +29,48 @@ function Dashboard() {
         }).finally(() => {
             setLoading(false);
         })
-    }, []);
+    }, [startDate, endDate]);
 
     return (
         <Container fluid={true}>
             {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
 
             {loading && <Loader loading={loading}/>}
-            <h3>Monthly expenses</h3>
+            <h3>Summary of expenses</h3>
             <Row>
+                <Col lg={12}>
+                    <span>Pick range</span>
+                    <div className={'date-picker'}>
+                        <DatePicker
+                            dateFormat="dd/MM/yyyy"
+                            selected={startDate}
+                            onChange={date => setStartDate(date)}
+                            selectsStart
+                            startDate={startDate}
+                            endDate={endDate}
+                        />
+                        <DatePicker
+                            dateFormat="dd/MM/yyyy"
+                            selected={endDate}
+                            onChange={date => setEndDate(date)}
+                            selectsEnd
+                            startDate={startDate}
+                            endDate={endDate}
+                            minDate={startDate}
+                        />
+                    </div>
+                </Col>
+            </Row>
+
+            <Row className={'transaction-summary-list'}>
+                {monthlySummary.length === 0 && <Col lg={12}>No transactions has been found</Col>}
                 {monthlySummary.map(item => {
+                    const options = {
+                        filterBy: {
+                            transactionTypeId: parseInt(item.transactionTypeId)
+                        }
+                    };
+
                     return (
                         <Col xs={12} sm={6} md={4}>
                             <div className={'item --bg-blue'} style={{ marginTop: '10px' }} key={item.transactionTypeId}>
@@ -42,8 +79,8 @@ function Dashboard() {
                                 </div>
                                 <div className={'item-body'}>
                                     <div>{ item.amount } PLN</div>
-                                    <Link to={'/dashboard'}><CgDetailsMore/> details</Link>
-                                </div>        
+                                    <Link to={`/listTransactions?options=${JSON.stringify(options)}`}><CgDetailsMore/> details</Link>
+                                </div>
                             </div>
                         </Col>
                     )

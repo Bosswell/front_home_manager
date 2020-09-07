@@ -148,3 +148,14 @@ menu {
 .transaction-list {
   margin-top: 30px
 }
+
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 420px;
+}
+
+.transaction-summary-list {
+  margin-top: 15px;
+}

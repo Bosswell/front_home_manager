@@ -36,9 +36,18 @@ export const addTransaction = (data) => {
         .catch(ErrorHandler);
 }
 
-export const getTransactionsSummary = () => {
+export const getTransactionsSummary = (startDate, endDate) => {
     return axios
-        .get(host + '/transaction/summary')
+        .get(host + '/transaction/summary', {
+            params: {
+                options: JSON.stringify({
+                    startDate: startDate
+                        .toLocaleDateString(),
+                    endDate: endDate
+                        .toLocaleDateString()
+                })
+            },
+        })
         .then(response => {
             if (response.status < 200 || response.status >= 300) {
                 return Promise.reject(response);
