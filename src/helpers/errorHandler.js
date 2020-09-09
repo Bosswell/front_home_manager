@@ -3,8 +3,10 @@ export const ErrorHandler = (error) => {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.status === 401) {
-            localStorage.removeItem('token');
-            window.location.href = '/';
+            if (localStorage.getItem('token')) {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }
 
             return {
                 'hasError': true,

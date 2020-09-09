@@ -5,34 +5,14 @@ import { ErrorHandler } from '../helpers/errorHandler';
 export const getTransactionTypes = () => {
     return axios
         .get(host + '/transaction/types/list')
-        .then(response => {
-            if (response.status < 200 || response.status >= 300) {
-                return Promise.reject(response);
-            }
-
-            if (response.data) {
-                return response.data;
-            }
-
-            return Promise.reject(response);
-        })
+        .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
 
 export const addTransaction = (data) => {
     return axios
         .post(host + '/transaction', data)
-        .then(response => {
-            if (response.status < 200 || response.status >= 300) {
-                return Promise.reject(response);
-            }
-
-            if (response.data) {
-                return response.data;
-            }
-
-            return Promise.reject(response);
-        })
+        .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
 
@@ -48,17 +28,8 @@ export const getTransactionsSummary = (startDate, endDate) => {
                 })
             },
         })
-        .then(response => {
-            if (response.status < 200 || response.status >= 300) {
-                return Promise.reject(response);
-            }
-
-            if (response.data) {
-                return response.data;
-            }
-
-            return Promise.reject(response);
-        }).catch(ErrorHandler);
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
 }
 
 export const getTransactionsList = (params) => {
@@ -68,15 +39,12 @@ export const getTransactionsList = (params) => {
                 options: params
             }
         })
-        .then(response => {
-            if (response.status < 200 || response.status >= 300) {
-                return Promise.reject(response);
-            }
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}
 
-            if (response.data) {
-                return response.data;
-            }
-
-            return Promise.reject(response);
-        }).catch(ErrorHandler);
+export const deleteTransaction = (id) => {
+    return axios.delete(host + `/transaction/delete/${id}`)
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
 }
