@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
 import { getTransactionsSummary } from "../services/transaction.service";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, FormControl } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
 import Alert from '../components/Alert';
 import { normalizeResponseErrors } from "../helpers/normalizers";
@@ -48,6 +48,7 @@ function Dashboard() {
                             selectsStart
                             startDate={startDate}
                             endDate={endDate}
+                            customInput={<FormControl />}
                         />
                         <DatePicker
                             dateFormat="dd/MM/yyyy"
@@ -57,6 +58,7 @@ function Dashboard() {
                             startDate={startDate}
                             endDate={endDate}
                             minDate={startDate}
+                            customInput={<FormControl />}
                         />
                     </div>
                 </Col>

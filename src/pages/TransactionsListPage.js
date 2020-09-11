@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
 import Loader from "../components/Loader";
-import {getTransactionsList, getTransactionTypes} from "../services/transaction.service";
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
+import { deleteTransaction, getTransactionsList, getTransactionTypes } from "../services/transaction.service";
+import { Container, Row, Col, ListGroup, Button, Modal } from 'react-bootstrap';
 import Alert from '../components/Alert';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router-dom'
 import Select from "react-select";
 import {normalizeResponseErrors} from "../helpers/normalizers";
 import {defaultSorting, filterDateFromOptions, sortingOptions} from "../constants/transactionListOptions";
+import DeleteTransactionModal from "../components/DeleteTransactionModal";
 
 
 function TransactionsListPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [alert, setAlert] = useState('');
     const query = useQuery();
     const history = useHistory();
     const [params, setParams] = useState(JSON.parse(query.get("options")) ?? {});
     const [transactionTypes, setTransactionTypes] = useState([]);
     const [sortingWay, setSortingWay] = useState('');
+    const [selectedItem, setSelectedItem] = useState({
+        item: {},
+        status: ''
+    });
     const [filters, setFilters] = useState({
         transactionType: {
             id: null,
@@ -55,22 +61,20 @@ function TransactionsListPage() {
 
             let filters = {};
 
-            if (filterBy) {
-                if (filterBy.transactionTypeId) {
-                    const transTypeObj = transactionTypes.find(obj => obj.value === params.filterBy.transactionTypeId);
-                    filters.transactionType = {
-                        id: filterBy.transactionTypeId,
-                        obj: transTypeObj ?? ''
-                    };
-                }
+            if (filterBy.transactionTypeId) {
+                const transTypeObj = transactionTypes.find(obj => obj.value === params.filterBy.transactionTypeId);
+                filters.transactionType = {
+                    id: filterBy.transactionTypeId,
+                    obj: transTypeObj ?? ''
+                };
+            }
 
-                if (filterBy.lastDays) {
-                    const dateFromObj = filterDateFromOptions.find(obj => obj.value === params.filterBy.lastDays);
-                    filters.dateFrom = {
-                        lastDays: filterBy.lastDays,
-                        obj: dateFromObj ?? ''
-                    };
-                }
+            if (filterBy.lastDays) {
+                const dateFromObj = filterDateFromOptions.find(obj => obj.value === params.filterBy.lastDays);
+                filters.dateFrom = {
+                    lastDays: filterBy.lastDays,
+                    obj: dateFromObj ?? ''
+                };
             }
 
             return {
@@ -78,7 +82,7 @@ function TransactionsListPage() {
                 ...filters
             }
         })
-    }, [transactionTypes])
+    }, [transactionTypes, params.filterBy])
 
     useEffect(() => {
         setSortingWay(() => {
@@ -102,7 +106,7 @@ function TransactionsListPage() {
                 setError(normalizeResponseErrors(response));
                 return;
             }
-            setError(null);
+            clearNotifications();
 
             const {nbPages, results} = response.data;
             setTransListInfo({
@@ -118,6 +122,19 @@ function TransactionsListPage() {
         })
 
     }, [params, history])
+
+    useEffect(() => {
+        if (selectedItem.status !== 'deleted') {
+            return;
+        }
+
+        setTransListInfo(prevState => ({
+            ...prevState,
+            results: prevState.results.filter((transaction) => {
+                return transaction.id !== selectedItem.item.id;
+            })
+        }))
+    }, [selectedItem]);
 
     function handlePageChange({ selected }) {
         setParams(prevState => ({
@@ -170,8 +187,9 @@ function TransactionsListPage() {
         }));
     }
 
-    function handleOnClick(params) {
-        console.log(params.key)
+    function clearNotifications() {
+        setAlert(null);
+        setError(null);
     }
 
     return (
@@ -179,6 +197,7 @@ function TransactionsListPage() {
             <Row>
                 <Col lg={12}>
                     {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
+                    {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
 
                     {loading && <Loader loading={loading}/>}
                     <h3>Transaction list</h3>
@@ -212,15 +231,15 @@ function TransactionsListPage() {
                     <ListGroup className={'transaction-list'} variant="flush">
                         {transListInfo.results.map((item) => {
                             return (
-                                <ListGroup.Item key={item.id} onClick={handleOnClick}>
+                                <ListGroup.Item key={item.id}>
                                     <div>Type: {item.name}</div>
                                     <div>Amount: { item.amount } PLN</div>
                                     <div>Created at: { item.created_at }</div>
                                     {item.description && <div>Desc: { item.description }</div>}
 
-                                    <a href={'/#'} className={'text-danger'}>delete</a>
+                                    <span onClick={() => {setSelectedItem({item: item, status: 'confirm'})}} className={'text-danger'}>delete</span>
                                     <span> | </span>
-                                    <a href={'/#'} className={'text-warning'}>edit</a>
+                                    <a className={'text-warning'}>edit</a>
                                 </ListGroup.Item>
                             )
                         })}
@@ -245,6 +264,8 @@ function TransactionsListPage() {
                     />
                 </Col>
             </Row>
+
+            <DeleteTransactionModal setAlert={setAlert} setError={setError} setLoading={setLoading} selected={selectedItem} setSelectedItem={setSelectedItem}/>
         </Container>
     );
 }

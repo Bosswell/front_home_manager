@@ -48,3 +48,9 @@ export const deleteTransaction = (id) => {
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
+
+export const updateTransaction = (transaction) => {
+    return axios.put(host + `/transaction/update`, { transaction })
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}

@@ -1,16 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import { hot } from 'react-hot-loader/root';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/form.scss';
 import './scss/global.scss';
 
-import { Switch, Route, BrowserRouter, useHistory} from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import TransactionsListPage from "./pages/TransactionsListPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
-import WrappedRoute, {PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE} from "./hoc/WrappedRoute";
+import WrappedRoute, { PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE } from "./hoc/WrappedRoute";
 import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
 import AddTransactionPage from './pages/AddTransactionPage';
