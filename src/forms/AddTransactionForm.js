@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import InputGroup from "../components/InputGroup";
 import Select from "react-select";
 import { addTransaction } from "../services/transaction.service";
 import Alert from "../components/Alert";
+import Switch from "react-switch";
 
 function AddTransactionForm({setLoading, transactionTypes}) {
     const [alert, setAlert] = useState('');
@@ -10,7 +10,8 @@ function AddTransactionForm({setLoading, transactionTypes}) {
     const [inputData, setInputData] = useState({
         amount: 0,
         description: '',
-        transactionTypeId: null
+        transactionTypeId: null,
+        isIncome: false
     });
 
     function handleInputChange(event) {
@@ -66,6 +67,14 @@ function AddTransactionForm({setLoading, transactionTypes}) {
                         name={'description'}
                     />
                 </div>
+
+                <div>Is income</div>
+                <Switch
+                    onChange={() => setInputData(prevState => ({ ...prevState, isIncome: !prevState.isIncome }))}
+                    checked={inputData.isIncome}
+                    checkedIcon={false}
+                    uncheckedIcon={false}
+                />
 
                 <button className={'--bg-charcoal --btn-full'}>Add transaction</button>
             </form>

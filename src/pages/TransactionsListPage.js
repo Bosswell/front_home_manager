@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
 import Loader from "../components/Loader";
-import { deleteTransaction, getTransactionsList, getTransactionTypes } from "../services/transaction.service";
+import { getTransactionsList, getTransactionTypes } from "../services/transaction.service";
 import { Container, Row, Col, ListGroup, Button, Modal } from 'react-bootstrap';
 import Alert from '../components/Alert';
 import ReactPaginate from 'react-paginate';

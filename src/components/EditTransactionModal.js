@@ -3,6 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { updateTransaction } from "../services/transaction.service";
 import Select from "react-select";
+import Switch from "react-switch";
 
 
 function EditTransactionModal({ selected, setLoading, setError, setAlert, setSelectedItem, transactionTypes }) {
@@ -16,7 +17,9 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
         setTransactionType(transactionTypes.filter((transactionType) => {
             return transactionType.value ===parseInt(selected.item.transactionTypeId);
         }));
-        setInputData(Object.assign({}, selected.item));
+        setInputData(Object.assign({}, selected.item, {
+            isIncome: parseInt(selected.item.isIncome) !== 0
+        }));
 
     }, [selected, transactionTypes]);
 
@@ -38,7 +41,7 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
                 setError(normalizeResponseErrors(response));
                 return;
             }
-            console.log(response);
+
             setAlert(response.message);
             setError(null);
         }).finally(() => {
@@ -85,6 +88,14 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
                             value={inputData.description}
                         />
                     </div>
+
+                    <div>Is income</div>
+                    <Switch
+                        onChange={() => setInputData(prevState => ({ ...prevState, isIncome: !prevState.isIncome }))}
+                        checked={inputData.isIncome}
+                        checkedIcon={false}
+                        uncheckedIcon={false}
+                    />
                 </form>
             </Modal.Body>
             <Modal.Footer>
