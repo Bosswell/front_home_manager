@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import InputGroup from "../components/InputGroup";
 import AuthService from "../services/user.service";
 import Alert from "../components/Alert";
+import {normalizeResponseErrors} from "../helpers/normalizers";
 
 
 function RegisterForm({ setIsOk, setLoading }) {
@@ -55,8 +56,8 @@ function RegisterForm({ setIsOk, setLoading }) {
 
         setLoading(false);
 
-        if (response.errors.length !== 0) {
-            await setErrors(response.errors);
+        if (response.hasError) {
+            await setErrors(normalizeResponseErrors(response));
         } else {
             await setIsOk(true);
         }
@@ -77,7 +78,7 @@ function RegisterForm({ setIsOk, setLoading }) {
             </form>
             <br/>
 
-            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occured" messages={errors}/>}
+            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occurred" messages={errors}/>}
         </div>
     );
 }

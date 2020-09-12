@@ -10,6 +10,7 @@ import Select from "react-select";
 import {normalizeResponseErrors} from "../helpers/normalizers";
 import {defaultSorting, filterDateFromOptions, sortingOptions} from "../constants/transactionListOptions";
 import DeleteTransactionModal from "../components/DeleteTransactionModal";
+import EditTransactionModal from "../components/EditTransactionModal";
 
 
 function TransactionsListPage() {
@@ -124,15 +125,32 @@ function TransactionsListPage() {
     }, [params, history])
 
     useEffect(() => {
-        if (selectedItem.status !== 'deleted') {
+        if (selectedItem.status !== 'deleted' && selectedItem.status !== 'updated') {
             return;
+        }
+
+        function changeTransaction(prevState) {
+            switch (selectedItem.status) {
+                case 'deleted':
+                    return prevState.results.filter((transaction) => {
+                        return transaction.id !== selectedItem.item.id;
+                    })
+                case 'updated':
+                    return prevState.results.map((transaction) => {
+                        if (transaction.id === selectedItem.item.id) {
+                            return selectedItem.item;
+                        }
+
+                        return transaction;
+                    })
+                default:
+                    return prevState.results;
+            }
         }
 
         setTransListInfo(prevState => ({
             ...prevState,
-            results: prevState.results.filter((transaction) => {
-                return transaction.id !== selectedItem.item.id;
-            })
+            results: changeTransaction(prevState)
         }))
     }, [selectedItem]);
 
@@ -237,9 +255,9 @@ function TransactionsListPage() {
                                     <div>Created at: { item.created_at }</div>
                                     {item.description && <div>Desc: { item.description }</div>}
 
-                                    <span onClick={() => {setSelectedItem({item: item, status: 'confirm'})}} className={'text-danger'}>delete</span>
+                                    <span onClick={() => {setSelectedItem({item: item, status: 'confirm'})}} className={'text-danger pointer btn-link'}>delete</span>
                                     <span> | </span>
-                                    <a className={'text-warning'}>edit</a>
+                                    <span onClick={() => {setSelectedItem({item: item, status: 'edit'})}} className={'text-warning pointer btn-link'}>edit</span>
                                 </ListGroup.Item>
                             )
                         })}
@@ -265,7 +283,21 @@ function TransactionsListPage() {
                 </Col>
             </Row>
 
-            <DeleteTransactionModal setAlert={setAlert} setError={setError} setLoading={setLoading} selected={selectedItem} setSelectedItem={setSelectedItem}/>
+            <DeleteTransactionModal
+                setAlert={setAlert}
+                setError={setError}
+                setLoading={setLoading}
+                selected={selectedItem}
+                setSelectedItem={setSelectedItem}
+            />
+            <EditTransactionModal
+                setAlert={setAlert}
+                setError={setError}
+                setLoading={setLoading}
+                selected={selectedItem}
+                setSelectedItem={setSelectedItem}
+                transactionTypes={transactionTypes}
+            />
         </Container>
     );
 }
