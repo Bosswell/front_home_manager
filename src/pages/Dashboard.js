@@ -72,6 +72,9 @@ function Dashboard() {
                             transactionTypeId: parseInt(item.transactionTypeId)
                         }
                     };
+                    const totalAmount = parseFloat(item.totalAmount);
+                    const income = item.income !== null ? parseFloat(item.income) : 0;
+                    const outcome = Math.round((totalAmount - income) * 100) / 100;
 
                     return (
                         <Col xs={12} sm={6} md={4}>
@@ -80,7 +83,9 @@ function Dashboard() {
                                     { item.name }
                                 </div>
                                 <div className={'item-body'}>
-                                    <div>{ item.amount } PLN</div>
+                                    <div>{ income } PLN - <span className={'text-success'}>Income</span></div>
+                                    <div>{ outcome } PLN - <span className={'text-danger'}>Outcome</span></div>
+                                    <div>Summary -> <b>{ -outcome + income }</b></div>
                                     <Link to={`/listTransactions?options=${JSON.stringify(options)}`}><CgDetailsMore/> details</Link>
                                 </div>
                             </div>
