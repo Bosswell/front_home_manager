@@ -8,9 +8,15 @@ import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router-dom'
 import Select from "react-select";
 import {normalizeResponseErrors} from "../helpers/normalizers";
-import {defaultSorting, filterDateFromOptions, sortingOptions} from "../constants/transactionListOptions";
+import {
+    defaultSorting,
+    filterDateFromOptions,
+    isIncomeOptions,
+    sortingOptions
+} from "../constants/transactionListOptions";
 import DeleteTransactionModal from "../components/DeleteTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
+import Switch from "react-bootstrap/Switch";
 
 
 function TransactionsListPage() {
@@ -40,6 +46,10 @@ function TransactionsListPage() {
         dateFrom: {
             lastDays: null,
             obj: ''
+        },
+        transactionFlow: {
+            isIncome: null,
+            obj: ''
         }
     });
 
@@ -68,19 +78,28 @@ function TransactionsListPage() {
 
             let filters = {};
 
-            if (filterBy.transactionTypeId) {
-                const transTypeObj = transactionTypes.find(obj => obj.value === params.filterBy.transactionTypeId);
+            if (filterBy.hasOwnProperty('transactionTypeId')) {
+                const transTypeObj = transactionTypes.find(obj => obj.value === filterBy.transactionTypeId);
                 filters.transactionType = {
                     id: filterBy.transactionTypeId,
                     obj: transTypeObj ?? ''
                 };
             }
 
-            if (filterBy.lastDays) {
-                const dateFromObj = filterDateFromOptions.find(obj => obj.value === params.filterBy.lastDays);
+            if (filterBy.hasOwnProperty('lastDays')) {
+                const dateFromObj = filterDateFromOptions.find(obj => obj.value === filterBy.lastDays);
                 filters.dateFrom = {
                     lastDays: filterBy.lastDays,
                     obj: dateFromObj ?? ''
+                };
+            }
+
+            if (filterBy.hasOwnProperty('isIncome')) {
+                const isIncome = filterBy.isIncome === 'true';
+                const isIncomeObj = isIncomeOptions.find(obj => obj.value === isIncome);
+                filters.transactionFlow = {
+                    isIncome: isIncome,
+                    obj: isIncomeObj ?? ''
                 };
             }
 
@@ -187,6 +206,16 @@ function TransactionsListPage() {
         }));
     }
 
+    function handleIsIncomeFilterChange(selected) {
+        setFilters(prevState => ({
+            ...prevState,
+            transactionFlow: {
+                isIncome: selected ? selected.value : null,
+                obj: selected
+            }
+        }));
+    }
+
     function handleSortingSelectChange({ value }) {
         const [name, direction] = value.split(',');
 
@@ -206,7 +235,8 @@ function TransactionsListPage() {
             nbPage: 1,
             filterBy: {
                 ...(filters.transactionType.id && {transactionTypeId: filters.transactionType.id}),
-                ...(filters.dateFrom.lastDays && {lastDays: filters.dateFrom.lastDays})
+                ...(filters.dateFrom.lastDays && {lastDays: filters.dateFrom.lastDays}),
+                ...(filters.transactionFlow.isIncome !== null && {isIncome: filters.transactionFlow.isIncome})
             }
         }));
     }
@@ -242,6 +272,15 @@ function TransactionsListPage() {
                                     onChange={handleDateFromFilterChange}
                                     options={filterDateFromOptions}
                                     placeholder={'Date from'}
+                                    isClearable={true}
+                                />
+                            </div>
+                            <div className={'filters--select'}>
+                                <Select
+                                    value={filters.transactionFlow.obj}
+                                    onChange={handleIsIncomeFilterChange}
+                                    options={isIncomeOptions}
+                                    placeholder={'Transaction flow'}
                                     isClearable={true}
                                 />
                             </div>

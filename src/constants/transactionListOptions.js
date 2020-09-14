@@ -52,3 +52,14 @@ export const filterDateFromOptions = [
         value: 30
     },
 ]
+
+export const isIncomeOptions = [
+    {
+        label: 'Income',
+        value: true
+    },
+    {
+        label: 'Outcome',
+        value: false
+    }
+];
