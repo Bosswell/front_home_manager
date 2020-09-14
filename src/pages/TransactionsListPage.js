@@ -19,7 +19,13 @@ function TransactionsListPage() {
     const [alert, setAlert] = useState('');
     const query = useQuery();
     const history = useHistory();
-    const [params, setParams] = useState(JSON.parse(query.get("options")) ?? {});
+    const [params, setParams] = useState(() => {
+        try {
+            return JSON.parse(query.get("options")) ?? {}
+        } catch (ex) {
+            return {};
+        }
+    });
     const [transactionTypes, setTransactionTypes] = useState([]);
     const [sortingWay, setSortingWay] = useState('');
     const [selectedItem, setSelectedItem] = useState({
@@ -251,7 +257,10 @@ function TransactionsListPage() {
                             return (
                                 <ListGroup.Item key={item.id}>
                                     <div>Type: {item.name}</div>
-                                    <div>Amount: { item.amount } PLN</div>
+                                    <div>Amount: { item.amount } PLN - {parseInt(item.isIncome) === 1 ?
+                                        <span className={'text-success'}>Income</span> :
+                                        <span className={'text-danger'}>Outcome</span> }
+                                    </div>
                                     <div>Created at: { item.created_at }</div>
                                     {item.description && <div>Desc: { item.description }</div>}
 
