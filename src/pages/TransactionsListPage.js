@@ -16,7 +16,7 @@ import {
 } from "../constants/transactionListOptions";
 import DeleteTransactionModal from "../components/DeleteTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
-import Switch from "react-bootstrap/Switch";
+import "../scss/list.scss";
 
 
 function TransactionsListPage() {

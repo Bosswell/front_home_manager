@@ -8,6 +8,8 @@ import Alert from '../components/Alert';
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../scss/dashboard.scss";
+import "../scss/list.scss";
 
 
 function Dashboard() {
@@ -16,6 +18,9 @@ function Dashboard() {
     const [error, setError] = useState(null);
     const [startDate, setStartDate] = useState(new Date((new Date()).setDate(1)));
     const [endDate, setEndDate] = useState(new Date());
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [totalOutcome, setTotalOutcome] = useState(0);
+    const [totalSummary, setTotalSummary] = useState(0);
 
     useEffect(() => {
         setLoading(true);
@@ -24,8 +29,11 @@ function Dashboard() {
                 setError(normalizeResponseErrors(response));
                 return;
             }
-    
-            setMonthlySummary(response.data);
+
+            setTotalIncome(response.data.totalIncome);
+            setTotalOutcome(response.data.totalOutcome);
+            setTotalSummary(response.data.totalSummary);
+            setMonthlySummary(response.data.entries);
         }).finally(() => {
             setLoading(false);
         })
@@ -64,6 +72,12 @@ function Dashboard() {
                 </Col>
             </Row>
 
+            <div className={'summary-details'}>
+                <div>&nbsp;Total income: <span className={'text-success'}>{totalIncome}</span> PLN</div>
+                <div>&nbsp;Total outcome: <span className={'text-danger'}>{totalOutcome}</span> PLN</div>
+                <div>&nbsp;Summary: {totalSummary > 0 ? <span className={'text-success'}>{totalSummary}</span> : <span className={'text-danger'}>{totalSummary}</span>} PLN</div>
+            </div>
+
             <Row className={'transaction-summary-list'}>
                 {monthlySummary.length === 0 && <Col lg={12}>No transactions has been found</Col>}
                 {monthlySummary.map(item => {
@@ -84,9 +98,9 @@ function Dashboard() {
                                     { item.name }
                                 </div>
                                 <div className={'item-body'}>
-                                    <div>{ income } PLN - <span className={'text-success'}>Income</span></div>
-                                    <div>{ outcome } PLN - <span className={'text-danger'}>Outcome</span></div>
-                                    <div>Summary -> <b>{ summary }</b></div>
+                                    <div><span className={'text-success'}>Income</span> - { income } PLN</div>
+                                    <div><span className={'text-danger'}>Outcome</span> - { outcome } PLN</div>
+                                    <div>Summary - <b>{ summary } PLN</b></div>
                                     <Link to={`/transactionsList?options=${JSON.stringify(options)}`}><CgDetailsMore/> details</Link>
                                 </div>
                             </div>

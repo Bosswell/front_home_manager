@@ -28,7 +28,7 @@ function Menu({ isOpen, setOpen, isMobile, showHamburger }) {
         <div className={'menu --bg-charcoal'}>
             <MenuLeft>
                 {isMobile && <Hamburger toggled={isOpen} toggle={setOpen} size={18}/>}
-                <MenuItem name={'Cash Manager'} handleClick={handleCashManager}/>
+                <MenuItem name={'Home Manager'} handleClick={handleCashManager}/>
             </MenuLeft>
             <MenuRight>
                 <MenuItem name={'Logout'} handleClick={handleLogout} icon={<CgLogOut/>}/>

@@ -55,7 +55,7 @@ function LoginForm({ setLoading }) {
 
     return (
         <div className={'login-form'}>
-            <h3 className={'text-center'}>Sign in to Cash Manager</h3>
+            <h3 className={'text-center'}>Sign in to Home Manager</h3>
             <form className={'form --vertical'} onSubmit={handleSubmit}>
                 <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'}/>
                 <InputGroup onChange={handleInputChange} name={'password'} type={'password'} label={'Password'}/>
@@ -64,7 +64,7 @@ function LoginForm({ setLoading }) {
                 <button className={'--bg-charcoal --btn-full'}>Sign in</button>
             </form>
             <br/>
-            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occured" messages={errors}/>}
+            {errors.length > 0 && <Alert type={'danger'} headMsg="An errors has occurred" messages={errors}/>}
         </div>
     );
 

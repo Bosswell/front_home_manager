@@ -1,0 +1,29 @@
+.item {
+  padding: 15px;
+
+  .item-title {
+    font-size: 17px;
+  }
+
+  .item-body {
+    font-size: 14px;
+  }
+}
+
+.summary-details {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.summary-details div:after {
+  content: ",";
+}
+
+.summary-details div:last-child:after {
+  content: "";
+}
+
+.transaction-summary-list {
+  margin-top: 15px;
+}

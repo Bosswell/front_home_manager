@@ -65,7 +65,7 @@ function RegisterForm({ setIsOk, setLoading }) {
 
     return (
         <div className={'register-form'}>
-            <h3 className={'text-center'}>Create account in Cash Manager</h3>
+            <h3 className={'text-center'}>Create account in Home Manager</h3>
             <form className={'form --vertical'} onSubmit={handleSubmit}>
                 <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'}/>
                 <InputGroup onChange={handleInputChange} name={'fullName'} type={'text'} label={'Your name'}/>

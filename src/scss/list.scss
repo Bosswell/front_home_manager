@@ -1,0 +1,36 @@
+.list-filters {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sorting-select, .filters--select {
+  width: 300px;
+}
+
+@media (max-width: 450px) {
+  .sorting-select, .filters--select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 660px) {
+  .list-filters {
+    flex-direction: column;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filters--button {
+  width: 130px;
+}
+
+@media (max-width: 660px) {
+  .filters {
+    margin-bottom: 10px;
+  }
+}
