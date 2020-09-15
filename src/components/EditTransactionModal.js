@@ -59,7 +59,7 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
     }
 
     return (
-        <Modal show={show} onHide={handleClose} animation={true}>
+        <Modal show={show} onHide={handleClose} animation={true} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Update transaction</Modal.Title>
             </Modal.Header>

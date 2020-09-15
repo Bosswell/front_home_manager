@@ -33,7 +33,7 @@ function DeleteTransactionModal({ selected, setLoading, setError, setAlert, setS
     }
 
     return (
-        <Modal show={show} onHide={handleClose} animation={true}>
+        <Modal show={show} onHide={handleClose} animation={true} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Delete transaction</Modal.Title>
             </Modal.Header>
