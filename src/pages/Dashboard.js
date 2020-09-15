@@ -29,11 +29,11 @@ function Dashboard() {
                 setError(normalizeResponseErrors(response));
                 return;
             }
-
-            setTotalIncome(response.data.totalIncome);
-            setTotalOutcome(response.data.totalOutcome);
-            setTotalSummary(response.data.totalSummary);
-            setMonthlySummary(response.data.entries);
+            const {totalIncome, totalOutcome, totalSummary, entries} = response.data;
+            setTotalIncome(totalIncome);
+            setTotalOutcome(totalOutcome);
+            setTotalSummary(totalSummary);
+            setMonthlySummary(entries);
         }).finally(() => {
             setLoading(false);
         })
@@ -57,6 +57,7 @@ function Dashboard() {
                             startDate={startDate}
                             endDate={endDate}
                             customInput={<FormControl />}
+                            onFocus={(e) => e.target.readOnly = true}
                         />
                         <DatePicker
                             dateFormat="dd/MM/yyyy"
@@ -67,6 +68,7 @@ function Dashboard() {
                             endDate={endDate}
                             minDate={startDate}
                             customInput={<FormControl />}
+                            onFocus={(e) => e.target.readOnly = true}
                         />
                     </div>
                 </Col>
