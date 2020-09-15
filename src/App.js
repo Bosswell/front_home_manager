@@ -27,7 +27,7 @@ function App() {
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/listTransactions' component={TransactionsListPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/transactionsList' component={TransactionsListPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>

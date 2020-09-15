@@ -75,6 +75,7 @@ function Dashboard() {
                     const totalAmount = parseFloat(item.totalAmount);
                     const income = item.income !== null ? parseFloat(item.income) : 0;
                     const outcome = Math.round((totalAmount - income) * 100) / 100;
+                    const summary = Math.round((income - outcome) * 100) / 100;
 
                     return (
                         <Col xs={12} sm={6} md={4}>
@@ -85,8 +86,8 @@ function Dashboard() {
                                 <div className={'item-body'}>
                                     <div>{ income } PLN - <span className={'text-success'}>Income</span></div>
                                     <div>{ outcome } PLN - <span className={'text-danger'}>Outcome</span></div>
-                                    <div>Summary -> <b>{ -outcome + income }</b></div>
-                                    <Link to={`/listTransactions?options=${JSON.stringify(options)}`}><CgDetailsMore/> details</Link>
+                                    <div>Summary -> <b>{ summary }</b></div>
+                                    <Link to={`/transactionsList?options=${JSON.stringify(options)}`}><CgDetailsMore/> details</Link>
                                 </div>
                             </div>
                         </Col>

@@ -12,7 +12,7 @@ function SideMenu({ isOpen, setOpen, isMobile }) {
         <div className={'side-menu' + (!isOpen ? ' hidden' : '')}>
             <MenuItem name={'Dashboard'} handleClick={() => { isMobile && setOpen(false); history.push('/dashboard') }} icon={<MdDashboard/>}/>
             <MenuItem name={'Add transaction'} handleClick={() => { isMobile && setOpen(false); history.push('/addTransaction') }} icon={<GrTransaction/>}/>
-            <MenuItem name={'List transactions'} handleClick={() => { isMobile && setOpen(false); history.push('/listTransactions') }} icon={<AiOutlineOrderedList/>}/>
+            <MenuItem name={'Transactions list '} handleClick={() => { isMobile && setOpen(false); history.push('/transactionsList') }} icon={<AiOutlineOrderedList/>}/>
         </div>
     )
 }
