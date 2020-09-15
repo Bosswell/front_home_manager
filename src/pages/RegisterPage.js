@@ -11,7 +11,7 @@ function RegisterPage() {
 
     function renderSuccess() {
         return (
-            <div>
+            <div className={'confirmation-box'}>
                 <h3>
                     You have successfully create an account. <Link to={'/login'}>Click to go to the login page</Link>
                 </h3>
@@ -21,7 +21,7 @@ function RegisterPage() {
 
     return (
         <div>
-            <h1 className={'text-center'}>Cash manager</h1>
+            <h1 className={'text-center'}>Home manager</h1>
 
             <div className={'page register-page'}>
                 {loading && <Loader loading={loading}/>}

@@ -9,7 +9,7 @@ function LoginPage() {
 
     return (
         <div>
-            <h1 className={'text-center'}>Cash manager</h1>
+            <h1 className={'text-center'}>Home manager</h1>
 
             <div className={'page login-page'}>
                 {loading && <Loader loading={loading}/>}
