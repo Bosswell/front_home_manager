@@ -9,7 +9,7 @@ export const sortingOptions = [
     },
     {
         label: "Creation date - Ascending",
-        value: "t.created_at"
+        value: "t.created_at,asc"
     },
     {
         label: "Creation date - Descending",
