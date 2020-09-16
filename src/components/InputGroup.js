@@ -2,16 +2,15 @@ import React, {Component} from "react";
 
 class InputGroup extends Component {
     render() {
+        const {name, label, ...otherProps} = this.props;
+
         return (
             <div className={'input-group'}>
-                {this.props.label && <label htmlFor={this.props.name}>{this.props.label}</label>}
-                <input 
-                    onChange={this.props.onChange} 
-                    type={this.props.type} 
-                    id={this.props.name} 
-                    name={this.props.name} 
-                    placeholder={this.props.placeholder || ''}
-                    value={this.props.value ? this.props.value : ''}
+                {label && <label htmlFor={name}>{label}</label>}
+                <input
+                    id={this.props.name}
+                    name={name}
+                    {...otherProps}
                 />
             </div>
         )
