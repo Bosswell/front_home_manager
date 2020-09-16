@@ -11,6 +11,7 @@ class InputGroup extends Component {
                     id={this.props.name} 
                     name={this.props.name} 
                     placeholder={this.props.placeholder || ''}
+                    value={this.props.value ? this.props.value : ''}
                 />
             </div>
         )
