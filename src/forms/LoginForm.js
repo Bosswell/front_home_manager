@@ -57,8 +57,8 @@ function LoginForm({ setLoading }) {
         <div className={'login-form'}>
             <h3 className={'text-center'}>Sign in to Home Manager</h3>
             <form className={'form --vertical'} onSubmit={handleSubmit}>
-                <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'} value={'demo@demo.com'}/>
-                <InputGroup onChange={handleInputChange} name={'password'} type={'password'} label={'Password'} value={'demo1234'}/>
+                <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'} value={inputData.email}/>
+                <InputGroup onChange={handleInputChange} name={'password'} type={'password'} label={'Password'} value={inputData.password}/>
                 <Link to={'/register'}><small className={'text-right'}>Don't have account yet? Click to create!</small></Link>
 
                 <button className={'--bg-charcoal --btn-full'}>Sign in</button>
