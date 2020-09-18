@@ -4,6 +4,7 @@ import Loader from "../components/Loader";
 import { Container, Row, Col } from 'react-bootstrap';
 import { getTransactionTypes } from "../services/transaction.service";
 import Alert from "../components/Alert";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 function AddTransactionPage() {
@@ -14,7 +15,7 @@ function AddTransactionPage() {
     useEffect(() => {
         getTransactionTypes().then(response => {
             if (response.hasError) {
-                setErrors(response.errors.length ? response.errors : [response.message]);
+                setErrors(normalizeResponseErrors(response));
             } else {
                 setTransactionTypes(response.data);
             }

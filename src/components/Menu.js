@@ -10,7 +10,7 @@ import { CgLogOut } from "react-icons/cg";
 import "../scss/menu.scss";
 
 
-function Menu({ isOpen, setOpen, isMobile, showHamburger }) {
+function Menu({ isOpen, setOpen, isMobile }) {
     const { setAuthed } = useContext(AuthContext);
     const history = useHistory();
 

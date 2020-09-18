@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
-import {AuthContext} from "../AuthContext";
+import { AuthContext } from "../AuthContext";
 import authProvider from "../providers/authProvider";
 import Alert from "../components/Alert";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 function LoginForm({ setLoading }) {
@@ -14,43 +15,49 @@ function LoginForm({ setLoading }) {
         password: 'demo1234'
     });
 
-    function handleInputChange(event) {
-        const target = event.target;
-
+    function handleInputChange({ target }) {
         setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
     }
 
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault();
-        let tmpErrors = [];
 
-        if (inputData.email === '') {
-            tmpErrors.push(['Address email is empty']);
-        }
-
-        if (inputData.password === '') {
-            tmpErrors.push(['You did not enter your password']);
-        }
-
-        if (tmpErrors.length !== 0) {
-            await setErrors(tmpErrors);
+        if (inputHasErrors()) {
             return;
         }
 
         setLoading(true);
 
-        await authProvider.login({
+        authProvider.login({
             username: inputData.email,
             password: inputData.password
         }).then(response => {
             setLoading(false);
 
             if (response && response.hasError) {
-                setErrors(response.errors);
+                setErrors(normalizeResponseErrors(response));
             } else {
                 setAuthed(true);
             }
         })
+    }
+
+    function inputHasErrors() {
+        let tmpErrors = [];
+
+        if (!inputData.email.trim()) {
+            tmpErrors.push(['Address email is empty']);
+        }
+
+        if (!inputData.password.trim()) {
+            tmpErrors.push(['You did not enter your password']);
+        }
+
+        if (tmpErrors.length !== 0) {
+            setErrors(tmpErrors);
+        }
+
+        return tmpErrors.length !== 0;
     }
 
     return (

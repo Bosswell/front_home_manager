@@ -1,20 +1,16 @@
-import React, {Component} from "react";
+import React from "react";
 
-class InputGroup extends Component {
-    render() {
-        const {name, label, ...otherProps} = this.props;
-
-        return (
-            <div className={'input-group'}>
-                {label && <label htmlFor={name}>{label}</label>}
-                <input
-                    id={this.props.name}
-                    name={name}
-                    {...otherProps}
-                />
-            </div>
-        )
-    }
+function InputGroup({name, label, ...otherProps}) {
+    return (
+        <div className={'input-group'}>
+            {label && <label htmlFor={name}>{label}</label>}
+            <input
+                id={name}
+                name={name}
+                {...otherProps}
+            />
+        </div>
+    )
 }
 
 export default InputGroup;

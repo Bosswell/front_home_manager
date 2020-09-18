@@ -6,19 +6,19 @@ import { Alert as ReactAlert } from "react-bootstrap";
  */
 function Alert({ type, messages, headMsg }) {
     function renderAlertBody() {
-        if (Array.isArray(messages)) {
-            return (
-                <ol>
-                    {messages.map(message => {
-                        return (
-                            <li> { message } </li>
-                        );
-                    })}
-                </ol>
-            );
+        if (!Array.isArray(messages)) {
+            return messages;
         }
 
-        return messages;
+        return (
+            <ol>
+                {messages.map((message, index) => {
+                    return (
+                        <li key={index}> { message } </li>
+                    );
+                })}
+            </ol>
+        );
     }
 
     return (

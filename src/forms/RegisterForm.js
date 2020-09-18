@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
 import AuthService from "../services/user.service";
 import Alert from "../components/Alert";
-import {normalizeResponseErrors} from "../helpers/normalizers";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 function RegisterForm({ setIsOk, setLoading }) {
@@ -15,29 +15,46 @@ function RegisterForm({ setIsOk, setLoading }) {
     });
     const [errors, setErrors] = useState([]);
 
-    function handleInputChange(event) {
-        const target = event.target;
-
+    function handleInputChange({ target }) {
         setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
     }
 
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault();
+
+        if (inputHasErrors()) {
+            return;
+        }
+
+        setLoading(true);
+
+        AuthService.register(inputData).then((response) => {
+            if (response.hasError) {
+                setErrors(normalizeResponseErrors(response));
+            } else {
+                setIsOk(true);
+            }
+        }).finally(() => {
+            setLoading(false);
+        });
+    }
+
+    function inputHasErrors() {
         let tmpErrors = [];
 
-        if (inputData.fullName === '') {
+        if (!inputData.fullName.trim()) {
             tmpErrors.push(['You did not enter your name ']);
         }
 
-        if (inputData.email === '') {
+        if (!inputData.email.trim()) {
             tmpErrors.push(['Address email is empty']);
         }
 
-        if (inputData.password === '') {
+        if (!inputData.password.trim()) {
             tmpErrors.push(['You did not enter your password']);
         }
 
-        if (inputData.confirmPassword === '') {
+        if (!inputData.confirmPassword()) {
             tmpErrors.push(['You did not confirmed your password']);
         }
 
@@ -46,21 +63,10 @@ function RegisterForm({ setIsOk, setLoading }) {
         }
 
         if (tmpErrors.length !== 0) {
-            await setErrors(tmpErrors);
-            return;
+            setErrors(tmpErrors);
         }
 
-        setLoading(true);
-
-        let response = await AuthService.register(inputData);
-
-        setLoading(false);
-
-        if (response.hasError) {
-            await setErrors(normalizeResponseErrors(response));
-        } else {
-            await setIsOk(true);
-        }
+        return tmpErrors.length !== 0;
     }
 
     return (
