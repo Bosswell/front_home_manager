@@ -54,7 +54,7 @@ function RegisterForm({ setIsOk, setLoading }) {
             tmpErrors.push(['You did not enter your password']);
         }
 
-        if (!inputData.confirmPassword()) {
+        if (!inputData.confirmPassword.trim()) {
             tmpErrors.push(['You did not confirmed your password']);
         }
 
