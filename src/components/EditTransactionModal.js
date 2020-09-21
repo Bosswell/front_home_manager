@@ -4,39 +4,48 @@ import { normalizeResponseErrors } from "../helpers/normalizers";
 import { updateTransaction } from "../services/transaction.service";
 import Select from "react-select";
 import Switch from "react-switch";
+import { taxPercentageOptions } from "../constants/transactionOptions";
 
 
 function EditTransactionModal({ selected, setLoading, setError, setAlert, setSelectedItem, transactionTypes }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [inputData, setInputData] = useState({});
-    const [transactionType, setTransactionType] = useState();
 
     useEffect(() => {
         setShow(selected.status === 'edit');
-        setTransactionType(transactionTypes.filter((transactionType) => {
-            return transactionType.value ===parseInt(selected.item.transactionTypeId);
-        }));
         setInputData(Object.assign({}, selected.item, {
-            isIncome: parseInt(selected.item.isIncome) !== 0
+            isIncome: parseInt(selected.item.isIncome) !== 0,
+            isDeductible: selected.item.taxPercentage !== null,
+            transactionType: transactionTypes.find((transactionType) => {
+                return transactionType.value === parseInt(selected.item.transactionTypeId);
+            }),
+            taxPercentage: taxPercentageOptions.find((taxOption) => {
+                return taxOption.value === parseInt(selected.item.taxPercentage);
+            })
         }));
 
     }, [selected, transactionTypes]);
 
-    function handleInputChange(event) {
-        const target = event.target;
-
+    function handleInputChange({ target }) {
         setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
     }
 
     function handleUpdateTransaction() {
+        const transaction = {
+            ...inputData,
+            transactionTypeId: inputData.transactionType.value,
+            name: inputData.transactionType.label,
+            taxPercentage: inputData.isDeductible && !inputData.isIncome ? inputData.taxPercentage.value : null
+        };
+
         setSelectedItem({
-            item: inputData,
+            item: transaction,
             status: 'updated'
         });
 
         setLoading(true);
-        updateTransaction(inputData).then(response => {
+        updateTransaction(transaction).then(response => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -50,11 +59,16 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
     }
 
     function handleSelectChange(selected) {
-        setTransactionType(selected);
         setInputData(prevState => ({
             ...prevState,
-            transactionTypeId: selected.value,
-            name: selected.label
+            transactionType: selected
+        }));
+    }
+
+    function handleTaxPercentageChange(selected) {
+        setInputData(prevState => ({
+            ...prevState,
+            taxPercentage: selected
         }));
     }
 
@@ -65,9 +79,9 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
             </Modal.Header>
             <Modal.Body>
                 <form className={'form --vertical'}>
-                    <Select value={transactionType} onChange={handleSelectChange} options={transactionTypes} placeholder={'Transaction type'}/>
+                    <Select value={inputData.transactionType} onChange={handleSelectChange} options={transactionTypes} placeholder={'Transaction type'}/>
                     <div className={'input-group'}>
-                        <label htmlFor={'amount'}>Amount (PLN)</label>
+                        <label htmlFor={'amount'}>Amount - tax included (PLN)</label>
                         <input
                             onChange={handleInputChange}
                             type={'number'}
@@ -92,10 +106,21 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
                     <div>Is income</div>
                     <Switch
                         onChange={() => setInputData(prevState => ({ ...prevState, isIncome: !prevState.isIncome }))}
-                        checked={inputData.isIncome}
+                        checked={!!inputData.isIncome}
                         checkedIcon={false}
                         uncheckedIcon={false}
                     />
+
+                    {!inputData.isIncome && <>
+                        <div>May be tax deductible?</div>
+                        <Switch
+                            onChange={() => setInputData(prevState => ({ ...prevState, isDeductible: !prevState.isDeductible }))}
+                            checked={!!inputData.isDeductible}
+                            checkedIcon={false}
+                            uncheckedIcon={false}
+                        />
+                        {inputData.isDeductible && <Select value={inputData.taxPercentage} onChange={handleTaxPercentageChange} options={taxPercentageOptions} placeholder={'Tax percentage'}/>}
+                    </>}
                 </form>
             </Modal.Body>
             <Modal.Footer>
