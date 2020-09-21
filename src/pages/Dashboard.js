@@ -89,7 +89,7 @@ function Dashboard() {
                         }
                     };
                     const totalAmount = parseFloat(item.totalAmount);
-                    const income = item.income !== null ? parseFloat(item.income) : 0;
+                    const income = item.incomeAmount !== null ? parseFloat(item.incomeAmount) : 0;
                     const outcome = Math.round((totalAmount - income) * 100) / 100;
                     const summary = Math.round((income - outcome) * 100) / 100;
 
