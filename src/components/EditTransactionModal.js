@@ -15,8 +15,8 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
     useEffect(() => {
         setShow(selected.status === 'edit');
         setInputData(Object.assign({}, selected.item, {
-            isIncome: parseInt(selected.item.isIncome) !== 0,
-            isDeductible: selected.item.taxPercentage !== null,
+            isIncome: [true, "true"].includes(selected.item.isIncome),
+            isDeductible: parseInt(selected.item.taxPercentage) > 0,
             transactionType: transactionTypes.find((transactionType) => {
                 return transactionType.value === parseInt(selected.item.transactionTypeId);
             }),
@@ -106,7 +106,7 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
                     <div>Is income</div>
                     <Switch
                         onChange={() => setInputData(prevState => ({ ...prevState, isIncome: !prevState.isIncome }))}
-                        checked={!!inputData.isIncome}
+                        checked={inputData.isIncome}
                         checkedIcon={false}
                         uncheckedIcon={false}
                     />
@@ -115,7 +115,7 @@ function EditTransactionModal({ selected, setLoading, setError, setAlert, setSel
                         <div>May be tax deductible?</div>
                         <Switch
                             onChange={() => setInputData(prevState => ({ ...prevState, isDeductible: !prevState.isDeductible }))}
-                            checked={!!inputData.isDeductible}
+                            checked={inputData.isDeductible}
                             checkedIcon={false}
                             uncheckedIcon={false}
                         />

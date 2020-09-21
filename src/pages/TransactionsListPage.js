@@ -296,10 +296,11 @@ function TransactionsListPage() {
                             return (
                                 <ListGroup.Item key={item.id}>
                                     <div>Type: {item.name}</div>
-                                    <div>Amount: { item.amount } PLN - {parseInt(item.isIncome) === 1 ?
+                                    <div>Amount: { item.amount } PLN {parseInt(item.taxPercentage) > 0 && <> with { item.taxPercentage }% TAX</>} - {parseInt(item.isIncome) === 1 ?
                                         <span className={'text-success'}>Income</span> :
                                         <span className={'text-danger'}>Outcome</span> }
                                     </div>
+
                                     <div>Created at: { item.created_at }</div>
                                     {item.description && <div>Desc: { item.description }</div>}
 
