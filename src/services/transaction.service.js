@@ -50,7 +50,6 @@ export const deleteTransaction = (id) => {
 }
 
 export const updateTransaction = (transaction) => {
-    console.log(transaction);
     return axios.put(host + `/transaction/update`, { ...transaction })
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
