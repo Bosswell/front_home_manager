@@ -246,6 +246,7 @@ function TransactionsListPage() {
     return (
         <Container fluid={true}>
             <TransactionList
+                params={params}
                 error={error}
                 alert={alert}
                 loading={loading}

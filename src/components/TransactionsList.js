@@ -8,6 +8,7 @@ import ReactPaginate from "react-paginate";
 
 function TransactionList(
     {
+        params,
         error,
         alert,
         loading,
@@ -93,7 +94,7 @@ function TransactionList(
                     onPageChange={handlePageChange}
                     disableInitialCallback={true}
                     pageCount={transListInfo.nbPages}
-                    initialPage={transListInfo.nbPage - 1}
+                    forcePage={params.nbPage ? params.nbPage - 1 : 0}
                     pageRangeDisplayed={2}
                     marginPagesDisplayed={2}
                     containerClassName={'pagination justify-content-end'}
