@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
-import Loader from "../components/Loader";
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
-import Alert from '../components/Alert';
-import ReactPaginate from 'react-paginate';
+import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
-import Select from "react-select";
-import {normalizeResponseErrors} from "../helpers/normalizers";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 import "../scss/list.scss";
 import "../scss/form.scss";
-import {getRecipesList} from "../services/recipe.service";
-import InputGroup from "../components/InputGroup";
+import { getRecipesList } from "../services/recipe.service";
 import { defaultSorting, sortingOptions } from "../constants/recipeListOptions";
+import RecipeDetails from "../components/RecipeDetails";
+import RecipesList from "../components/RecipesList";
 
 
 function RecipesListPage() {
@@ -29,14 +26,13 @@ function RecipesListPage() {
     });
     const [sortingWay, setSortingWay] = useState('');
     const [search, setSearch] = useState('');
-    const [selectedItem, setSelectedItem] = useState({
-        item: {},
-        status: ''
-    });
-
     const [recipeListInfo, setRecipeListInfo] = useState({
         nbPages: 0,
         results: []
+    });
+    const [details, setDetails] = useState({
+        show: false,
+        object: {}
     });
 
     useEffect(() => {
@@ -66,16 +62,15 @@ function RecipesListPage() {
             const {nbPages, results} = response.data;
             setRecipeListInfo({
                 nbPages: nbPages,
-                results: results,
+                results: results
             });
         }).finally(() => {
             setLoading(false);
             history.push({
                 location: 'listTransactions',
                 search: '?options=' + JSON.stringify(params)
-            })
+            });
         })
-
     }, [params, history])
 
     function handlePageChange({ selected }) {
@@ -109,52 +104,23 @@ function RecipesListPage() {
 
     return (
         <Container fluid={true}>
-            <Row>
-                <Col lg={12}>
-                    {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
-                    {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
-
-                    {loading && <Loader loading={loading}/>}
-                    <h3>Recipes list</h3>
-                    <div className={'list-filters'}>
-                        <div className={'filters form'}>
-                            <InputGroup onChange={handleSearchRecipe} name={'search'} type={'search'} placeholder={'Search ...'}/>
-                        </div>
-                        <div className={'sorting-select'}>
-                            <Select onChange={handleSortingSelectChange} value={sortingWay} options={sortingOptions} placeholder={'Sort by'}/>
-                        </div>
-                    </div>
-
-                    <ListGroup className={'transaction-list'} variant="flush">
-                        {recipeListInfo.results.map((item) => {
-                            return (
-                                <ListGroup.Item key={item.id}>
-                                    <div className={'text-info pointer btn-link'}>{ item.name }</div>
-                                    <div>Created at: { item.created_at }</div>
-                                </ListGroup.Item>
-                            )
-                        })}
-                    </ListGroup>
-
-                    <ReactPaginate
-                        onPageChange={handlePageChange}
-                        disableInitialCallback={true}
-                        pageCount={recipeListInfo.nbPages}
-                        initialPage={recipeListInfo.nbPage - 1}
-                        pageRangeDisplayed={2}
-                        marginPagesDisplayed={2}
-                        containerClassName={'pagination justify-content-end'}
-                        pageClassName={'page-item'}
-                        pageLinkClassName={'page-link'}
-                        previousClassName={'page-item'}
-                        nextClassName={'page-item'}
-                        previousLinkClassName={'page-link'}
-                        nextLinkClassName={'page-link'}
-                        disabledClassName={'disabled'}
-                        activeClassName={'active'}
-                    />
-                </Col>
-            </Row>
+            {details.show ?
+                <RecipeDetails
+                    setDetails={setDetails}
+                /> :
+                <RecipesList
+                    params={params}
+                    error={error}
+                    alert={alert}
+                    loading={loading}
+                    handleSearchRecipe={handleSearchRecipe}
+                    handleSortingSelectChange={handleSortingSelectChange}
+                    sortingWay={sortingWay}
+                    recipeListInfo={recipeListInfo}
+                    handlePageChange={handlePageChange}
+                    setDetails={setDetails}
+                />
+            }
         </Container>
     );
 }
