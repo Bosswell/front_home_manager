@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
-import Loader from "../components/Loader";
 import { getTransactionsList, getTransactionTypes } from "../services/transaction.service";
-import { Container, Row, Col, ListGroup, Button, Modal } from 'react-bootstrap';
-import Alert from '../components/Alert';
-import ReactPaginate from 'react-paginate';
+import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
-import Select from "react-select";
 import {normalizeResponseErrors} from "../helpers/normalizers";
 import {
     defaultSorting,
@@ -16,6 +12,7 @@ import {
 } from "../constants/transactionListOptions";
 import DeleteTransactionModal from "../components/DeleteTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
+import TransactionList from "../components/TransactionsList";
 import "../scss/list.scss";
 
 
@@ -248,89 +245,22 @@ function TransactionsListPage() {
 
     return (
         <Container fluid={true}>
-            <Row>
-                <Col lg={12}>
-                    {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
-                    {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
-
-                    {loading && <Loader loading={loading}/>}
-                    <h3>Transaction list</h3>
-                    <div className={'list-filters'}>
-                        <div className={'filters'}>
-                            <div className={'filters--select'}>
-                                <Select
-                                    value={filters.transactionType.obj}
-                                    onChange={handleTransactionTypeFilterChange}
-                                    options={transactionTypes}
-                                    placeholder={'Transaction type'}
-                                    isClearable={true}
-                                />
-                            </div>
-                            <div className={'filters--select'}>
-                                <Select
-                                    value={filters.dateFrom.obj}
-                                    onChange={handleDateFromFilterChange}
-                                    options={filterDateFromOptions}
-                                    placeholder={'Date from'}
-                                    isClearable={true}
-                                />
-                            </div>
-                            <div className={'filters--select'}>
-                                <Select
-                                    value={filters.transactionFlow.obj}
-                                    onChange={handleIsIncomeFilterChange}
-                                    options={isIncomeOptions}
-                                    placeholder={'Transaction flow'}
-                                    isClearable={true}
-                                />
-                            </div>
-                            <Button className={'filters--button'} onClick={handleApplyFilters} variant="outline-dark">Apply filters</Button>
-                        </div>
-                        <div className={'sorting-select'}>
-                            <Select onChange={handleSortingSelectChange} value={sortingWay} options={sortingOptions} placeholder={'Sort by'}/>
-                        </div>
-                    </div>
-
-                    <ListGroup className={'transaction-list'} variant="flush">
-                        {transListInfo.results.map((item) => {
-                            return (
-                                <ListGroup.Item key={item.id}>
-                                    <div>Type: {item.name}</div>
-                                    <div>Amount: { item.amount } PLN {parseInt(item.taxPercentage) > 0 && <> with { item.taxPercentage }% TAX</>} - {parseInt(item.isIncome) === 1 ?
-                                        <span className={'text-success'}>Income</span> :
-                                        <span className={'text-danger'}>Outcome</span> }
-                                    </div>
-
-                                    <div>Created at: { item.created_at }</div>
-                                    {item.description && <div>Desc: { item.description }</div>}
-
-                                    <span onClick={() => {setSelectedItem({item: item, status: 'confirm'})}} className={'text-danger pointer btn-link'}>delete</span>
-                                    <span> | </span>
-                                    <span onClick={() => {setSelectedItem({item: item, status: 'edit'})}} className={'text-warning pointer btn-link'}>edit</span>
-                                </ListGroup.Item>
-                            )
-                        })}
-                    </ListGroup>
-
-                    <ReactPaginate
-                        onPageChange={handlePageChange}
-                        disableInitialCallback={true}
-                        pageCount={transListInfo.nbPages}
-                        initialPage={transListInfo.nbPage - 1}
-                        pageRangeDisplayed={2}
-                        marginPagesDisplayed={2}
-                        containerClassName={'pagination justify-content-end'}
-                        pageClassName={'page-item'}
-                        pageLinkClassName={'page-link'}
-                        previousClassName={'page-item'}
-                        nextClassName={'page-item'}
-                        previousLinkClassName={'page-link'}
-                        nextLinkClassName={'page-link'}
-                        disabledClassName={'disabled'}
-                        activeClassName={'active'}
-                    />
-                </Col>
-            </Row>
+            <TransactionList
+                error={error}
+                alert={alert}
+                loading={loading}
+                handleSortingSelectChange={handleSortingSelectChange}
+                sortingWay={sortingWay}
+                filters={filters}
+                handlePageChange={handlePageChange}
+                handleTransactionTypeFilterChange={handleTransactionTypeFilterChange}
+                transactionTypes={transactionTypes}
+                handleDateFromFilterChange={handleDateFromFilterChange}
+                handleIsIncomeFilterChange={handleIsIncomeFilterChange}
+                handleApplyFilters={handleApplyFilters}
+                transListInfo={transListInfo}
+                setSelectedItem={setSelectedItem}
+            />
 
             <DeleteTransactionModal
                 setAlert={setAlert}
