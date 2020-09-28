@@ -40,7 +40,7 @@ function RecipesPage() {
                     <Col lg={12} className={'page-header'}>
                         <h3>{ title }</h3>
                         {mode !== 'insert' ?
-                            <Button variant={'outline-dark'} onClick={() => setMode('insert')}>Create new</Button>
+                            <Button variant={'outline-success'} onClick={() => setMode('insert')}>Create new</Button>
                             :
                             <Button variant={'outline-dark'} onClick={() => setMode('list')}>List recipes</Button>
                         }
