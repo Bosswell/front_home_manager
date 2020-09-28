@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Row, Col } from "react-bootstrap";
 import { deleteRecipe, updateRecipe } from "../services/recipe.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
@@ -6,9 +6,12 @@ import DeleteModal from "../components/DeleteModal";
 import DetailsView from "./DetailsView";
 import EditView from "./EditView";
 import DetailsNav from "../components/DetailsNav";
+import {PageContext} from "../PageContext";
 
 
-function RecipeDetails({ setRecipeId, setRecipe, recipe, setLoading, setError, setAlert, setRecipeListInfo }) {
+function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
+    const {setError, setAlert, setLoading} = useContext(PageContext);
+
     const [showModal, setShow] = useState(false);
     const [action, setAction] = useState('view');
     const [inputData, setInputData] = useState({

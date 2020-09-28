@@ -151,3 +151,9 @@ menu {
 .ck-editor__editable {
   min-height: 400px;
 }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
