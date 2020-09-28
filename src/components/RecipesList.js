@@ -13,7 +13,7 @@ function RecipesList(
         sortingWay,
         recipeListInfo,
         handlePageChange,
-        setRecipe
+        setRecipeId
     }
 ) {
     return (
@@ -35,7 +35,7 @@ function RecipesList(
                             <ListGroup.Item key={item.id}>
                                 <div
                                     className={'text-info pointer btn-link'}
-                                    onClick={() => {setRecipe({show: true, id: item.id})}}
+                                    onClick={() => {setRecipeId(parseInt(item.id))}}
                                 >
                                     { item.name }
                                 </div>

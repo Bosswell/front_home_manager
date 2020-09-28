@@ -35,10 +35,41 @@ function RecipesListPage() {
     const [cachedRecipes, setCachedRecipe] = useState([]);
     const [recipe, setRecipe] = useState({
         show: false,
-        prepared: false,
-        id: 0,
         data: {}
     });
+    const [selectedRecipeId, setRecipeId] = useState(0);
+
+    // Get and show details of selected recipe
+    // Clicked recipes are cached
+    useEffect(() => {
+        clearNotifications();
+
+        if (selectedRecipeId === 0) {
+            setRecipe({data: {}, show: false})
+            return;
+        }
+
+        const cachedRecipe = cachedRecipes.find((cachedRecipe) => {
+            return cachedRecipe.id === selectedRecipeId;
+        })
+
+        if (cachedRecipe) {
+            setRecipe({data: cachedRecipe, show: true});
+            return;
+        }
+
+        setLoading(true);
+        getRecipe(selectedRecipeId).then((response) => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+            } else {
+                setRecipe({data: response.data, show: true});
+                setCachedRecipe(prevState => ([...prevState, response.data]));
+            }
+        }).finally(() => {
+            setLoading(false);
+        })
+    }, [selectedRecipeId, cachedRecipes])
 
     useEffect(() => {
         setSortingWay(() => {
@@ -109,44 +140,6 @@ function RecipesListPage() {
         setError(null);
     }
 
-    useEffect(() => {
-        if (!recipe.show || !recipe.id) {
-            return;
-        }
-
-        clearNotifications();
-
-        let cachedRecipe = cachedRecipes.find((cachedRecipe) => {
-            return cachedRecipe.id === parseInt(recipe.id);
-        })
-
-        if (cachedRecipe) {
-            setRecipe(prevState => ({
-                ...prevState,
-                data: cachedRecipe,
-                show: true,
-                prepared: true
-            }));
-            return;
-        }
-
-        setLoading(true);
-        getRecipe(recipe.id).then((response) => {
-            if (response.hasError) {
-                setError(normalizeResponseErrors(response));
-            } else {
-                setRecipe(prevState => ({
-                    ...prevState,
-                    data: response.data,
-                    prepared: true
-                }));
-                setCachedRecipe(prevState => ([...prevState, response.data]));
-            }
-        }).finally(() => {
-            setLoading(false);
-        })
-    }, [recipe.show])
-
     return (
         <Container fluid={true}>
             <Row>
@@ -158,7 +151,7 @@ function RecipesListPage() {
                 {loading && <Loader loading={loading}/>}
             </Row>
 
-            {recipe.show && recipe.prepared ?
+            {recipe.show ?
                 <RecipeDetails
                     recipe={recipe}
                     setError={setError}
@@ -166,6 +159,7 @@ function RecipesListPage() {
                     setLoading={setLoading}
                     setAlert={setAlert}
                     setRecipeListInfo={setRecipeListInfo}
+                    setRecipeId={setRecipeId}
                 /> :
                 <RecipesList
                     params={params}
@@ -174,7 +168,7 @@ function RecipesListPage() {
                     sortingWay={sortingWay}
                     recipeListInfo={recipeListInfo}
                     handlePageChange={handlePageChange}
-                    setRecipe={setRecipe}
+                    setRecipeId={setRecipeId}
                 />
             }
         </Container>

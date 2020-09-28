@@ -1,18 +1,31 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Row, Col } from "react-bootstrap";
 import { BiArrowBack } from "react-icons/bi";
 import Button from "react-bootstrap/Button";
-import { deleteRecipe } from "../services/recipe.service";
+import {deleteRecipe, updateRecipe} from "../services/recipe.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
-import InputGroup from "./InputGroup";
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DeleteModal from "./DeleteModal";
+import DetailsView from "./Recipe/DetailsView";
+import EditView from "./Recipe/EditView";
 
 
-function RecipeDetails({ setRecipe, recipe, setLoading, setError, setAlert, setRecipeListInfo }) {
-    function handleDelete() {
+function RecipeDetails({ setRecipeId, setRecipe, recipe, setLoading, setError, setAlert, setRecipeListInfo }) {
+    const [showModal, setShow] = useState(false);
+    const [action, setAction] = useState('view');
+    const [inputData, setInputData] = useState({
+        name: '',
+        content: ''
+    })
+
+    useEffect(() => {
+        setInputData({ ...recipe.data });
+    }, [recipe])
+
+    function handleDeleteRecipe() {
+        setShow(false);
+
         setLoading(true);
-        deleteRecipe(recipe.id).then((response) => {
+        deleteRecipe(recipe.data.id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
             } else {
@@ -22,65 +35,92 @@ function RecipeDetails({ setRecipe, recipe, setLoading, setError, setAlert, setR
             setRecipeListInfo(prevState => ({
                 ...prevState,
                 results: prevState.results.filter((entry) => {
-                    return parseInt(entry.id) !== recipe.id;
+                    return parseInt(entry.id) !== recipe.data.id;
                 })
             }));
-            setRecipe({id: 0, data: {}, show: false, prepared: false});
+            setRecipe({data: {}, show: false});
         }).finally(() => {
             setLoading(false);
         })
     }
 
-    function handleContentChange() {
-
+    function returnToList() {
+        setRecipe(prevState => ({...prevState, show: false}))
+        setRecipeId(0);
     }
 
-    function listView() {
-        return (
-            <>
-                <h2>Recipe details</h2>
-                <h3>{ recipe.data.name }</h3>
-                <article>{ recipe.data.content }</article>
-            </>
-        )
+    function handleContentChange(event, editor) {
+        const data = editor.getData();
+
+        setInputData(prevState => ({
+            name: prevState.name,
+            content: data
+        }))
     }
 
-    function editView() {
-        return (
-            <form className={'form'}>
-                <InputGroup name={'name'} label={'Recipe name'} type={'text'} value={recipe.data.name}/>
-                <div className={'cke-name'}>Content</div>
-                <CKEditor
-                    editor={ ClassicEditor }
-                    data={ recipe.data.content }
-                    onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        console.log( { event, editor, data } );
-                    } }
-                />
-                <Button variant={'success'}>Update</Button>
-            </form>
-        )
+    function handleInputChange({ target }) {
+        setInputData(prevState => ({
+            name: target.value,
+            content: prevState.content
+        }))
+    }
+
+    function handleSubmit() {
+        setLoading(true);
+        updateRecipe({...inputData, id: recipe.data.id}).then((response) => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+            } else {
+                setAlert(response.message);
+                setRecipe(prevState => ({
+                    show: prevState.show,
+                    data: inputData
+                }))
+                setAction('view');
+            }
+        }).finally(() => {
+            setLoading(false);
+        })
     }
 
     return (
         <Row>
             <Col lg={12}>
                 <nav className={'details__nav'}>
-                    <div className={'details__nav--back'} onClick={() => {setRecipe(prevState => ({...prevState, prepared: false, show: false}))}}>
+                    <div className={'details__nav--back'} onClick={returnToList}>
                         <BiArrowBack/> <span>back</span>
                     </div>
 
                     <div className={'details__nav__actions'}>
-                        <Button className={'details--action-btn'} variant={'outline-warning'}>Edit</Button>
-                        <Button className={'details--action-btn'} variant={'outline-danger'} onClick={handleDelete}>Delete</Button>
+                        {action === 'view' ?
+                            <Button className={'details--action-btn'} variant={'outline-warning'} onClick={() => setAction('edit')}>
+                                Edit
+                            </Button>
+                                :
+                            <Button className={'details--action-btn'} variant={'outline-info'} onClick={() => setAction('view')}>
+                                View
+                            </Button>
+                        }
+
+                        <Button className={'details--action-btn'} variant={'outline-danger'} onClick={() => setShow(true)}>Delete</Button>
                     </div>
                 </nav>
             </Col>
             <Col lg={12}>
                 <hr/>
-                {editView()}
+                {action === 'view' ?
+                    <DetailsView {...recipe.data}/>
+                        :
+                    <EditView
+                        {...inputData}
+                        onContentChange={handleContentChange}
+                        onInputChange={handleInputChange}
+                        onSubmit={handleSubmit}
+                    />
+                }
             </Col>
+
+            <DeleteModal show={showModal} setShow={setShow} entityName={'recipe'} handleDelete={handleDeleteRecipe}/>
         </Row>
     );
 }
