@@ -32,12 +32,13 @@ function RecipesListPage() {
         nbPages: 0,
         results: []
     });
-    const [details, setDetails] = useState({
-        show: false,
-        object: {}
-    });
     const [cachedRecipes, setCachedRecipe] = useState([]);
-    const [recipe, setRecipe] = useState({});
+    const [recipe, setRecipe] = useState({
+        show: false,
+        prepared: false,
+        id: 0,
+        data: {}
+    });
 
     useEffect(() => {
         setSortingWay(() => {
@@ -109,32 +110,42 @@ function RecipesListPage() {
     }
 
     useEffect(() => {
-        if (!details.show || details.obj.length === 0) {
+        if (!recipe.show || !recipe.id) {
             return;
         }
+
         clearNotifications();
 
-        let recipe = cachedRecipes.find((recipe) => {
-            return recipe.id === parseInt(details.obj.id);
+        let cachedRecipe = cachedRecipes.find((cachedRecipe) => {
+            return cachedRecipe.id === parseInt(recipe.id);
         })
 
-        if (recipe) {
-            setRecipe(recipe);
+        if (cachedRecipe) {
+            setRecipe(prevState => ({
+                ...prevState,
+                data: cachedRecipe,
+                show: true,
+                prepared: true
+            }));
             return;
         }
 
         setLoading(true);
-        getRecipe(details.obj.id).then((response) => {
+        getRecipe(recipe.id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
             } else {
-                setRecipe(response.data);
+                setRecipe(prevState => ({
+                    ...prevState,
+                    data: response.data,
+                    prepared: true
+                }));
                 setCachedRecipe(prevState => ([...prevState, response.data]));
             }
         }).finally(() => {
             setLoading(false);
         })
-    }, [details.show])
+    }, [recipe.show])
 
     return (
         <Container fluid={true}>
@@ -147,11 +158,11 @@ function RecipesListPage() {
                 {loading && <Loader loading={loading}/>}
             </Row>
 
-            {details.show ?
+            {recipe.show && recipe.prepared ?
                 <RecipeDetails
-                    setDetails={setDetails}
                     recipe={recipe}
                     setError={setError}
+                    setRecipe={setRecipe}
                     setLoading={setLoading}
                     setAlert={setAlert}
                     setRecipeListInfo={setRecipeListInfo}
@@ -163,7 +174,7 @@ function RecipesListPage() {
                     sortingWay={sortingWay}
                     recipeListInfo={recipeListInfo}
                     handlePageChange={handlePageChange}
-                    setDetails={setDetails}
+                    setRecipe={setRecipe}
                 />
             }
         </Container>
