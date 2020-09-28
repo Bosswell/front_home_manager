@@ -15,8 +15,7 @@ function SideMenu({ isOpen, setOpen, isMobile }) {
             <MenuItem name={'Add transaction'} handleClick={() => { isMobile && setOpen(false); history.push('/addTransaction') }} icon={<GrTransaction/>}/>
             <MenuItem name={'Transactions list '} handleClick={() => { isMobile && setOpen(false); history.push('/transactionsList') }} icon={<AiOutlineOrderedList/>}/>
             <MenuItem divider={true}/>
-            <MenuItem name={'Add recipe '} handleClick={() => { isMobile && setOpen(false); history.push('/addRecipe') }} icon={<GiCookingPot/>}/>
-            <MenuItem name={'Recipes list '} handleClick={() => { isMobile && setOpen(false); history.push('/recipesList') }} icon={<AiOutlineOrderedList/>}/>
+            <MenuItem name={'Recipes list '} handleClick={() => { isMobile && setOpen(false); history.push('/recipesList') }} icon={<GiCookingPot/>}/>
         </div>
     )
 }

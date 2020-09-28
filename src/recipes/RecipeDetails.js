@@ -4,9 +4,9 @@ import { deleteRecipe, updateRecipe } from "../services/recipe.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import DeleteModal from "../components/DeleteModal";
 import DetailsView from "./DetailsView";
-import EditView from "./EditView";
 import DetailsNav from "../components/DetailsNav";
 import {PageContext} from "../PageContext";
+import RecipeForm from "./RecipeForm";
 
 
 function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
@@ -78,6 +78,16 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
                     show: prevState.show,
                     data: inputData
                 }))
+                setRecipeListInfo(prevState => ({
+                    ...prevState,
+                    results: prevState.results.map((entry) => {
+                        if (parseInt(entry.id) === recipe.data.id) {
+                            return { ...entry, name: inputData.name };
+                        }
+
+                        return entry;
+                    })
+                }));
                 setAction('view');
             }
         }).finally(() => {
@@ -100,7 +110,7 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
                 {action === 'view' ?
                     <DetailsView {...recipe.data}/>
                         :
-                    <EditView
+                    <RecipeForm
                         {...inputData}
                         onContentChange={handleContentChange}
                         onInputChange={handleInputChange}

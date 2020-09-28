@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 import Button from "react-bootstrap/Button";
 import { PageContext } from "../PageContext";
 import { DETAILS_MODE, INSERT_MODE, LIST_MODE } from "../constants/pageModes";
+import CreateRecipe from "../recipes/CreateRecipe";
 
 function RecipesPage() {
     const [loading, setLoading] = useState(false);
@@ -54,9 +55,7 @@ function RecipesPage() {
                     </Col>
                 </Row>
 
-                {mode !== 'insert' &&
-                <RecipesList />
-                }
+                {mode !== 'insert' ? <RecipesList /> : <CreateRecipe/>}
             </Container>
         </PageContext.Provider>
     );

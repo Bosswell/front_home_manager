@@ -1,10 +1,12 @@
 import React from "react";
 
-function DetailsView({name, content}) {
+function DetailsView({ name, content }) {
+    const html = () => ({__html: content});
+
     return (
         <>
             <h3>{ name }</h3>
-            <article>{ content }</article>
+            <article dangerouslySetInnerHTML={html()}/>
         </>
     )
 }
