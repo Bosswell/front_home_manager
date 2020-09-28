@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
-import InputGroup from "./InputGroup";
+import InputGroup from "../components/InputGroup";
 import Select from "react-select";
 import { sortingOptions } from "../constants/recipeListOptions";
 import ReactPaginate from "react-paginate";

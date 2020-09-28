@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
-import Alert from "./Alert";
-import Loader from "./Loader";
+import Alert from "../components/Alert";
+import Loader from "../components/Loader";
 import Select from "react-select";
 import { filterDateFromOptions, isIncomeOptions, sortingOptions } from "../constants/transactionListOptions";
 import ReactPaginate from "react-paginate";

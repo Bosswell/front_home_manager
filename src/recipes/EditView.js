@@ -1,5 +1,5 @@
 import React from "react";
-import InputGroup from "../InputGroup";
+import InputGroup from "../components/InputGroup";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Button from "react-bootstrap/Button";

@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { Row, Col } from "react-bootstrap";
-import { BiArrowBack } from "react-icons/bi";
-import Button from "react-bootstrap/Button";
-import {deleteRecipe, updateRecipe} from "../services/recipe.service";
+import { deleteRecipe, updateRecipe } from "../services/recipe.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
-import DeleteModal from "./DeleteModal";
-import DetailsView from "./Recipe/DetailsView";
-import EditView from "./Recipe/EditView";
+import DeleteModal from "../components/DeleteModal";
+import DetailsView from "./DetailsView";
+import EditView from "./EditView";
+import DetailsNav from "../components/DetailsNav";
 
 
 function RecipeDetails({ setRecipeId, setRecipe, recipe, setLoading, setError, setAlert, setRecipeListInfo }) {
@@ -86,25 +85,12 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setLoading, setError, s
     return (
         <Row>
             <Col lg={12}>
-                <nav className={'details__nav'}>
-                    <div className={'details__nav--back'} onClick={returnToList}>
-                        <BiArrowBack/> <span>back</span>
-                    </div>
-
-                    <div className={'details__nav__actions'}>
-                        {action === 'view' ?
-                            <Button className={'details--action-btn'} variant={'outline-warning'} onClick={() => setAction('edit')}>
-                                Edit
-                            </Button>
-                                :
-                            <Button className={'details--action-btn'} variant={'outline-info'} onClick={() => setAction('view')}>
-                                View
-                            </Button>
-                        }
-
-                        <Button className={'details--action-btn'} variant={'outline-danger'} onClick={() => setShow(true)}>Delete</Button>
-                    </div>
-                </nav>
+                <DetailsNav
+                    onReturn={returnToList}
+                    action={action}
+                    setAction={setAction}
+                    onDelete={() => setShow(true)}
+                />
             </Col>
             <Col lg={12}>
                 <hr/>

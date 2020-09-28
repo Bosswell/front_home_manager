@@ -10,8 +10,8 @@ import {
     isIncomeOptions,
     sortingOptions
 } from "../constants/transactionListOptions";
-import EditTransactionModal from "../components/EditTransactionModal";
-import TransactionList from "../components/TransactionsList";
+import EditTransactionModal from "../transactions/EditTransactionModal";
+import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
 

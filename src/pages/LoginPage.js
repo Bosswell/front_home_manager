@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import LoginForm from '../forms/LoginForm'
+import LoginForm from '../authForms/LoginForm'
 import Loader from '../components/Loader'
 import '../scss/login-page.scss'
 

@@ -7,8 +7,8 @@ import "../scss/list.scss";
 import "../scss/form.scss";
 import {getRecipe, getRecipesList} from "../services/recipe.service";
 import { defaultSorting, sortingOptions } from "../constants/recipeListOptions";
-import RecipeDetails from "../components/RecipeDetails";
-import RecipesList from "../components/RecipesList";
+import RecipeDetails from "../recipes/RecipeDetails";
+import RecipesList from "../recipes/RecipesList";
 import Alert from "../components/Alert";
 import Loader from "../components/Loader";
 
