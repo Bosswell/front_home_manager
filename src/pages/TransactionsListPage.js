@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
-import { getTransactionsList, getTransactionTypes } from "../services/transaction.service";
+import {deleteTransaction, getTransactionsList, getTransactionTypes} from "../services/transaction.service";
 import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import {normalizeResponseErrors} from "../helpers/normalizers";
@@ -10,10 +10,10 @@ import {
     isIncomeOptions,
     sortingOptions
 } from "../constants/transactionListOptions";
-import DeleteTransactionModal from "../components/DeleteTransactionModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import TransactionList from "../components/TransactionsList";
 import "../scss/list.scss";
+import DeleteModal from "../components/DeleteModal";
 
 
 function TransactionsListPage() {
@@ -49,11 +49,11 @@ function TransactionsListPage() {
             obj: ''
         }
     });
-
     const [transListInfo, setTransListInfo] = useState({
         nbPages: 0,
         results: []
     });
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
         getTransactionTypes().then(response => {
@@ -145,6 +145,10 @@ function TransactionsListPage() {
         })
 
     }, [params, history])
+
+    useEffect(() => {
+        setShowDeleteModal(selectedItem.status === 'confirm');
+    }, [selectedItem]);
 
     useEffect(() => {
         if (selectedItem.status !== 'deleted' && selectedItem.status !== 'updated') {
@@ -243,6 +247,26 @@ function TransactionsListPage() {
         setError(null);
     }
 
+    function handleDeleteTransaction() {
+        setSelectedItem(prevState => ({
+            ...prevState,
+            status: 'deleted'
+        }));
+
+        setLoading(true);
+
+        deleteTransaction(selectedItem.item.id).then(response => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+                return;
+            }
+            setAlert(response.message);
+            setError(null);
+        }).finally(() => {
+            setLoading(false);
+        })
+    }
+
     return (
         <Container fluid={true}>
             <TransactionList
@@ -263,13 +287,13 @@ function TransactionsListPage() {
                 setSelectedItem={setSelectedItem}
             />
 
-            <DeleteTransactionModal
-                setAlert={setAlert}
-                setError={setError}
-                setLoading={setLoading}
-                selected={selectedItem}
-                setSelectedItem={setSelectedItem}
+            <DeleteModal
+                show={showDeleteModal}
+                setShow={setShowDeleteModal}
+                handleDelete={handleDeleteTransaction}
+                entityName={'transaction'}
             />
+
             <EditTransactionModal
                 setAlert={setAlert}
                 setError={setError}
