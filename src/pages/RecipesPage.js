@@ -48,7 +48,7 @@ function RecipesPage() {
                 </Row>
                 <Row>
                     <Col lg={12}>
-                        {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
+                        {error && <Alert messages={error} type={'danger'} headMsg={'An error has occurred'}/>}
                         {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
 
                         {loading && <Loader loading={loading}/>}

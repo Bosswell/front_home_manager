@@ -27,7 +27,9 @@ function CreateRecipe() {
         }))
     }
 
-    function handleSubmit() {
+    function handleSubmit(event) {
+        event.preventDefault();
+
         setLoading(true);
         addRecipe(inputData).then((response) => {
             if (response.hasError) {
@@ -46,6 +48,7 @@ function CreateRecipe() {
             onContentChange={handleContentChange}
             onInputChange={handleInputChange}
             onSubmit={handleSubmit}
+            buttonText={'Create recipe'}
         />
     )
 }

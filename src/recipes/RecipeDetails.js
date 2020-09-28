@@ -67,7 +67,9 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
         }))
     }
 
-    function handleSubmit() {
+    function handleSubmit(event) {
+        event.preventDefault();
+
         setLoading(true);
         updateRecipe({...inputData, id: recipe.data.id}).then((response) => {
             if (response.hasError) {
@@ -115,6 +117,7 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
                         onContentChange={handleContentChange}
                         onInputChange={handleInputChange}
                         onSubmit={handleSubmit}
+                        buttonText={'Update'}
                     />
                 }
             </Col>
