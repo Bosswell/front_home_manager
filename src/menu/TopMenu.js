@@ -1,8 +1,7 @@
-import React, {useContext, useState} from "react";
-import MenuLeft from "./MenuLeft";
+import React, { useContext } from "react";
+import Menu from "./Menu";
 import { Spin as Hamburger } from 'hamburger-react'
 import MenuItem from "./MenuItem";
-import MenuRight from "./MenuRight";
 import { AuthContext } from "../AuthContext";
 import { useHistory } from 'react-router-dom'
 import authProvider from "../providers/authProvider";
@@ -10,7 +9,7 @@ import { CgLogOut } from "react-icons/cg";
 import "../scss/menu.scss";
 
 
-function Menu({ isOpen, setOpen, isMobile }) {
+function TopMenu({ isOpen, setOpen, isMobile }) {
     const { setAuthed } = useContext(AuthContext);
     const history = useHistory();
 
@@ -26,15 +25,15 @@ function Menu({ isOpen, setOpen, isMobile }) {
 
     return (
         <div className={'menu --bg-charcoal'}>
-            <MenuLeft>
+            <Menu className={'menu-left'}>
                 {isMobile && <Hamburger toggled={isOpen} toggle={setOpen} size={18}/>}
                 <MenuItem name={'Home Manager'} handleClick={handleCashManager}/>
-            </MenuLeft>
-            <MenuRight>
+            </Menu>
+            <Menu className={'menu-right'}>
                 <MenuItem name={'Logout'} handleClick={handleLogout} icon={<CgLogOut/>}/>
-            </MenuRight>
+            </Menu>
         </div>
     )
 }
 
-export default Menu;
+export default TopMenu;
