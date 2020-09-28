@@ -14,6 +14,7 @@ import EditTransactionModal from "../transactions/EditTransactionModal";
 import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
+import useListSorter from "../helpers/useListSorter";
 
 
 function TransactionsListPage() {
@@ -30,7 +31,7 @@ function TransactionsListPage() {
         }
     });
     const [transactionTypes, setTransactionTypes] = useState([]);
-    const [sortingWay, setSortingWay] = useState('');
+    const [sortingWay] = useListSorter(params, sortingOptions, defaultSorting);
     const [selectedItem, setSelectedItem] = useState({
         item: {},
         status: ''
@@ -106,21 +107,6 @@ function TransactionsListPage() {
             }
         })
     }, [transactionTypes, params.filterBy])
-
-    useEffect(() => {
-        setSortingWay(() => {
-            if (!params.sortBy) {
-                return defaultSorting;
-            }
-            const {name, direction} = params.sortBy;
-
-            return sortingOptions.find((obj) => {
-                const [tmpName, tmpDirection] = obj.value.split(',');
-
-                return name === tmpName && direction === tmpDirection;
-            });
-        })
-    }, [params.sortBy])
 
     useEffect(() => {
         setLoading(true);
