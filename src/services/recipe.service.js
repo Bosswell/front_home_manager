@@ -28,7 +28,7 @@ export const getRecipesList = (params) => {
 }
 
 export const deleteRecipe = (id) => {
-    return axios.delete(host + `${host}/recipe/delete/${id}`)
+    return axios.delete(host + `/recipe/delete/${id}`)
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }

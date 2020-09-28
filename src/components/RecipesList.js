@@ -1,7 +1,5 @@
 import React from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
-import Alert from "./Alert";
-import Loader from "./Loader";
 import InputGroup from "./InputGroup";
 import Select from "react-select";
 import { sortingOptions } from "../constants/recipeListOptions";
@@ -10,9 +8,6 @@ import ReactPaginate from "react-paginate";
 function RecipesList(
     {
         params,
-        error,
-        alert,
-        loading,
         handleSearchRecipe,
         handleSortingSelectChange,
         sortingWay,
@@ -24,10 +19,6 @@ function RecipesList(
     return (
         <Row>
             <Col lg={12}>
-                {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
-                {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
-
-                {loading && <Loader loading={loading}/>}
                 <h3>Recipes list</h3>
                 <div className={'list-filters'}>
                     <div className={'filters form'}>

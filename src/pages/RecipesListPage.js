@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
-import { Container } from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import "../scss/list.scss";
 import "../scss/form.scss";
-import { getRecipesList } from "../services/recipe.service";
+import {getRecipe, getRecipesList} from "../services/recipe.service";
 import { defaultSorting, sortingOptions } from "../constants/recipeListOptions";
 import RecipeDetails from "../components/RecipeDetails";
 import RecipesList from "../components/RecipesList";
+import Alert from "../components/Alert";
+import Loader from "../components/Loader";
 
 
 function RecipesListPage() {
@@ -34,6 +36,8 @@ function RecipesListPage() {
         show: false,
         object: {}
     });
+    const [cachedRecipes, setCachedRecipe] = useState([]);
+    const [recipe, setRecipe] = useState({});
 
     useEffect(() => {
         setSortingWay(() => {
@@ -74,6 +78,8 @@ function RecipesListPage() {
     }, [params, history])
 
     function handlePageChange({ selected }) {
+        clearNotifications();
+
         setParams(prevState => ({
             ...prevState,
             nbPage: !Number.isNaN(selected) ? (selected + 1) : 1
@@ -102,17 +108,56 @@ function RecipesListPage() {
         setError(null);
     }
 
+    useEffect(() => {
+        if (!details.show || details.obj.length === 0) {
+            return;
+        }
+        clearNotifications();
+
+        let recipe = cachedRecipes.find((recipe) => {
+            return recipe.id === parseInt(details.obj.id);
+        })
+
+        if (recipe) {
+            setRecipe(recipe);
+            return;
+        }
+
+        setLoading(true);
+        getRecipe(details.obj.id).then((response) => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+            } else {
+                setRecipe(response.data);
+                setCachedRecipe(prevState => ([...prevState, response.data]));
+            }
+        }).finally(() => {
+            setLoading(false);
+        })
+    }, [details.show])
+
     return (
         <Container fluid={true}>
+            <Row>
+                <Col lg={12}>
+                    {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
+                    {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
+                </Col>
+
+                {loading && <Loader loading={loading}/>}
+            </Row>
+
             {details.show ?
                 <RecipeDetails
                     setDetails={setDetails}
+                    recipe={recipe}
+                    setError={setError}
+                    setLoading={setLoading}
+                    setAlert={setAlert}
+                    setRecipeListInfo={setRecipeListInfo}
                 /> :
                 <RecipesList
                     params={params}
-                    error={error}
-                    alert={alert}
-                    loading={loading}
                     handleSearchRecipe={handleSearchRecipe}
                     handleSortingSelectChange={handleSortingSelectChange}
                     sortingWay={sortingWay}
