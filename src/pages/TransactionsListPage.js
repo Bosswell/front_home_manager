@@ -14,7 +14,7 @@ import EditTransactionModal from "../transactions/EditTransactionModal";
 import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
-import useListSorter from "../helpers/useListSorter";
+import useListSorter from "../hooks/useListSorter";
 import Alert from "../components/Alert";
 import Loader from "../components/Loader";
 import {PageContext} from "../PageContext";

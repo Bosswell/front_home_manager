@@ -7,8 +7,9 @@ import { useHistory } from "react-router-dom";
 import useQuery from "../hooks/useQuery";
 import RecipeDetails from "./RecipeDetails";
 import { PageContext } from "../PageContext";
-import useListSorter from "../helpers/useListSorter";
-import {DETAILS_MODE, LIST_MODE} from "../constants/pageModes";
+import useListSorter from "../hooks/useListSorter";
+import { DETAILS_MODE, LIST_MODE } from "../constants/pageModes";
+import { debounce } from 'throttle-debounce';
 
 
 function RecipesList() {
@@ -33,6 +34,17 @@ function RecipesList() {
     const [recipe, setRecipe] = useState({
         show: false,
         data: {}
+    });
+    const debounceSearch = debounce(1000, (searchBy) => {
+        if (searchBy.length < 3) {
+            setError('Type at least 3 character to search recipe');
+            return;
+        }
+
+        setParams(prevState => ({
+            ...prevState,
+            searchBy: searchBy
+        }))
     });
 
     useEffect(() => {
@@ -118,7 +130,7 @@ function RecipesList() {
     }
 
     function handleSearchRecipe({ target }) {
-        return;
+        debounceSearch(target.value);
     }
 
     if (recipe.show) {

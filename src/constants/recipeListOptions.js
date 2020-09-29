@@ -1,31 +1,31 @@
 export const sortingOptions = [
     {
         label: "Creation date - Ascending",
-        value: "t.created_at,asc"
+        value: "r.created_at,asc"
     },
     {
         label: "Creation date - Descending",
-        value: "t.created_at,desc"
+        value: "r.created_at,desc"
     },
     {
         label: "Position number - Ascending",
-        value: "t.id,asc"
+        value: "r.id,asc"
     },
     {
         label: "Position number - Descending",
-        value: "t.id,desc"
+        value: "r.id,desc"
     },
     {
         label: "Transaction type - Ascending",
-        value: "tt.name,asc"
+        value: "r.name,asc"
     },
     {
         label: "Transaction type - Descending",
-        value: "tt.name,desc"
+        value: "r.name,desc"
     },
 ]
 
 export const defaultSorting = {
     label: "Creation date - Descending",
-    value: "t.created_at,desc"
+    value: "r.created_at,desc"
 };

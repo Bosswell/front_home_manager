@@ -29,6 +29,8 @@ function RecipesListView(
                 </div>
 
                 <ListGroup className={'transaction-list'} variant="flush">
+                    {!recipeListInfo && <div>Empty list</div>}
+
                     {recipeListInfo.results.map((item) => {
                         return (
                             <ListGroup.Item key={item.id}>
