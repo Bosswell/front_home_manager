@@ -1,7 +1,5 @@
 import React from "react";
 import { Button, Col, ListGroup, Row } from "react-bootstrap";
-import Alert from "../components/Alert";
-import Loader from "../components/Loader";
 import Select from "react-select";
 import { filterDateFromOptions, isIncomeOptions, sortingOptions } from "../constants/transactionListOptions";
 import ReactPaginate from "react-paginate";
@@ -9,9 +7,6 @@ import ReactPaginate from "react-paginate";
 function TransactionList(
     {
         params,
-        error,
-        alert,
-        loading,
         handleSortingSelectChange,
         sortingWay,
         filters,
@@ -28,10 +23,6 @@ function TransactionList(
     return (
         <Row>
             <Col lg={12}>
-                {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
-                {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
-
-                {loading && <Loader loading={loading}/>}
                 <h3>Transaction list</h3>
                 <div className={'list-filters'}>
                     <div className={'filters'}>

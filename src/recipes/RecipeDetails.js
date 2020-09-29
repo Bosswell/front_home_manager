@@ -5,11 +5,11 @@ import { normalizeResponseErrors } from "../helpers/normalizers";
 import DeleteModal from "../components/DeleteModal";
 import DetailsView from "./DetailsView";
 import DetailsNav from "../components/DetailsNav";
-import {PageContext} from "../PageContext";
+import { PageContext } from "../PageContext";
 import RecipeForm from "./RecipeForm";
 
 
-function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
+function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo, setCachedRecipe }) {
     const {setError, setAlert, setLoading} = useContext(PageContext);
 
     const [showModal, setShow] = useState(false);
@@ -90,6 +90,16 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo }) {
                         return entry;
                     })
                 }));
+                setCachedRecipe(prevState =>
+                    prevState.map((cachedRecipe) => {
+                        if (cachedRecipe.id === recipe.data.id) {
+                            return recipe;
+                        }
+
+                        return cachedRecipe;
+                    })
+                );
+
                 setAction('view');
             }
         }).finally(() => {

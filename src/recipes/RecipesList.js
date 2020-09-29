@@ -12,7 +12,7 @@ import {DETAILS_MODE, LIST_MODE} from "../constants/pageModes";
 
 
 function RecipesList() {
-    const {setError, setLoading, clearNotifications, setMode} = useContext(PageContext);
+    const { setError, setLoading, clearNotifications, setMode } = useContext(PageContext);
     const history = useHistory();
     const query = useQuery();
     const [params, setParams] = useState(() => {
@@ -36,7 +36,7 @@ function RecipesList() {
     });
 
     useEffect(() => {
-        setMode(recipe.show ? DETAILS_MODE : LIST_MODE)
+        setMode(recipe.show ? DETAILS_MODE : LIST_MODE);
     }, [recipe])
 
     useEffect(() => {
@@ -128,6 +128,7 @@ function RecipesList() {
                 setRecipe={setRecipe}
                 setRecipeListInfo={setRecipeListInfo}
                 setRecipeId={setRecipeId}
+                setCachedRecipe={setCachedRecipe}
             />
         );
     } else {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useQuery from "../hooks/useQuery";
 import {deleteTransaction, getTransactionsList, getTransactionTypes} from "../services/transaction.service";
-import { Container } from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import {normalizeResponseErrors} from "../helpers/normalizers";
 import {
@@ -15,6 +15,9 @@ import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
 import useListSorter from "../helpers/useListSorter";
+import Alert from "../components/Alert";
+import Loader from "../components/Loader";
+import {PageContext} from "../PageContext";
 
 
 function TransactionsListPage() {
@@ -254,41 +257,46 @@ function TransactionsListPage() {
     }
 
     return (
-        <Container fluid={true}>
-            <TransactionList
-                params={params}
-                error={error}
-                alert={alert}
-                loading={loading}
-                handleSortingSelectChange={handleSortingSelectChange}
-                sortingWay={sortingWay}
-                filters={filters}
-                handlePageChange={handlePageChange}
-                handleTransactionTypeFilterChange={handleTransactionTypeFilterChange}
-                transactionTypes={transactionTypes}
-                handleDateFromFilterChange={handleDateFromFilterChange}
-                handleIsIncomeFilterChange={handleIsIncomeFilterChange}
-                handleApplyFilters={handleApplyFilters}
-                transListInfo={transListInfo}
-                setSelectedItem={setSelectedItem}
-            />
+        <PageContext.Provider value={{ setLoading, setError, setAlert }}>
+            <Container fluid={true}>
+                <Row>
+                    <Col lg={12}>
+                        {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
+                        {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
 
-            <DeleteModal
-                show={showDeleteModal}
-                setShow={setShowDeleteModal}
-                handleDelete={handleDeleteTransaction}
-                entityName={'transaction'}
-            />
+                        {loading && <Loader loading={loading}/>}
+                    </Col>
+                </Row>
 
-            <EditTransactionModal
-                setAlert={setAlert}
-                setError={setError}
-                setLoading={setLoading}
-                selected={selectedItem}
-                setSelectedItem={setSelectedItem}
-                transactionTypes={transactionTypes}
-            />
-        </Container>
+                <TransactionList
+                    params={params}
+                    handleSortingSelectChange={handleSortingSelectChange}
+                    sortingWay={sortingWay}
+                    filters={filters}
+                    handlePageChange={handlePageChange}
+                    handleTransactionTypeFilterChange={handleTransactionTypeFilterChange}
+                    transactionTypes={transactionTypes}
+                    handleDateFromFilterChange={handleDateFromFilterChange}
+                    handleIsIncomeFilterChange={handleIsIncomeFilterChange}
+                    handleApplyFilters={handleApplyFilters}
+                    transListInfo={transListInfo}
+                    setSelectedItem={setSelectedItem}
+                />
+
+                <DeleteModal
+                    show={showDeleteModal}
+                    setShow={setShowDeleteModal}
+                    handleDelete={handleDeleteTransaction}
+                    entityName={'transaction'}
+                />
+
+                <EditTransactionModal
+                    selected={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                    transactionTypes={transactionTypes}
+                />
+            </Container>
+        </PageContext.Provider>
     );
 }
 
