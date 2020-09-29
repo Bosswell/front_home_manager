@@ -36,11 +36,6 @@ function RecipesList() {
         data: {}
     });
     const debounceSearch = debounce(1000, (searchBy) => {
-        if (searchBy.length < 3) {
-            setError('Type at least 3 character to search recipe');
-            return;
-        }
-
         setParams(prevState => ({
             ...prevState,
             searchBy: searchBy
