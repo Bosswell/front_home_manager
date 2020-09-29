@@ -21,7 +21,7 @@ function RecipesListView(
             <Col lg={12}>
                 <div className={'list-filters'}>
                     <div className={'filters form'}>
-                        <InputGroup onChange={handleSearchRecipe} name={'search'} type={'search'} placeholder={'Search ...'}/>
+                        <InputGroup onChange={handleSearchRecipe} name={'search'} type={'search'} placeholder={'Search ...'} value={params.searchBy}/>
                     </div>
                     <div className={'sorting-select'}>
                         <Select onChange={handleSortingSelectChange} value={sortingWay} options={sortingOptions} placeholder={'Sort by'}/>
