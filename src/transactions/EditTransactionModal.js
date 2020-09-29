@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Button, Modal } from "react-bootstrap";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { updateTransaction } from "../services/transaction.service";
 import Select from "react-select";
 import Switch from "react-switch";
 import { taxPercentageOptions } from "../constants/transactionOptions";
+import { PageContext } from "../PageContext";
 
 
-function EditTransactionModal({ selected, setLoading, setError, setAlert, setSelectedItem, transactionTypes }) {
+function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
+    const {setLoading, setError, setAlert} = useContext(PageContext);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [inputData, setInputData] = useState({});
