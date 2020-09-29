@@ -112,3 +112,48 @@ menu {
 .pointer {
   cursor: pointer;
 }
+
+.details__nav {
+  display: flex;
+  justify-content: space-between;
+  width: 240px
+}
+
+.details__nav--back {
+  position: relative;
+  padding: 10px 45px 10px 0;
+  cursor: pointer;
+
+  span {
+    position: absolute;
+    left: 20px;
+    bottom: 9px;
+  }
+}
+
+.details__nav__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+}
+
+.details--action-btn {
+  width: 70px;
+  font-size: 14px;
+}
+
+.cke-name {
+  margin-top: 15px;
+  margin-bottom: .5rem;
+}
+
+.ck-editor__editable {
+  min-height: 400px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}

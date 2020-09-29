@@ -14,7 +14,7 @@ import WrappedRoute, { PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE } from "
 import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
 import AddTransactionPage from './pages/AddTransactionPage';
-import RecipesListPage from "./pages/RecipesListPage";
+import RecipesPage from "./pages/RecipesPage";
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/transactionsList' component={TransactionsListPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/recipesList' component={RecipesListPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/recipesList' component={RecipesPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import SideMenu from './components/SideMenu';
-import Menu from './components/Menu';
+import SideMenu from './menu/SideMenu';
+import TopMenu from './menu/TopMenu';
 import { isMobile } from 'react-device-detect';
 
 
@@ -32,13 +32,13 @@ function PrivateLayout({ children }) {
 
     return (
         <menu>
-            <Menu isOpen={isOpen} setOpen={setOpen} isMobile={isMobileSize}/>
-            <aside className={'middle-section'}>
+            <TopMenu isOpen={isOpen} setOpen={setOpen} isMobile={isMobileSize}/>
+            <div className={'middle-section'}>
                 <SideMenu isOpen={isOpen} setOpen={setOpen} isMobile={isMobileSize}/>
                 <section className={'content'}>
                     { children }
                 </section>
-            </aside>
+            </div>
         </menu>
     );
 }

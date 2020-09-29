@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../scss/register-page.scss';
-import RegisterForm from '../forms/RegisterForm';
+import RegisterForm from '../authForms/RegisterForm';
 import Loader from '../components/Loader';
 import {Link} from 'react-router-dom';
 

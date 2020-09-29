@@ -1,6 +1,6 @@
 import React from "react";
 
-function MenuLeft({ children }) {
+function Menu({ children }) {
     return (
         <div className={'menu-left'}>
             {children}
@@ -8,4 +8,4 @@ function MenuLeft({ children }) {
     )
 }
 
-export default MenuLeft;
+export default Menu;

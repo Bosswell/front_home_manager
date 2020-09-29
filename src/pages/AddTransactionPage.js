@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import AddTransactionForm from "../forms/AddTransactionForm";
+import AddTransactionForm from "../transactions/AddTransactionForm";
 import Loader from "../components/Loader";
 import { Container, Row, Col } from 'react-bootstrap';
 import { getTransactionTypes } from "../services/transaction.service";
