@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import { defaultSorting, sortingOptions } from "../constants/recipeListOptions";
 import RecipesListView from "./RecipesListView";
 import { getRecipe, getRecipesList } from "../services/recipe.service";
@@ -35,12 +35,17 @@ function RecipesList() {
         show: false,
         data: {}
     });
-    const debounceSearch = debounce(1000, (searchBy) => {
-        setParams(prevState => ({
-            ...prevState,
-            searchBy: searchBy
-        }))
-    });
+    const debounceCallback = useCallback(
+        debounce(1000, (searchVal) => {
+            setParams(prevState => ({
+                ...prevState,
+                searchBy: searchVal
+            }))
+        }),
+        []
+    );
+
+    const [searchBy, setSearchBy] = useState(params.searchBy ?? '');
 
     useEffect(() => {
         setMode(recipe.show ? DETAILS_MODE : LIST_MODE);
@@ -124,8 +129,9 @@ function RecipesList() {
         }));
     }
 
-    function handleSearchRecipe({ target }) {
-        debounceSearch(target.value);
+    function handleSearchRecipe({ target: { value } }) {
+        setSearchBy(value);
+        debounceCallback(value);
     }
 
     if (recipe.show) {
@@ -148,6 +154,7 @@ function RecipesList() {
                 recipeListInfo={recipeListInfo}
                 handlePageChange={handlePageChange}
                 setRecipeId={setRecipeId}
+                searchBy={searchBy}
             />
         )
     }
