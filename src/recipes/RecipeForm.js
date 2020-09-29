@@ -20,7 +20,6 @@ function RecipeForm({ name, content, onContentChange, onInputChange, onSubmit, b
                     />
                     <Button type={'submit'} variant={'success'} onClick={onSubmit}>{ buttonText }</Button>
                 </form>
-                )
             </Col>
         </Row>
     )
