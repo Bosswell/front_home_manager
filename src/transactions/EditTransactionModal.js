@@ -15,9 +15,10 @@ function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
     const [inputData, setInputData] = useState({});
 
     useEffect(() => {
+        console.log(selected.item.isIncome);
         setShow(selected.status === 'edit');
         setInputData(Object.assign({}, selected.item, {
-            isIncome: [true, "true"].includes(selected.item.isIncome),
+            isIncome: !!parseInt(selected.item.isIncome),
             isDeductible: parseInt(selected.item.taxPercentage) > 0,
             transactionType: transactionTypes.find((transactionType) => {
                 return transactionType.value === parseInt(selected.item.transactionTypeId);
