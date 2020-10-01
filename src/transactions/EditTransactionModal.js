@@ -39,7 +39,7 @@ function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
             ...inputData,
             transactionTypeId: inputData.transactionType.value,
             name: inputData.transactionType.label,
-            taxPercentage: inputData.isDeductible && !inputData.isIncome ? inputData.taxPercentage.value : null
+            taxPercentage: inputData.isDeductible && !inputData.isIncome && inputData.taxPercentage ? inputData.taxPercentage.value : null
         };
 
         setSelectedItem({
