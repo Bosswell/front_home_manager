@@ -152,7 +152,8 @@ function TransactionsListPage() {
                     })
                 case 'updated':
                     return prevState.results.map((transaction) => {
-                        if (transaction.id === selectedItem.item.id) {
+                        if (parseInt(transaction.id) === parseInt(selectedItem.item.id)) {
+                            console.log(selectedItem);
                             return selectedItem.item;
                         }
 

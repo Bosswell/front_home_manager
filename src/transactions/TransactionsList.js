@@ -62,10 +62,16 @@ function TransactionList(
 
                 <ListGroup className={'transaction-list'} variant="flush">
                     {transListInfo.results.map((item) => {
+                        const isIncome = parseInt(item.isIncome);
+
+                        if (!Number.isNaN(isIncome)) {
+                            item.isIncome = !!isIncome;
+                        }
+
                         return (
                             <ListGroup.Item key={item.id}>
                                 <div>Type: {item.name}</div>
-                                <div>Amount: { item.amount } PLN {parseInt(item.taxPercentage) > 0 && <> with { item.taxPercentage }% TAX</>} - {parseInt(item.isIncome) === 1 ?
+                                <div>Amount: { item.amount } PLN {parseInt(item.taxPercentage) > 0 && <> with { item.taxPercentage }% TAX</>} - {item.isIncome ?
                                     <span className={'text-success'}>Income</span> :
                                     <span className={'text-danger'}>Outcome</span> }
                                 </div>
