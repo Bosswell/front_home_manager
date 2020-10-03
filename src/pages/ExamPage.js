@@ -1,9 +1,10 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Question from "../exams/Question";
 import Option from "../exams/Option";
 import '../scss/exam.scss';
-import {startExam, validateExam} from "../services/exam.service";
-import {Button} from "react-bootstrap";
+import { startExam, validateExam } from "../services/exam.service";
+import { Button } from "react-bootstrap";
+import Countdown from 'react-countdown';
 
 
 const basicValues = {
@@ -20,31 +21,15 @@ function ExamPage() {
         questions: {}
     });
     const [snippets, setSnippets] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(0);
     const [userId, setUserId] = useState(0);
-    const [timer, setTimer] = useState({
-        isOn: false,
-        start: 0,
-        timeout: 9999
-    });
 
-    function startTimer() {
-        const interval = setInterval(() => {
-            setTimer(prev => ({...prev, timeout: prev.timeout - 1}))
-        }, 1000);
-
-        setTimeLeft(interval);
-    }
-
-    useEffect(() => {
-        if (timer.isOn) {
-            if (timeLeft === 0) {
-                startTimer();
-            } else if (timer.timeout <= 0) {
-                handleFinish();
-            }
+    const renderer = ({ minutes, seconds, completed }) => {
+        if (completed) {
+            handleFinish();
+        } else {
+            return <span>{minutes}:{seconds}{seconds < 10 ? '0' : ''}</span>;
         }
-    }, [timer, timeLeft])
+    };
 
     useEffect(() => {
         startExam(basicValues).then((response) => {
@@ -58,13 +43,6 @@ function ExamPage() {
                 }
             }))
             setUserId(response.data.userId);
-
-            const sec = exam.timeout * 60;
-            setTimer({
-                isOn: true,
-                start: new Date().getTime() / 1000 - sec,
-                timeout: sec
-            })
         })
     }, [])
 
@@ -86,8 +64,6 @@ function ExamPage() {
     }) : '';
 
     function handleFinish() {
-        clearInterval(timeLeft);
-
         validateExam({ userId: userId, examId: exam.id, snippets: snippets }).then((response) => {
             const correctOptions = response.data.correctOptions;
             // Show correct questions if users are allowed
@@ -131,9 +107,12 @@ function ExamPage() {
     return (
         <div className={'exam'}>
             <h2>{ exam.name }</h2>
-            <div className={'exam--timer'}>
-                { timer.timeout }
-            </div>
+            {exam.timeout !== 0 &&
+                <Countdown
+                    date={Date.now() + exam.timeout * 60000}
+                    renderer={renderer}
+                />
+            }
             { questions }
             <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>
         </div>
