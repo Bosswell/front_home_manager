@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
-import Question from "../components/Question";
-import Option from "../components/Option";
+import Question from "../exams/Question";
+import Option from "../exams/Option";
 import '../scss/exam.scss';
 import {startExam, validateExam} from "../services/exam.service";
 import {Button} from "react-bootstrap";
@@ -25,7 +25,7 @@ function ExamPage() {
     const [timer, setTimer] = useState({
         isOn: false,
         start: 0,
-        timeout: null
+        timeout: 9999
     });
 
     function startTimer() {
@@ -41,7 +41,6 @@ function ExamPage() {
             if (timeLeft === 0) {
                 startTimer();
             } else if (timer.timeout <= 0) {
-                clearInterval(timeLeft);
                 handleFinish();
             }
         }
@@ -60,16 +59,11 @@ function ExamPage() {
             }))
             setUserId(response.data.userId);
 
-            // const sec = ex.timeout * 60;
-            // setTimer({
-            //     isOn: true,
-            //     start: new Date().getTime() / 1000 - sec,
-            //     timeout: sec
-            // })
+            const sec = exam.timeout * 60;
             setTimer({
                 isOn: true,
-                start: new Date().getTime() / 1000 - 10,
-                timeout: 5
+                start: new Date().getTime() / 1000 - sec,
+                timeout: sec
             })
         })
     }, [])
@@ -79,7 +73,12 @@ function ExamPage() {
             <Question query={question.query} index={index + 1}>
                 {question.options.length !== 0 &&
                     question.options.map((option) => {
-                        return <Option content={option.content} handleOnClick={() => handleOptionClick(option, question, index)}/>;
+                        return <Option
+                            correctOptions={question.correctOptions ?? {}}
+                            checkedOptions={question.checkedOptions ?? {}}
+                            {...option}
+                            handleOnClick={() => handleOptionClick(option, question, index)}
+                        />;
                     })
                 }
             </Question>
@@ -87,8 +86,21 @@ function ExamPage() {
     }) : '';
 
     function handleFinish() {
+        clearInterval(timeLeft);
+
         validateExam({ userId: userId, examId: exam.id, snippets: snippets }).then((response) => {
-            console.log(response.data);
+            const correctOptions = response.data.correctOptions;
+            // Show correct questions if users are allowed
+            setExam(prevState => ({
+                ...prevState,
+                questions: prevState.questions.map((question, index) => {
+                    return {
+                        ...question,
+                        correctOptions: correctOptions[question.id],
+                        checkedOptions: snippets[index].checkedOptions
+                    }
+                })
+            }))
         })
     }
 
