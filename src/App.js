@@ -15,6 +15,7 @@ import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
 import AddTransactionPage from './pages/AddTransactionPage';
 import RecipesPage from "./pages/RecipesPage";
+import ExamPage from "./pages/ExamPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                 <Switch>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
+                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/exam" component={ExamPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/transactionsList' component={TransactionsListPage} />
