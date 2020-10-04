@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
-import Question from "../exams/Question";
-import Option from "../exams/Option";
 import '../scss/exam.scss';
-import { startExam, validateExam } from "../services/exam.service";
-import {Button, Col, Container, Row} from "react-bootstrap";
-import Countdown from 'react-countdown';
-import Alert from "../components/Alert";
+import '../scss/form.scss';
+import Exam from "../exams/Exam";
 import Loader from "../components/Loader";
+import Alert from "../components/Alert";
+import InputGroup from "../components/InputGroup";
+import { Button } from "react-bootstrap";
+import { startExam } from "../services/exam.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
-const basicValues = {
-    code: '5f78a8f17c09e',
-    examId: 1,
-    username: 'Jakub Batko',
-    userNUmber: 1
-};
-
 function ExamPage() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [snippets, setSnippets] = useState([]);
+    const [userId, setUserId] = useState(0);
+    const [inputData, setInputData] = useState({
+        code: '5f78a8f17c09e',
+        examId: 1,
+        username: 'Jakub Batko',
+        userNumber: 1
+    });
     const [exam, setExam] = useState({
+        isStarted: false,
         isFinished: false,
         data: {
             name: '',
@@ -31,21 +35,14 @@ function ExamPage() {
         percentage: null,
         showResults: true
     });
-    const [snippets, setSnippets] = useState([]);
-    const [userId, setUserId] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    const renderer = ({ minutes, seconds, completed }) => {
-        if (completed) {
-            handleFinish();
-        } else {
-            return <span>{minutes}:{seconds}{seconds < 10 ? '0' : ''}</span>;
-        }
-    };
+    function handleInputChange({ target }) {
+        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+    }
 
-    useEffect(() => {
-        startExam(basicValues).then((response) => {
+    function handleFormClick() {
+        setLoading(true);
+        startExam(inputData).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -54,6 +51,7 @@ function ExamPage() {
             const exam = response.data.exam;
             setExam(prevState => ({
                 ...prevState,
+                isStarted: true,
                 data: exam,
             }));
             setSnippets(exam.questions.map((question) => {
@@ -66,113 +64,38 @@ function ExamPage() {
         }).finally(() => {
             setLoading(false);
         })
-    }, [])
-
-    const questions = exam.data.questions.length ? exam.data.questions.map((question, index) => {
-        return (
-            <Question query={question.query} index={index + 1}>
-                {question.options.length !== 0 &&
-                    question.options.map((option) => {
-                        return <Option
-                            correctOptions={question.correctOptions ?? {}}
-                            checkedOptions={question.checkedOptions ?? {}}
-                            {...option}
-                            handleOnClick={() => handleOptionClick(option, question, index)}
-                        />;
-                    })
-                }
-            </Question>
-        )
-    }) : '';
-
-    function handleFinish() {
-        window.scroll(0,0);
-
-        if (exam.isFinished) {
-            return;
-        }
-
-        setLoading(true);
-
-        validateExam({ userId: userId, examId: exam.data.id, snippets: snippets }).then((response) => {
-            if (response.hasError) {
-                setError(normalizeResponseErrors(response));
-                return;
-            }
-
-            const { correctOptions, totalPoints, correctPoints, incorrectPoints, percentage } = response.data;
-            setExam(prevState => ({
-                totalPoints: totalPoints,
-                correctPoints: correctPoints,
-                incorrectPoints: incorrectPoints,
-                percentage: percentage,
-                isFinished: true,
-                showResults: prevState.showResults,
-                data: {
-                    name: prevState.data.name,
-                    timeout: prevState.data.timeout,
-                    questions: prevState.data.questions.map((question, index) => {
-                        console.log(question, correctOptions, snippets);
-                        return {
-                            ...question,
-                            correctOptions: correctOptions[question.id],
-                            checkedOptions: snippets[index].checkedOptions
-                        }
-                    })
-                }
-            }))
-        }).finally(() => {
-            setLoading(false);
-        })
     }
 
-    function handleOptionClick(option, question, index) {
-        setSnippets((prevState) => {
-            const { checkedOptions, questionId } = prevState[index];
-
-            const checkedOption = checkedOptions.find((tmpOption) => {
-                return tmpOption === option.id;
-            });
-
-            if (checkedOption) {
-                const i = checkedOptions.indexOf(checkedOption);
-                checkedOptions.splice(i, 1);
-            } else {
-                checkedOptions.push(option.id);
-            }
-
-            prevState[index] = {
-                questionId: questionId,
-                checkedOptions: checkedOptions,
-            }
-
-            return prevState;
-        })
-    }
 
     return (
-        <div className={'exam' + (!exam.isFinished ? ' --active' : '')}>
+        <div className={'exam-container'}>
             {loading && <Loader loading={loading}/>}
 
             <div className={'exam--errors'}>
                 {error && <Alert messages={error} type={'danger'} headMsg={'An error has occurred'}/>}
             </div>
 
-            <h2>{ exam.data.name }</h2>
-            {exam.isFinished &&
-            <div className={'exam--summary'}>
-                <div><b>Summary</b></div>
-                <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
-            </div>
-            }
-            {exam.data.timeout !== 0 && exam.isFinished !== true &&
-            <Countdown
-                date={Date.now() + exam.data.timeout * 60000}
-                renderer={renderer}
-            />
-            }
-            { exam.isFinished && !exam.showResults ? '' : questions }
-            { !exam.isFinished && <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>}
+            {!exam.isStarted && <>
+                <h1 className={'text-center'}>Find your exam</h1>
+                <form className={'form'}>
+                    <InputGroup value={inputData.code} onChange={handleInputChange} name={'code'} label={'Exam code'}/>
+                    <InputGroup value={inputData.examId} onChange={handleInputChange} type={'number'} name={'examId'} label={'Exam id'}/>
+                    <InputGroup value={inputData.username} onChange={handleInputChange} name={'username'} label={'First and last name'}/>
+                    <InputGroup value={inputData.userNumber} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
+
+                    <Button variant={'outline-dark'} onClick={handleFormClick}>Start exam</Button>
+                </form>
+            </>}
+
+            {exam.isStarted && <Exam
+                setLoading={setLoading}
+                setError={setError}
+                exam={exam}
+                setExam={setExam}
+                snippets={snippets}
+                setSnippets={setSnippets}
+                userId={userId}
+            />}
         </div>
     )
 }
