@@ -10,7 +10,6 @@ export const startExam = (data) => {
 }
 
 export const validateExam = (data) => {
-    console.log(data);
     return axios
         .post(host + '/exam/action/validate', data)
         .then((resp) => { return resp.data; })

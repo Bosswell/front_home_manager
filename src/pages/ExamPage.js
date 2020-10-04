@@ -3,11 +3,11 @@ import Question from "../exams/Question";
 import Option from "../exams/Option";
 import '../scss/exam.scss';
 import { startExam, validateExam } from "../services/exam.service";
-import {Button, Col, Row} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 import Countdown from 'react-countdown';
 import Alert from "../components/Alert";
 import Loader from "../components/Loader";
-import {normalizeResponseErrors} from "../helpers/normalizers";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 const basicValues = {
@@ -95,8 +95,12 @@ function ExamPage() {
         setLoading(true);
 
         validateExam({ userId: userId, examId: exam.data.id, snippets: snippets }).then((response) => {
-            const { correctOptions, totalPoints, correctPoints, incorrectPoints, percentage } = response.data;
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+                return;
+            }
 
+            const { correctOptions, totalPoints, correctPoints, incorrectPoints, percentage } = response.data;
             setExam(prevState => ({
                 totalPoints: totalPoints,
                 correctPoints: correctPoints,
@@ -148,24 +152,24 @@ function ExamPage() {
 
     return (
         <div className={'exam' + (!exam.isFinished ? ' --active' : '')}>
-            <Row>
-                <Col lg={12}>
-                    {error && <Alert messages={error} type={'danger'} headMsg={'An error has occurred'}/>}
-                    {loading && <Loader loading={loading}/>}
-                </Col>
-            </Row>
+            {loading && <Loader loading={loading}/>}
+
+            <div className={'exam--errors'}>
+                {error && <Alert messages={error} type={'danger'} headMsg={'An error has occurred'}/>}
+            </div>
+
             <h2>{ exam.data.name }</h2>
             {exam.isFinished &&
-                <div className={'exam--summary'}>
-                    <div><b>Summary</b></div>
-                    <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
-                </div>
+            <div className={'exam--summary'}>
+                <div><b>Summary</b></div>
+                <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
+            </div>
             }
             {exam.data.timeout !== 0 && exam.isFinished !== true &&
-                <Countdown
-                    date={Date.now() + exam.data.timeout * 60000}
-                    renderer={renderer}
-                />
+            <Countdown
+                date={Date.now() + exam.data.timeout * 60000}
+                renderer={renderer}
+            />
             }
             { exam.isFinished && !exam.showResults ? '' : questions }
             { !exam.isFinished && <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>}

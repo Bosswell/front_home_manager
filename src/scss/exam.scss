@@ -3,6 +3,10 @@ $invalidColor: #dc3545;
 $neutralColor: #ebe9e7;
 $hoverColor: #eee;
 
+.exam-container {
+  margin: 20px 15px;
+}
+
 .exam {
   display: flex;
   justify-content: center;
@@ -56,10 +60,8 @@ $hoverColor: #eee;
   background: $neutralColor;
 }
 
-.exam--summary {
+.exam--errors {
   width: 600px;
-  font-size: 23px;
-  text-align: center;
 }
 
 .finish-button {
