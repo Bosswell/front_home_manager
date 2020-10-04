@@ -1,3 +1,8 @@
+$successColor: #28a745;
+$invalidColor: #dc3545;
+$neutralColor: #ebe9e7;
+$hoverColor: #eee;
+
 .exam {
   display: flex;
   justify-content: center;
@@ -21,19 +26,40 @@
   padding: 10px;
   border: 1px solid #252525;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: default;
 }
 
-.question--option.--valid {
-  background: #28a745;
+.exam.--active {
+  .question--option {
+    cursor: pointer;
+  }
+
+  .question--option:hover {
+    background: $hoverColor;
+  }
+
+  .question--option:hover.--checked {
+    background: $successColor;
+  }
+}
+
+.question--option.--valid,
+.question--option.--checked {
+  background: $successColor;
 }
 
 .question--option.--invalid {
-  background: #dc3545;
+  background: $invalidColor;
 }
 
-.question--option:hover {
-  background: #eee;
+.question--option.--neutral {
+  background: $neutralColor;
+}
+
+.exam--summary {
+  width: 600px;
+  font-size: 23px;
+  text-align: center;
 }
 
 .finish-button {

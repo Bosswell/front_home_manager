@@ -3,8 +3,11 @@ import Question from "../exams/Question";
 import Option from "../exams/Option";
 import '../scss/exam.scss';
 import { startExam, validateExam } from "../services/exam.service";
-import { Button } from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import Countdown from 'react-countdown';
+import Alert from "../components/Alert";
+import Loader from "../components/Loader";
+import {normalizeResponseErrors} from "../helpers/normalizers";
 
 
 const basicValues = {
@@ -16,12 +19,22 @@ const basicValues = {
 
 function ExamPage() {
     const [exam, setExam] = useState({
-        name: '',
-        timeout: 0,
-        questions: {}
+        isFinished: false,
+        data: {
+            name: '',
+            timeout: 0,
+            questions: {}
+        },
+        totalPoints: null,
+        correctPoints: null,
+        incorrectPoints: null,
+        percentage: null,
+        showResults: true
     });
     const [snippets, setSnippets] = useState([]);
     const [userId, setUserId] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const renderer = ({ minutes, seconds, completed }) => {
         if (completed) {
@@ -33,9 +46,16 @@ function ExamPage() {
 
     useEffect(() => {
         startExam(basicValues).then((response) => {
-            const exam = response.data.exam;
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+                return;
+            }
 
-            setExam(exam);
+            const exam = response.data.exam;
+            setExam(prevState => ({
+                ...prevState,
+                data: exam,
+            }));
             setSnippets(exam.questions.map((question) => {
                 return {
                     questionId: question.id,
@@ -43,10 +63,12 @@ function ExamPage() {
                 }
             }))
             setUserId(response.data.userId);
+        }).finally(() => {
+            setLoading(false);
         })
     }, [])
 
-    const questions = exam.questions.length ? exam.questions.map((question, index) => {
+    const questions = exam.data.questions.length ? exam.data.questions.map((question, index) => {
         return (
             <Question query={question.query} index={index + 1}>
                 {question.options.length !== 0 &&
@@ -64,19 +86,39 @@ function ExamPage() {
     }) : '';
 
     function handleFinish() {
-        validateExam({ userId: userId, examId: exam.id, snippets: snippets }).then((response) => {
-            const correctOptions = response.data.correctOptions;
-            // Show correct questions if users are allowed
+        window.scroll(0,0);
+
+        if (exam.isFinished) {
+            return;
+        }
+
+        setLoading(true);
+
+        validateExam({ userId: userId, examId: exam.data.id, snippets: snippets }).then((response) => {
+            const { correctOptions, totalPoints, correctPoints, incorrectPoints, percentage } = response.data;
+
             setExam(prevState => ({
-                ...prevState,
-                questions: prevState.questions.map((question, index) => {
-                    return {
-                        ...question,
-                        correctOptions: correctOptions[question.id],
-                        checkedOptions: snippets[index].checkedOptions
-                    }
-                })
+                totalPoints: totalPoints,
+                correctPoints: correctPoints,
+                incorrectPoints: incorrectPoints,
+                percentage: percentage,
+                isFinished: true,
+                showResults: prevState.showResults,
+                data: {
+                    name: prevState.data.name,
+                    timeout: prevState.data.timeout,
+                    questions: prevState.data.questions.map((question, index) => {
+                        console.log(question, correctOptions, snippets);
+                        return {
+                            ...question,
+                            correctOptions: correctOptions[question.id],
+                            checkedOptions: snippets[index].checkedOptions
+                        }
+                    })
+                }
             }))
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
@@ -105,16 +147,28 @@ function ExamPage() {
     }
 
     return (
-        <div className={'exam'}>
-            <h2>{ exam.name }</h2>
-            {exam.timeout !== 0 &&
+        <div className={'exam' + (!exam.isFinished ? ' --active' : '')}>
+            <Row>
+                <Col lg={12}>
+                    {error && <Alert messages={error} type={'danger'} headMsg={'An error has occurred'}/>}
+                    {loading && <Loader loading={loading}/>}
+                </Col>
+            </Row>
+            <h2>{ exam.data.name }</h2>
+            {exam.isFinished &&
+                <div className={'exam--summary'}>
+                    <div><b>Summary</b></div>
+                    <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
+                </div>
+            }
+            {exam.data.timeout !== 0 && exam.isFinished !== true &&
                 <Countdown
-                    date={Date.now() + exam.timeout * 60000}
+                    date={Date.now() + exam.data.timeout * 60000}
                     renderer={renderer}
                 />
             }
-            { questions }
-            <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>
+            { exam.isFinished && !exam.showResults ? '' : questions }
+            { !exam.isFinished && <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>}
         </div>
     )
 }
