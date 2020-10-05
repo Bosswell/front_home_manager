@@ -1,0 +1,17 @@
+import axios from 'axios';
+import { host } from '../config';
+import { ErrorHandler } from '../helpers/errorHandler';
+
+export const startExam = (data) => {
+    return axios
+        .post(host + '/exam/front/start', data)
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}
+
+export const validateExam = (data) => {
+    return axios
+        .post(host + '/exam/front/validate', data)
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}
