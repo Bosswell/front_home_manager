@@ -2,6 +2,7 @@ $successColor: #28a745;
 $invalidColor: #dc3545;
 $neutralColor: #ebe9e7;
 $hoverColor: #eee;
+$borderColor: #999;
 
 .exam-container {
   width: 730px;
@@ -28,7 +29,7 @@ $hoverColor: #eee;
 .question--option {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #252525;
+  border: 1px solid $borderColor;
   border-radius: 5px;
   cursor: default;
 }
@@ -75,7 +76,7 @@ $hoverColor: #eee;
   width: 600px;
   margin-top: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid $borderColor;
 }
 
 .exam--top.--center {
