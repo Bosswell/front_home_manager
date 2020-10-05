@@ -27,13 +27,13 @@ function ExamPage() {
         data: {
             name: '',
             timeout: 0,
-            questions: {}
+            questions: {},
+            showResults: true
         },
         totalPoints: null,
         correctPoints: null,
         incorrectPoints: null,
         percentage: null,
-        showResults: true
     });
 
     function handleInputChange({ target }) {

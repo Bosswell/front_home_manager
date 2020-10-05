@@ -129,7 +129,7 @@ function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setEx
                 }
             </div>
 
-            { exam.isFinished && !exam.showResults ? '' : questions }
+            { exam.isFinished && !exam.data.showResults ? '' : questions }
             { !exam.isFinished && <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>}
         </div>
     )
