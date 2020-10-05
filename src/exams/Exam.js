@@ -112,11 +112,11 @@ function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, hist
             <h2>{ exam.data.name }</h2>
             {exam.isFinished &&
                 <div className={'summary-box'}>
-                    <div><b>Summary</b></div>
+                    <div><b>Your test is done!</b></div>
                     <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
                 </div>
             }
-            <div className={'exam--top'}>
+            <div className={'exam--top' + (exam.isFinished ? ' --center' : '')}>
                 {!exam.isFinished ?
                     <Button className={'rel-exam-button'} variant={'danger'} onClick={() => window.location.reload()}>Stop exam</Button>
                     :
