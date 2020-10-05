@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Option({ id, content, handleOnClick, correctOptions, checkedOptions }) {
+function Option({ id, index, content, handleOnClick, correctOptions, checkedOptions }) {
     const isCorrect = correctOptions.length ? correctOptions.find(option => option === id) : false;
     const isChecked = checkedOptions.length ? checkedOptions.find(option => option === id) : false;
     const [clicked, setClicked] = useState(false);
@@ -21,7 +21,7 @@ function Option({ id, content, handleOnClick, correctOptions, checkedOptions }) 
 
     return (
         <div className={'question--option' + className} onClick={() => {setClicked(prevState => !prevState); handleOnClick()}}>
-            { content }
+            { index + 1 }. { content }
         </div>
     );
 }

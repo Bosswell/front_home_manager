@@ -27,8 +27,9 @@ function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setEx
         return (
             <Question query={question.query} index={index + 1}>
                 {question.options.length !== 0 &&
-                question.options.map((option) => {
+                question.options.map((option, indexOpt) => {
                     return <Option
+                        index={indexOpt}
                         correctOptions={question.correctOptions ?? {}}
                         checkedOptions={question.checkedOptions ?? {}}
                         {...option}
@@ -68,7 +69,6 @@ function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setEx
                     name: prevState.data.name,
                     timeout: prevState.data.timeout,
                     questions: prevState.data.questions.map((question, index) => {
-                        console.log(question, correctOptions, snippets);
                         return {
                             ...question,
                             correctOptions: correctOptions[question.id],

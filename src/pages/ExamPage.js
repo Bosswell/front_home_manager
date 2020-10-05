@@ -16,8 +16,8 @@ function ExamPage() {
     const [snippets, setSnippets] = useState([]);
     const [userId, setUserId] = useState(0);
     const [inputData, setInputData] = useState({
-        code: '5f78a8f17c09e',
-        examId: 1,
+        code: '5f7a1cea75738',
+        examId: 4,
         username: 'Jakub Batko',
         userNumber: 1
     });
@@ -47,8 +47,11 @@ function ExamPage() {
                 setError(normalizeResponseErrors(response));
                 return;
             }
+            setError(null);
 
             const exam = response.data.exam;
+            exam.questions = exam.questions.sort(() => Math.random() - 0.5)
+
             setExam(prevState => ({
                 ...prevState,
                 isStarted: true,
