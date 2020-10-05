@@ -8,13 +8,14 @@ import InputGroup from "../components/InputGroup";
 import { Button } from "react-bootstrap";
 import { startExam } from "../services/exam.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import { getUserId } from "../helpers/userHelper";
 
 
 function ExamPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [snippets, setSnippets] = useState([]);
-    const [userId, setUserId] = useState(0);
+    const [historyId, setHistoryId] = useState(0);
     const [inputData, setInputData] = useState({
         code: '5f7a1cea75738',
         examId: 4,
@@ -28,7 +29,7 @@ function ExamPage() {
             name: '',
             timeout: 0,
             questions: {},
-            showResults: true
+            hasVisibleResult: true
         },
         totalPoints: null,
         correctPoints: null,
@@ -42,16 +43,17 @@ function ExamPage() {
 
     function handleFormClick() {
         setLoading(true);
-        startExam(inputData).then((response) => {
+        startExam({ ...inputData, userId: getUserId()}).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
             }
             setError(null);
 
-            const exam = response.data.exam;
+            const { exam, historyId } = response.data;
             exam.questions = exam.questions.sort(() => Math.random() - 0.5)
 
+            setHistoryId(historyId);
             setExam(prevState => ({
                 ...prevState,
                 isStarted: true,
@@ -63,7 +65,6 @@ function ExamPage() {
                     checkedOptions: []
                 }
             }))
-            setUserId(response.data.userId);
         }).finally(() => {
             setLoading(false);
         })
@@ -97,7 +98,7 @@ function ExamPage() {
                 setExam={setExam}
                 snippets={snippets}
                 setSnippets={setSnippets}
-                userId={userId}
+                historyId={historyId}
             />}
         </div>
     )

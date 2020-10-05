@@ -8,7 +8,7 @@ import Countdown from 'react-countdown';
 import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
-function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setExam }) {
+function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, historyId }) {
     const renderer = ({ minutes, seconds, completed }) => {
         if (completed) {
             handleFinish();
@@ -50,33 +50,34 @@ function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setEx
 
         setLoading(true);
 
-        validateExam({ userId: userId, examId: exam.data.id, snippets: snippets }).then((response) => {
+        validateExam({ historyId: historyId, examId: exam.data.id, snippets: snippets }).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
             }
 
             const { correctOptions, totalPoints, correctPoints, incorrectPoints, percentage } = response.data;
-            setExam(prevState => ({
-                isStarted: prevState.isStarted,
-                totalPoints: totalPoints,
-                correctPoints: correctPoints,
-                incorrectPoints: incorrectPoints,
-                percentage: percentage,
-                isFinished: true,
-                showResults: prevState.showResults,
-                data: {
-                    name: prevState.data.name,
-                    timeout: prevState.data.timeout,
-                    questions: prevState.data.questions.map((question, index) => {
-                        return {
-                            ...question,
-                            correctOptions: correctOptions[question.id],
-                            checkedOptions: snippets[index].checkedOptions
-                        }
-                    })
+
+            setExam(prevState => {
+                return {
+                    ...prevState,
+                    totalPoints: totalPoints,
+                    correctPoints: correctPoints,
+                    incorrectPoints: incorrectPoints,
+                    percentage: percentage,
+                    isFinished: true,
+                    data: {
+                        ...prevState.data,
+                        questions: prevState.data.questions.map((question, index) => {
+                            return {
+                                ...question,
+                                correctOptions: correctOptions[question.id],
+                                checkedOptions: snippets[index].checkedOptions
+                            }
+                        })
+                    }
                 }
-            }))
+            })
         }).finally(() => {
             setLoading(false);
         })
@@ -129,7 +130,7 @@ function Exam({ setLoading, setError, userId, snippets, setSnippets, exam, setEx
                 }
             </div>
 
-            { exam.isFinished && !exam.data.showResults ? '' : questions }
+            { exam.isFinished && !exam.data.hasVisibleResult ? '' : questions }
             { !exam.isFinished && <Button variant={'success'} className={'finish-button'} onClick={handleFinish}>Finish exam</Button>}
         </div>
     )
