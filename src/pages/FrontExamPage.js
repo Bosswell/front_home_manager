@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import '../scss/exam.scss';
 import '../scss/form.scss';
 import Exam from "../exams/Exam";
@@ -9,9 +9,10 @@ import { Button } from "react-bootstrap";
 import { startExam } from "../services/exam.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { getUserId } from "../helpers/userHelper";
+import {inputNormalizer} from "../helpers/inputNormalizer";
 
 
-function ExamPage() {
+function FrontExamPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [snippets, setSnippets] = useState([]);
@@ -38,7 +39,9 @@ function ExamPage() {
     });
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleFormClick() {
@@ -104,4 +107,4 @@ function ExamPage() {
     )
 }
 
-export default ExamPage;
+export default FrontExamPage;

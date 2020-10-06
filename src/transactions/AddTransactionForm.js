@@ -3,7 +3,8 @@ import Select from "react-select";
 import { addTransaction } from "../services/transaction.service";
 import Alert from "../components/Alert";
 import Switch from "react-switch";
-import {taxPercentageOptions} from "../constants/transactionOptions";
+import { taxPercentageOptions } from "../constants/transactionOptions";
+import { FLOAT_TYPE, inputNormalizer } from "../helpers/inputNormalizer";
 
 function AddTransactionForm({setLoading, transactionTypes}) {
     const [alert, setAlert] = useState('');
@@ -18,7 +19,9 @@ function AddTransactionForm({setLoading, transactionTypes}) {
     const [isDeductible, setDeductible] = useState(false);
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleSelectChange({ value }) {
@@ -67,6 +70,7 @@ function AddTransactionForm({setLoading, transactionTypes}) {
                     <input
                         onChange={handleInputChange}
                         type={'number'}
+                        data-scalar={FLOAT_TYPE}
                         id={'amount'}
                         name={'amount'}
                         step={'0.01'}

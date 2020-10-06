@@ -5,6 +5,7 @@ import { AuthContext } from "../AuthContext";
 import authProvider from "../providers/authProvider";
 import Alert from "../components/Alert";
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import {inputNormalizer} from "../helpers/inputNormalizer";
 
 
 function LoginForm({ setLoading }) {
@@ -16,7 +17,9 @@ function LoginForm({ setLoading }) {
     });
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleSubmit(event) {

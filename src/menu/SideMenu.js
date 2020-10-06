@@ -4,6 +4,7 @@ import { GrTransaction } from "react-icons/gr";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import { MdDashboard } from "react-icons/md";
 import { GiCookingPot } from "react-icons/gi";
+import { ImBook } from "react-icons/im";
 import { useHistory } from "react-router-dom";
 
 function SideMenu({ isOpen, setOpen, isMobile }) {
@@ -16,6 +17,8 @@ function SideMenu({ isOpen, setOpen, isMobile }) {
             <MenuItem name={'Transactions list '} handleClick={() => { isMobile && setOpen(false); history.push('/transactionsList') }} icon={<AiOutlineOrderedList/>}/>
             <MenuItem divider={true}/>
             <MenuItem name={'Recipes list '} handleClick={() => { isMobile && setOpen(false); history.push('/recipesList') }} icon={<GiCookingPot/>}/>
+            <MenuItem divider={true}/>
+            <MenuItem name={'Exams list '} handleClick={() => { isMobile && setOpen(false); history.push('/examsList') }} icon={<ImBook/>}/>
         </aside>
     )
 }

@@ -4,6 +4,7 @@ import InputGroup from "../components/InputGroup";
 import AuthService from "../services/user.service";
 import Alert from "../components/Alert";
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import { inputNormalizer } from "../helpers/inputNormalizer";
 
 
 function RegisterForm({ setIsOk, setLoading }) {
@@ -16,7 +17,9 @@ function RegisterForm({ setIsOk, setLoading }) {
     const [errors, setErrors] = useState([]);
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleSubmit(event) {
