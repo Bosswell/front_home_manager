@@ -5,11 +5,16 @@ import PrivateLayout from "../PrivateLayout";
 
 export const PRIVATE_ACCESS_TYPE = 'PRIVATE_ACCESS';
 export const UNAUTHENTICATED_ACCESS_TYPE = 'UNAUTHENTICATED_ACCESS';
+export const PUBLIC_ACCESS_TYPE = 'PUBLIC_ACCESS';
 
 function WrappedRoute({ component: Component, accessType, ...props }) {
     const { authed } = useContext(AuthContext);
 
     function renderRoute() {
+        if (accessType === PUBLIC_ACCESS_TYPE) {
+            return <Component {...props} />;
+        }
+
         if (authed) {
             if (accessType === UNAUTHENTICATED_ACCESS_TYPE) {
                 return <Redirect to={'/dashboard'}/>;

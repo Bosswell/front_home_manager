@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import TransactionsListPage from "./pages/TransactionsListPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
-import WrappedRoute, { PRIVATE_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE } from "./hoc/WrappedRoute";
+import WrappedRoute, { PRIVATE_ACCESS_TYPE, PUBLIC_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE } from "./hoc/WrappedRoute";
 import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
 import AddTransactionPage from './pages/AddTransactionPage';
@@ -29,7 +29,7 @@ function App() {
                 <Switch>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
-                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/exam" component={FrontExamPage} />
+                    <WrappedRoute accessType={PUBLIC_ACCESS_TYPE} exact path="/exam" component={FrontExamPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/transactionsList' component={TransactionsListPage} />
