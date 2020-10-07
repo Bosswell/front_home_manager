@@ -14,11 +14,11 @@ import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
 import useListSorter from "../hooks/useListSorter";
-import {PageContext} from "../PageContext";
+import { PageContext } from "../PageContext";
 
 
 function TransactionsListPage() {
-    const {setLoading, setError, setAlert, setTitle, clearNotifications} = useContext(PageContext);
+    const {setLoading, setError, setAlert, setTitle, clearNotifications, setActionButtons} = useContext(PageContext);
 
     const query = useQuery();
     const history = useHistory();
@@ -56,7 +56,9 @@ function TransactionsListPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
-        setTitle('Transactions list')
+        setTitle('Transactions list');
+        setActionButtons({ show: false });
+
         getTransactionTypes().then(response => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));

@@ -9,7 +9,7 @@ import ExamForm from "../exams/ExamForm";
 import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
-import {EXAMS_LIST_ROUTE} from "../constants/routes";
+import { EXAMS_LIST_ROUTE } from "../constants/routes";
 
 
 function ExamDetailsPage() {
@@ -78,6 +78,7 @@ function ExamDetailsPage() {
 
         getExam(id).then((response) => {
             if (response.hasError) {
+                setActionButtons({show: false});
                 setError(normalizeResponseErrors(response));
                 return;
             }
@@ -99,11 +100,19 @@ function ExamDetailsPage() {
         return <Link to={EXAMS_LIST_ROUTE}>Click to go to the exams list</Link>;
     }
 
+    if (!exam.id) {
+        return '';
+    }
+
     return (
         <>
             <Row>
                 <Col>
-                    {mode === UPDATE_MODE ? <ExamForm action={'Update'} setInputData={setInputData} inputData={inputData}/> : <ExamDetails exam={exam}/> }
+                    {mode === UPDATE_MODE ?
+                        <ExamForm action={'Update'} setInputData={setInputData} inputData={inputData}/>
+                        :
+                        <ExamDetails exam={exam}/>
+                    }
                 </Col>
             </Row>
             <DeleteModal

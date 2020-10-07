@@ -59,7 +59,9 @@ function TransactionList(
                     </div>
                 </div>
 
-                <ListGroup className={'transaction-list'} variant="flush">
+                <ListGroup className={'entry-list'} variant="flush">
+                    {!transListInfo.results.length && <div>There is no available transactions</div>}
+
                     {transListInfo.results.map((item) => {
                         const isIncome = parseInt(item.isIncome);
 

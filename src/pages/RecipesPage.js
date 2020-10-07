@@ -7,10 +7,11 @@ import { DETAILS_MODE, INSERT_MODE, LIST_MODE } from "../constants/pageModes";
 import CreateRecipe from "../recipes/CreateRecipe";
 
 function RecipesPage() {
-    const {setTitle, mode, setActionButtons} = useContext(PageContext);
+    const {setTitle, mode, setActionButtons, setMode} = useContext(PageContext);
 
     useEffect(() => {
         setActionButtons({show: true, create: true});
+        setMode(LIST_MODE);
     }, [])
 
     useEffect(() => {

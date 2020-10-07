@@ -23,8 +23,8 @@ function ExamsListView(
                     </div>
                 </div>
 
-                <ListGroup className={'transaction-list'} variant="flush">
-                    {!examsListInfo&& <div>Empty list</div>}
+                <ListGroup className={'entry-list'} variant="flush">
+                    {!examsListInfo.results.length && <div>There is no available exams</div>}
 
                     {examsListInfo.results.map((item) => {
                         return (
