@@ -6,7 +6,8 @@ import useListSorter from "../hooks/useListSorter";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { getExamsList } from "../services/exam.service";
 import ExamsListView from "./ExamsListView";
-import {defaultSorting, sortingOptions} from "../constants/examsListOptions";
+import { defaultSorting, sortingOptions } from "../constants/examsListOptions";
+import { EXAM_ROUTE } from "../constants/routes";
 
 function ExamsList() {
     const { setError, setLoading, clearNotifications } = useContext(PageContext);
@@ -43,7 +44,7 @@ function ExamsList() {
         }).finally(() => {
             setLoading(false);
             history.push({
-                location: 'listTransactions',
+                location: 'listExams',
                 search: '?options=' + JSON.stringify(params)
             });
         })
@@ -72,7 +73,7 @@ function ExamsList() {
     }
 
     function handleExamClick(id) {
-        history.push('/exam/' + id)
+        history.push(EXAM_ROUTE + id)
     }
 
     return (

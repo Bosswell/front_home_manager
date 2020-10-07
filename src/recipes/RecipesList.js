@@ -68,7 +68,7 @@ function RecipesList() {
         }).finally(() => {
             setLoading(false);
             history.push({
-                location: 'listTransactions',
+                location: 'listRecipes',
                 search: '?options=' + JSON.stringify(params)
             });
         })

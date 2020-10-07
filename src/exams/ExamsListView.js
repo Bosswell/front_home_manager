@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import Select from "react-select";
-import { sortingOptions } from "../constants/recipeListOptions";
+import { sortingOptions } from "../constants/examsListOptions";
 import ReactPaginate from "react-paginate";
 
 function ExamsListView(

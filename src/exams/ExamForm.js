@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext } from "react";
 import InputGroup from "../components/InputGroup";
 import Switch from "react-switch";
 import Select from "react-select";
@@ -29,7 +29,7 @@ function ExamForm({ action, inputData, setInputData }) {
     function handleClickForm() {
         const errors = validateInputs();
 
-        if (errors) {
+        if (errors.length) {
             setError(errors);
             return;
         }
