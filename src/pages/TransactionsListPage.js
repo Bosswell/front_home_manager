@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import useQuery from "../hooks/useQuery";
 import {deleteTransaction, getTransactionsList, getTransactionTypes} from "../services/transaction.service";
-import {Col, Container, Row} from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
-import {normalizeResponseErrors} from "../helpers/normalizers";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 import {
     defaultSorting,
     filterDateFromOptions,
@@ -15,15 +14,12 @@ import TransactionList from "../transactions/TransactionsList";
 import "../scss/list.scss";
 import DeleteModal from "../components/DeleteModal";
 import useListSorter from "../hooks/useListSorter";
-import Alert from "../components/Alert";
-import Loader from "../components/Loader";
 import {PageContext} from "../PageContext";
 
 
 function TransactionsListPage() {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [alert, setAlert] = useState('');
+    const {setLoading, setError, setAlert, setTitle, clearNotifications} = useContext(PageContext);
+
     const query = useQuery();
     const history = useHistory();
     const [params, setParams] = useState(() => {
@@ -60,6 +56,7 @@ function TransactionsListPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
+        setTitle('Transactions list')
         getTransactionTypes().then(response => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
@@ -232,11 +229,6 @@ function TransactionsListPage() {
         }));
     }
 
-    function clearNotifications() {
-        setAlert(null);
-        setError(null);
-    }
-
     function handleDeleteTransaction() {
         setSelectedItem(prevState => ({
             ...prevState,
@@ -258,46 +250,35 @@ function TransactionsListPage() {
     }
 
     return (
-        <PageContext.Provider value={{ setLoading, setError, setAlert }}>
-            <Container fluid={true}>
-                <Row>
-                    <Col lg={12}>
-                        {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occurred'}/>}
-                        {alert && <Alert messages={alert} type={'success'} headMsg={'Success!'}/>}
+        <>
+            <TransactionList
+                params={params}
+                handleSortingSelectChange={handleSortingSelectChange}
+                sortingWay={sortingWay}
+                filters={filters}
+                handlePageChange={handlePageChange}
+                handleTransactionTypeFilterChange={handleTransactionTypeFilterChange}
+                transactionTypes={transactionTypes}
+                handleDateFromFilterChange={handleDateFromFilterChange}
+                handleIsIncomeFilterChange={handleIsIncomeFilterChange}
+                handleApplyFilters={handleApplyFilters}
+                transListInfo={transListInfo}
+                setSelectedItem={setSelectedItem}
+            />
 
-                        {loading && <Loader loading={loading}/>}
-                    </Col>
-                </Row>
+            <DeleteModal
+                show={showDeleteModal}
+                setShow={setShowDeleteModal}
+                handleDelete={handleDeleteTransaction}
+                entityName={'transaction'}
+            />
 
-                <TransactionList
-                    params={params}
-                    handleSortingSelectChange={handleSortingSelectChange}
-                    sortingWay={sortingWay}
-                    filters={filters}
-                    handlePageChange={handlePageChange}
-                    handleTransactionTypeFilterChange={handleTransactionTypeFilterChange}
-                    transactionTypes={transactionTypes}
-                    handleDateFromFilterChange={handleDateFromFilterChange}
-                    handleIsIncomeFilterChange={handleIsIncomeFilterChange}
-                    handleApplyFilters={handleApplyFilters}
-                    transListInfo={transListInfo}
-                    setSelectedItem={setSelectedItem}
-                />
-
-                <DeleteModal
-                    show={showDeleteModal}
-                    setShow={setShowDeleteModal}
-                    handleDelete={handleDeleteTransaction}
-                    entityName={'transaction'}
-                />
-
-                <EditTransactionModal
-                    selected={selectedItem}
-                    setSelectedItem={setSelectedItem}
-                    transactionTypes={transactionTypes}
-                />
-            </Container>
-        </PageContext.Provider>
+            <EditTransactionModal
+                selected={selectedItem}
+                setSelectedItem={setSelectedItem}
+                transactionTypes={transactionTypes}
+            />
+        </>
     );
 }
 

@@ -158,3 +158,12 @@ menu {
   justify-content: space-between;
   align-items: baseline;
 }
+
+.top__action-buttons .btn {
+  min-width: 100px;
+  margin-left: 10px;
+}
+
+.top__action-buttons .btn:last-of-type {
+  margin-left: 0;
+}

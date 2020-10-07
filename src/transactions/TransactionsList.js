@@ -23,7 +23,6 @@ function TransactionList(
     return (
         <Row>
             <Col lg={12}>
-                <h3>Transaction list</h3>
                 <div className={'list-filters'}>
                     <div className={'filters'}>
                         <div className={'filters--select'}>

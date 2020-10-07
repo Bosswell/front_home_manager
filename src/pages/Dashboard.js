@@ -1,27 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Link } from "react-router-dom";
-import Loader from "../components/Loader";
 import { getTransactionsSummary } from "../services/transaction.service";
-import { Container, Row, Col, FormControl } from 'react-bootstrap';
+import { Row, Col, FormControl } from 'react-bootstrap';
 import { CgDetailsMore } from "react-icons/cg";
-import Alert from '../components/Alert';
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../scss/dashboard.scss";
 import "../scss/list.scss";
+import { PageContext } from "../PageContext";
 
 
 function Dashboard() {
-    const [loading, setLoading] = useState(true);
+    const {setError, setLoading, setTitle} = useContext(PageContext);
+
     const [monthlySummary, setMonthlySummary] = useState([]);
-    const [error, setError] = useState(null);
     const [startDate, setStartDate] = useState(new Date((new Date()).setDate(1)));
     const [endDate, setEndDate] = useState(new Date());
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalOutcome, setTotalOutcome] = useState(0);
     const [totalSummary, setTotalSummary] = useState(0);
     const [totalDeductibleExpanses, setTotalDeductibleExpanses] = useState(0);
+
+    useEffect(() => {
+        setTitle('Summary of expenses');
+    }, [])
 
     useEffect(() => {
         setLoading(true);
@@ -42,11 +45,7 @@ function Dashboard() {
     }, [startDate, endDate]);
 
     return (
-        <Container fluid={true}>
-            {error && <Alert messages={[error]} type={'danger'} headMsg={'An error has occured'}/>}
-
-            {loading && <Loader loading={loading}/>}
-            <h3>Summary of expenses</h3>
+        <>
             <Row>
                 <Col lg={12}>
                     <span>Pick range</span>
@@ -112,7 +111,7 @@ function Dashboard() {
                     )
                 })}
             </Row>
-        </Container>
+        </>
     );
 }
 
