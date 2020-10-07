@@ -10,7 +10,7 @@ import RecipeForm from "./RecipeForm";
 
 
 function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo, setCachedRecipe }) {
-    const {setError, setAlert, setLoading} = useContext(PageContext);
+    const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
     const [showModal, setShow] = useState(false);
     const [action, setAction] = useState('view');
@@ -30,10 +30,10 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo, setC
         deleteRecipe(recipe.data.id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
-            } else {
-                setAlert(response.message);
+                return;
             }
 
+            setAlert(response.message);
             setRecipeListInfo(prevState => ({
                 ...prevState,
                 results: prevState.results.filter((entry) => {
@@ -74,34 +74,36 @@ function RecipeDetails({ setRecipeId, setRecipe, recipe, setRecipeListInfo, setC
         updateRecipe({...inputData, id: recipe.data.id}).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
-            } else {
-                setAlert(response.message);
-                setRecipe(prevState => ({
-                    show: prevState.show,
-                    data: inputData
-                }))
-                setRecipeListInfo(prevState => ({
-                    ...prevState,
-                    results: prevState.results.map((entry) => {
-                        if (parseInt(entry.id) === recipe.data.id) {
-                            return { ...entry, name: inputData.name };
-                        }
-
-                        return entry;
-                    })
-                }));
-                setCachedRecipe(prevState =>
-                    prevState.map((cachedRecipe) => {
-                        if (cachedRecipe.id === recipe.data.id) {
-                            return recipe;
-                        }
-
-                        return cachedRecipe;
-                    })
-                );
-
-                setAction('view');
+                return;
             }
+
+            clearNotifications();
+            setAlert(response.message);
+            setRecipe(prevState => ({
+                show: prevState.show,
+                data: inputData
+            }))
+            setRecipeListInfo(prevState => ({
+                ...prevState,
+                results: prevState.results.map((entry) => {
+                    if (parseInt(entry.id) === recipe.data.id) {
+                        return { ...entry, name: inputData.name };
+                    }
+
+                    return entry;
+                })
+            }));
+            setCachedRecipe(prevState =>
+                prevState.map((cachedRecipe) => {
+                    if (cachedRecipe.id === recipe.data.id) {
+                        return recipe.data;
+                    }
+
+                    return cachedRecipe;
+                })
+            );
+
+            setAction('view');
         }).finally(() => {
             setLoading(false);
         })

@@ -12,7 +12,7 @@ import { PageContext } from "../PageContext";
 
 
 function Dashboard() {
-    const {setError, setLoading, setTitle} = useContext(PageContext);
+    const {setError, setLoading, setTitle, setActionButtons} = useContext(PageContext);
 
     const [monthlySummary, setMonthlySummary] = useState([]);
     const [startDate, setStartDate] = useState(new Date((new Date()).setDate(1)));
@@ -24,6 +24,7 @@ function Dashboard() {
 
     useEffect(() => {
         setTitle('Summary of expenses');
+        setActionButtons({ show: false })
     }, [])
 
     useEffect(() => {

@@ -78,8 +78,6 @@ function RecipesList() {
     // Get and show details of selected recipe
     // Clicked recipes are cached
     useEffect(() => {
-        clearNotifications();
-
         if (selectedRecipeId === 0) {
             setRecipe({data: {}, show: false})
             return;
@@ -90,7 +88,7 @@ function RecipesList() {
         })
 
         if (cachedRecipe) {
-            setRecipe({data: cachedRecipe, show: true});
+            setRecipe({ data: cachedRecipe, show: true });
             return;
         }
 
@@ -98,10 +96,12 @@ function RecipesList() {
         getRecipe(selectedRecipeId).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
-            } else {
-                setRecipe({data: response.data, show: true});
-                setCachedRecipe(prevState => ([...prevState, response.data]));
+                return;
             }
+
+            clearNotifications();
+            setRecipe({ data: response.data, show: true });
+            setCachedRecipe(prevState => ([...prevState, response.data]));
         }).finally(() => {
             setLoading(false);
         })

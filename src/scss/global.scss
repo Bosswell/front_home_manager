@@ -157,13 +157,17 @@ menu {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap-reverse;
+  gap: 15px;
 }
 
-.top__action-buttons .btn {
-  min-width: 100px;
-  margin-left: 10px;
-}
+.top__action-buttons {
+  .btn {
+    min-width: 100px;
+    margin-left: 10px;
+  }
 
-.top__action-buttons .btn:first-of-type {
-  margin-left: 0;
+  .btn:first-of-type {
+    margin-left: 0;
+  }
 }

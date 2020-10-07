@@ -7,7 +7,7 @@ import { normalizeResponseErrors } from "../helpers/normalizers";
 import { getExamsList } from "../services/exam.service";
 import ExamsListView from "./ExamsListView";
 import { defaultSorting, sortingOptions } from "../constants/examsListOptions";
-import { EXAM_ROUTE } from "../constants/routes";
+import {EXAM_DETAILS_ROUTE, EXAM_ROUTE} from "../constants/routes";
 
 function ExamsList() {
     const { setError, setLoading, clearNotifications } = useContext(PageContext);
@@ -73,7 +73,7 @@ function ExamsList() {
     }
 
     function handleExamClick(id) {
-        history.push(EXAM_ROUTE + id)
+        history.push(EXAM_DETAILS_ROUTE + id)
     }
 
     return (
