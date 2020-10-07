@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import {deleteExam, getExam} from "../services/exam.service";
-import {PageContext} from "../PageContext";
-import {Col, Row} from "react-bootstrap";
-import {normalizeResponseErrors} from "../helpers/normalizers";
-import {DETAILS_MODE, UPDATE_MODE} from "../constants/pageModes";
+import { deleteExam, getExam} from "../services/exam.service";
+import { PageContext } from "../PageContext";
+import { Col, Row } from "react-bootstrap";
+import { normalizeResponseErrors } from "../helpers/normalizers";
+import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
 import ExamForm from "../exams/ExamForm";
-import {defaultMode, examModes} from "../constants/examModes";
+import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
 
@@ -53,14 +53,15 @@ function ExamDetailsPage() {
             case UPDATE_MODE: setTitle('Update exam'); break;
             case DETAILS_MODE:
             default:
-                setTitle('Details')
+                setTitle('Exam details')
         }
     }, [mode])
 
     useEffect(() => {
         setLoading(true);
         setMode(DETAILS_MODE);
-        setActionButtons(prevState => ({...prevState, delete: true, show: true}))
+        setActionButtons(prevState => ({...prevState, delete: true, show: true, update: true}))
+
         getExam(id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
