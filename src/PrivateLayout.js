@@ -17,6 +17,7 @@ function PrivateLayout({ children }) {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState('');
     const [title, setTitle] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [mode, setMode] = useState(DETAILS_MODE)
     const [actionButtons, setActionButtons] = useState({
         show: false,
@@ -74,7 +75,7 @@ function PrivateLayout({ children }) {
             <div className={'middle-section'}>
                 <SideMenu isOpen={isOpen} setOpen={setOpen} isMobile={isMobileSize}/>
                 <section className={'content'}>
-                    <PageContext.Provider value={{setLoading, setError, setAlert, setActionButtons, setTitle, setMode, mode, clearNotifications}}>
+                    <PageContext.Provider value={{setLoading, setError, setAlert, setActionButtons, setTitle, setMode, mode, setShowDeleteModal, showDeleteModal, clearNotifications}}>
                         <Container fluid={true}>
                             <Row>
                                 <Col lg={12} className={'page-header'}>
@@ -84,7 +85,7 @@ function PrivateLayout({ children }) {
                                         <div className={'top__action-buttons'}>
                                             {actionButtons.update && renderEditButtons()}
                                             {actionButtons.create && renderCreateButtons()}
-                                            {actionButtons.delete && <Button variant={'danger'} onClick={() => setMode(DELETE_MODE)}>Delete</Button>}
+                                            {actionButtons.delete && <Button variant={'danger'} onClick={() => { setShowDeleteModal(true); setMode(DELETE_MODE) }}>Delete</Button>}
                                         </div>
                                     }
                                 </Col>

@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import {Link, useParams} from "react-router-dom";
 import { deleteExam, getExam} from "../services/exam.service";
 import { PageContext } from "../PageContext";
 import { Col, Row } from "react-bootstrap";
@@ -9,11 +9,24 @@ import ExamForm from "../exams/ExamForm";
 import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
+import {EXAMS_LIST_ROUTE} from "../constants/routes";
 
 
 function ExamDetailsPage() {
-    const {setError, setAlert, setLoading, setTitle, setMode, mode, clearNotifications, setActionButtons} = useContext(PageContext);
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const {
+        setError,
+        setAlert,
+        setLoading,
+        setTitle,
+        setMode,
+        mode,
+        clearNotifications,
+        setActionButtons,
+        setShowDeleteModal,
+        showDeleteModal
+    } = useContext(PageContext);
+
+    const [isDeleted, setDeleted] = useState(false);
     const [exam, setExam] = useState({
         id: null,
         name: null,
@@ -31,16 +44,17 @@ function ExamDetailsPage() {
         mode: defaultMode,
         timeout: 0
     });
-
     const { id } = useParams();
 
     function handleDelete() {
+        setShowDeleteModal(false);
         setLoading(true);
         deleteExam(id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
             }
+            setDeleted(true);
 
             setAlert(response.message);
         }).finally(() => {
@@ -60,7 +74,7 @@ function ExamDetailsPage() {
     useEffect(() => {
         setLoading(true);
         setMode(DETAILS_MODE);
-        setActionButtons(prevState => ({...prevState, delete: true, show: true, update: true}))
+        setActionButtons({delete: true, show: true, update: true});
 
         getExam(id).then((response) => {
             if (response.hasError) {
@@ -80,6 +94,10 @@ function ExamDetailsPage() {
             setLoading(false);
         })
     }, [])
+
+    if (isDeleted) {
+        return <Link to={EXAMS_LIST_ROUTE}>Click to go to the exams list</Link>;
+    }
 
     return (
         <>

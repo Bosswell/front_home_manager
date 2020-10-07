@@ -18,6 +18,13 @@ import RecipesPage from "./pages/RecipesPage";
 import FrontExamPage from "./pages/FrontExamPage";
 import BackExamsPage from "./pages/BackExamsPage";
 import ExamDetailsPage from "./pages/ExamDetailsPage";
+import {
+    ADD_TRANSACTION_ROUTE, DASHBOARD_ROUTE,
+    EXAM_DETAILS_ROUTE, EXAM_ROUTE,
+    EXAMS_LIST_ROUTE, LOGIN_ROUTE, MAIN_ROUTE,
+    RECIPES_LIST_ROUTE, REGISTER_ROUTE,
+    TRANSACTIONS_LIST_ROUTE
+} from "./constants/routes";
 
 
 function App() {
@@ -27,15 +34,15 @@ function App() {
         <AuthContext.Provider value={{ authed, setAuthed }}>
             <BrowserRouter>
                 <Switch>
-                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={['/login', '/']} component={LoginPage}/>
-                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path="/register" component={RegisterPage} />
-                    <WrappedRoute accessType={PUBLIC_ACCESS_TYPE} exact path="/exam" component={FrontExamPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/dashboard' component={Dashboard} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/addTransaction' component={AddTransactionPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/transactionsList' component={TransactionsListPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/recipesList' component={RecipesPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/examsList' component={BackExamsPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path='/exam/:id' component={ExamDetailsPage} />
+                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={[LOGIN_ROUTE, MAIN_ROUTE]} component={LoginPage}/>
+                    <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={REGISTER_ROUTE} component={RegisterPage} />
+                    <WrappedRoute accessType={PUBLIC_ACCESS_TYPE} exact path={EXAM_ROUTE} component={FrontExamPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={DASHBOARD_ROUTE} component={Dashboard} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={ADD_TRANSACTION_ROUTE} component={AddTransactionPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={TRANSACTIONS_LIST_ROUTE} component={TransactionsListPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={RECIPES_LIST_ROUTE} component={RecipesPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAMS_LIST_ROUTE} component={BackExamsPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAM_DETAILS_ROUTE + ':id'} component={ExamDetailsPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>

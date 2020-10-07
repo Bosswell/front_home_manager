@@ -10,7 +10,7 @@ function RecipesPage() {
     const {setTitle, mode, setActionButtons} = useContext(PageContext);
 
     useEffect(() => {
-        setActionButtons(prevState => ({...prevState, show: true, create: true}));
+        setActionButtons({show: true, create: true});
     }, [])
 
     useEffect(() => {

@@ -12,7 +12,7 @@ function AddTransactionPage() {
 
     useEffect(() => {
         setLoading(true);
-        setActionButtons(prevState => ({ ...prevState, show: false }));
+        setActionButtons({show: false });
         setTitle('Create transaction');
 
         getTransactionTypes().then(response => {
