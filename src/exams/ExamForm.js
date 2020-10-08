@@ -10,9 +10,7 @@ import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
-function ExamForm({ action, inputData, setInputData }) {
-    const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
-
+function ExamForm({ action, inputData, setInputData, handleClickForm }) {
     function handleInputChange({ target }) {
         setInputData(prevState => {
             return Object.assign({}, prevState, inputNormalizer(target));
@@ -24,46 +22,6 @@ function ExamForm({ action, inputData, setInputData }) {
             ...prevState,
             mode: value
         }));
-    }
-
-    function handleClickForm() {
-        const errors = validateInputs();
-
-        if (errors.length) {
-            setError(errors);
-            return;
-        }
-
-        setLoading(true);
-        addExam({ ...inputData, mode: inputData.mode.value }).then((response) => {
-            if (response.hasError) {
-                setError(normalizeResponseErrors(response));
-                return;
-            }
-            clearNotifications();
-
-            setAlert(response.message)
-        }).finally(() => {
-            setLoading(false);
-        })
-    }
-
-    function validateInputs() {
-        let err = [];
-
-        if (!inputData.name.trim()) {
-            err.push('Exam name cannot be empty')
-        }
-
-        if (!inputData.code.trim()) {
-            err.push('Code cannot be empty')
-        }
-
-        if (inputData.timeout <= 0) {
-            err.push('Timeout must be greater then 0')
-        }
-
-        return err;
     }
 
     return (

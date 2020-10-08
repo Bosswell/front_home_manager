@@ -1,22 +1,12 @@
-import React, {useContext, useState} from "react";
-import { defaultMode } from "../constants/examModes";
+import React, { useContext } from "react";
+import { updateExam } from "../services/exam.service";
+import { normalizeResponseErrors} from "../helpers/normalizers";
 import ExamForm from "./ExamForm";
-import { addExam} from "../services/exam.service";
-import { normalizeResponseErrors } from "../helpers/normalizers";
 import { PageContext } from "../PageContext";
 import { validateExamInput } from "../helpers/validateExamInput";
 
-
-function CreateExam() {
+function UpdateExam({ inputData, setInputData }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
-    const [inputData, setInputData] = useState({
-        name: '',
-        code: '',
-        isAvailable: false,
-        hasVisibleResult: false,
-        mode: defaultMode,
-        timeout: 0
-    });
 
     function handleClickForm() {
         const errors = validateExamInput(inputData)
@@ -27,7 +17,7 @@ function CreateExam() {
         }
 
         setLoading(true);
-        addExam({ ...inputData, mode: inputData.mode.value }).then((response) => {
+        updateExam({ ...inputData, mode: inputData.mode.value }).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -42,7 +32,7 @@ function CreateExam() {
 
     return (
         <ExamForm
-            action={'Create'}
+            action={'Update'}
             inputData={inputData}
             setInputData={setInputData}
             handleClickForm={handleClickForm}
@@ -50,4 +40,4 @@ function CreateExam() {
     );
 }
 
-export default CreateExam;
+export default UpdateExam;

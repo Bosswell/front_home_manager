@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import {Link, useParams} from "react-router-dom";
 import { deleteExam, getExam} from "../services/exam.service";
 import { PageContext } from "../PageContext";
-import { Col, Row } from "react-bootstrap";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
 import ExamForm from "../exams/ExamForm";
@@ -10,6 +9,7 @@ import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
 import { EXAMS_LIST_ROUTE } from "../constants/routes";
+import UpdateExam from "../exams/UpdateExam";
 
 
 function ExamDetailsPage() {
@@ -67,7 +67,7 @@ function ExamDetailsPage() {
             case UPDATE_MODE: setTitle('Update exam'); break;
             case DETAILS_MODE:
             default:
-                setTitle('Exam details')
+                setTitle('')
         }
     }, [mode])
 
@@ -106,15 +106,11 @@ function ExamDetailsPage() {
 
     return (
         <>
-            <Row>
-                <Col>
-                    {mode === UPDATE_MODE ?
-                        <ExamForm action={'Update'} setInputData={setInputData} inputData={inputData}/>
-                        :
-                        <ExamDetails exam={exam}/>
-                    }
-                </Col>
-            </Row>
+            {mode === UPDATE_MODE ?
+                <UpdateExam setInputData={setInputData} inputData={inputData}/>
+                :
+                <ExamDetails exam={exam} setExam={setExam}/>
+            }
             <DeleteModal
                 show={showDeleteModal}
                 setShow={setShowDeleteModal}

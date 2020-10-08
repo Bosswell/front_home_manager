@@ -79,7 +79,7 @@ function PrivateLayout({ children }) {
                         <Container fluid={true}>
                             <Row>
                                 <Col lg={12} className={'page-header'}>
-                                    <h3>{ title }</h3>
+                                    <h3>{title && title }</h3>
 
                                     {actionButtons.show &&
                                         <div className={'top__action-buttons'}>

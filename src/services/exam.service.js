@@ -35,7 +35,7 @@ export const addExam = (data) => {
 
 export const getExamsList = (params) => {
     return axios
-        .get(host + '/exam/action/list', {
+        .get(host + '/exam/list/exams', {
             params: {
                 options: params
             }
