@@ -33,3 +33,9 @@ export const unlinkQuestion = (question) => {
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
+
+export const linkQuestion = (question) => {
+    return axios.post(host + `/question/link`, { ...question })
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}

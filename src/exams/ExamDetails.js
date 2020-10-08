@@ -1,56 +1,73 @@
-import React, {useContext, useState} from "react";
-import {Button, Col, ListGroup, Row} from "react-bootstrap";
+import React, {useCallback, useContext, useState} from "react";
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import AsyncSelect from 'react-select/async';
-import InputGroup from "../components/InputGroup";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditor from "@ckeditor/ckeditor5-react";
-import {addQuestion, unlinkQuestion} from "../services/question.service";
-import {PageContext} from "../PageContext";
-import {normalizeResponseErrors} from "../helpers/normalizers";
+import {addQuestion, linkQuestion, unlinkQuestion} from "../services/question.service";
+import { PageContext } from "../PageContext";
+import { normalizeResponseErrors } from "../helpers/normalizers";
 import { Html5Entities } from 'html-entities';
+import { getUserQuestions } from "../services/user.service";
+import { debounce } from "throttle-debounce";
 
-
-const colourOptions = [
-    {
-        label: 'Hello 1',
-        value: 1,
-    },{
-        label: 'Hello 2',
-        value: 2,
-    },{
-        label: 'Hello 3',
-        value: 3,
-    },
-]
-
-const filterColors = (inputValue) => {
-    return colourOptions.filter(i =>
-        i.label.toLowerCase().includes(inputValue.toLowerCase())
-    );
-};
-
-const loadOptions = (inputValue, callback) => {
-    setTimeout(() => {
-        callback(filterColors(inputValue));
-    }, 3000);
-};
-
+const truncate = (input, positions) => input.length > positions ? `${input.substring(0, positions)}...` : input;
 
 function ExamDetails({ exam, setExam }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
     const htmlEntities = new Html5Entities();
-    const [inputValue, setInputValue] = useState('');
     const [showQuestionForm, setQuestionForm] = useState(false);
     const [questionQuery, setQuestionQuery] = useState('');
 
-    const handleInputChange = (newValue) => {
-        const inputValue = newValue.replace(/\W/g, '');
-        setInputValue(inputValue);
-        return inputValue;
+    const loadOptions = (searchBy, callback) => {
+        debounceCallback(searchBy, callback)
     };
 
-    const truncate = (input) => input.length > 20 ? `${input.substring(0, 20)}...` : input;
+    const debounceCallback = useCallback(
+        debounce(1000, (searchVal, callback) => {
+            getUserQuestions(searchVal).then((response) => {
+                if (response.hasError) {
+                    callback([]);
+                } else {
+                    const normalizedData = response.data.map(({ id, query }) => {
+                        const label = htmlEntities.decode(query.replace(/<[^>]+>/g, ''));
+
+                        return {
+                            label: truncate(label, 10),
+                            value: parseInt(id)
+                        }
+                    })
+
+                    callback(normalizedData);
+                }
+            })
+        }),
+        []
+    );
+
+    function createQuestion() {
+        setLoading(true);
+        addQuestion({ query: questionQuery, examId: exam.id }).then((response) => {
+            handleQuestionLinkResponse(response);
+            setQuestionForm(false);
+            setQuestionQuery('');
+        }).finally(() => {
+            setLoading(false);
+        })
+    }
+
+    function onFinderChange({ value, label }) {
+        setLoading(true);
+        linkQuestion({ questionId: value, examId: exam.id }).then((response) => {
+            response.data = {
+                id: value,
+                query: label
+            }
+            handleQuestionLinkResponse(response);
+        }).finally(() => {
+            setLoading(false);
+        })
+    }
 
     function handleUnlink(questionId) {
         setLoading(true);
@@ -76,6 +93,35 @@ function ExamDetails({ exam, setExam }) {
         })
     }
 
+    function handleQuestionLinkResponse(response) {
+        clearNotifications();
+        if (response.hasError) {
+            setError(normalizeResponseErrors(response));
+            return;
+        }
+
+        const { data, message } = response;
+        console.log(data);
+        setAlert(message);
+        setExam(prevState => {
+            const questions = [...prevState.questions];
+            const questionAlreadyExist = questions.find((question) => {
+                return question.id === data.id;
+            });
+
+            if (questionAlreadyExist) {
+                return prevState;
+            }
+
+            questions.push(data);
+
+            return {
+                ...prevState,
+                questions: questions
+            }
+        })
+    }
+
     return (
         <>
             <Row>
@@ -96,7 +142,7 @@ function ExamDetails({ exam, setExam }) {
                                 cacheOptions
                                 loadOptions={loadOptions}
                                 defaultOptions
-                                onInputChange={handleInputChange}
+                                onChange={onFinderChange}
                             />
                         </div>
 
@@ -129,7 +175,7 @@ function ExamDetails({ exam, setExam }) {
                                         className={'text-info pointer btn-link'}
                                         onClick={() => {}}
                                     >
-                                        { truncate(query) }
+                                        { truncate(query, 20) }
                                     </div>
                                     <div className={'text-danger pointer'} onClick={() => handleUnlink(question.id)}>
                                         unlink
@@ -142,33 +188,6 @@ function ExamDetails({ exam, setExam }) {
             </Row>
         </>
     )
-
-    function createQuestion() {
-        setLoading(true);
-        addQuestion({ query: questionQuery, examId: exam.id }).then((response) => {
-            clearNotifications();
-
-            if (response.hasError) {
-                setError(normalizeResponseErrors(response));
-                return;
-            }
-
-            setAlert(response.message);
-            setExam(prevState => {
-                const questions = [...prevState.questions];
-                questions.push(response.data);
-
-                return {
-                    ...prevState,
-                    questions: questions
-                }
-            })
-            setQuestionForm(false);
-            setQuestionQuery('');
-        }).finally(() => {
-            setLoading(false);
-        })
-    }
 
     function handleContentChange(event, editor) {
         const data = editor.getData();
