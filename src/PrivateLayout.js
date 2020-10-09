@@ -31,6 +31,10 @@ function PrivateLayout({ children }) {
     });
 
     useEffect(() => {
+        clearNotifications();
+    }, [mode])
+
+    useEffect(() => {
         manipulateView();
 
         function manipulateView() {
