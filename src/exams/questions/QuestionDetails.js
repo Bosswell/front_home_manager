@@ -10,6 +10,7 @@ import { truncate } from "../../helpers/truncate";
 import DeleteModal from "../../components/DeleteModal";
 import { OPTION_DETAILS_ROUTE } from "../../constants/routes";
 import OptionForm from "../options/OptionForm";
+import OptionList from "../options/OptionList";
 
 
 function QuestionsDetails({ question, setQuestion }) {
@@ -115,25 +116,11 @@ function QuestionsDetails({ question, setQuestion }) {
                 </Col>
                 <Col lg={6}>
                     <h4>Options</h4>
-                    <ListGroup className={'entry-list'} variant="flush">
-                        {question.options.map(({ content, id, isCorrect }) => {
-                            const val = htmlEntities.decode(content.replace(/<[^>]+>/g, ''));
-
-                            return (
-                                <ListGroup.Item key={id} className={'item-with-action'}>
-                                    <div className={'text-info'}>
-                                        <span className={'pointer btn-link'} onClick={() => { history.push(OPTION_DETAILS_ROUTE + id) }}>
-                                            { truncate(val, 35) }
-                                        </span>
-                                        <span className={isCorrect ? 'text-success' : 'text-danger'}> - {isCorrect ? 'is correct' : 'is incorrect'}</span>
-                                    </div>
-                                    <div className={'text-danger pointer btn-link'} onClick={() => { setClickedOptionId(id); setShowDeleteModal(true) }}>
-                                        delete
-                                    </div>
-                                </ListGroup.Item>
-                            )
-                        })}
-                    </ListGroup>
+                    <OptionList
+                        options={question.options}
+                        setClickedOptionId={setClickedOptionId}
+                        setShowDeleteModal={setShowDeleteModal}
+                    />
                 </Col>
             </Row>
             <DeleteModal
