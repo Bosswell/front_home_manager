@@ -17,7 +17,7 @@ import useListSorter from "../hooks/useListSorter";
 import { PageContext } from "../PageContext";
 
 
-function TransactionsListPage() {
+function TransactionListPage() {
     const {setLoading, setError, setAlert, setTitle, clearNotifications, setActionButtons} = useContext(PageContext);
 
     const query = useQuery();
@@ -284,4 +284,4 @@ function TransactionsListPage() {
     );
 }
 
-export default TransactionsListPage;
+export default TransactionListPage;

@@ -12,7 +12,7 @@ import { getUserId } from "../helpers/userHelper";
 import {inputNormalizer} from "../helpers/inputNormalizer";
 
 
-function FrontExamPage() {
+function ExamPublicPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [snippets, setSnippets] = useState([]);
@@ -107,4 +107,4 @@ function FrontExamPage() {
     )
 }
 
-export default FrontExamPage;
+export default ExamPublicPage;

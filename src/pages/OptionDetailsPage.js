@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { deleteExam, getExam} from "../services/exam.service";
+import { deleteExam } from "../services/exam.service";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
-import { defaultMode, examModes } from "../constants/examModes";
-import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
 import { EXAMS_LIST_ROUTE } from "../constants/routes";
-import UpdateExam from "../exams/UpdateExam";
-import {getOption} from "../services/options.service";
+import {deleteOption, getOption} from "../services/options.service";
+import OptionDetails from "../exams/options/OptionDetails";
+import UpdateOption from "../exams/options/UpdateOption";
 
 
 function OptionDetailsPage() {
@@ -27,22 +26,14 @@ function OptionDetailsPage() {
     } = useContext(PageContext);
 
     const [isDeleted, setDeleted] = useState(false);
-    const [exam, setExam] = useState({
+    const [option, setOption] = useState({
         id: null,
-        name: null,
-        code: null,
-        isAvailable: null,
-        timeout: null,
-        hasVisibleResult: null,
-        mode: null
+        content: null,
+        isCorrect: null,
     });
     const [inputData, setInputData] = useState({
-        name: '',
-        code: '',
-        isAvailable: false,
-        hasVisibleResult: false,
-        mode: defaultMode,
-        timeout: 0
+        content: null,
+        isCorrect: null
     });
     const { id } = useParams();
     const history = useHistory();
@@ -50,7 +41,7 @@ function OptionDetailsPage() {
     function handleDelete() {
         setShowDeleteModal(false);
         setLoading(true);
-        deleteExam(id).then((response) => {
+        deleteOption(id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -68,7 +59,7 @@ function OptionDetailsPage() {
             case UPDATE_MODE: setTitle('Update option'); break;
             case DETAILS_MODE:
             default:
-                setTitle('')
+                setTitle('Option details')
         }
     }, [mode])
 
@@ -85,24 +76,24 @@ function OptionDetailsPage() {
             }
             clearNotifications();
 
-            setExam(response.data);
-            setInputData({
-                ...response.data,
-                mode: examModes.find((mode) => {
-                    return mode.value === response.data.mode;
-                })
-            })
+            const data = response.data;
+            setOption(data);
+            setInputData(data)
         }).finally(() => {
             setLoading(false);
         })
     }, [])
 
-    if (isDeleted) {
-        return <Link to={EXAMS_LIST_ROUTE}>Click to go to the exams list</Link>;
+    if (!option.id) {
+        return '';
     }
 
-    if (!exam.id) {
-        return '';
+    if (isDeleted) {
+        return (
+            <nav className={'pointer btn-link navigation'} onClick={() => { history.goBack() }}>
+                Back to question details
+            </nav>
+        )
     }
 
     return (
@@ -110,11 +101,11 @@ function OptionDetailsPage() {
             <nav className={'pointer btn-link navigation'} onClick={() => { history.goBack() }}>
                 Back to question details
             </nav>
-            {/*{mode === UPDATE_MODE ?*/}
-            {/*    <UpdateExam setInputData={setInputData} inputData={inputData} setExam={setExam}/>*/}
-            {/*    :*/}
-            {/*    <ExamDetails exam={exam} setExam={setExam}/>*/}
-            {/*}*/}
+            {mode === UPDATE_MODE ?
+                <UpdateOption setInputData={setInputData} inputData={inputData} setOption={option}/>
+                :
+                <OptionDetails option={option}/>
+            }
             <DeleteModal
                 show={showDeleteModal}
                 setShow={setShowDeleteModal}

@@ -6,7 +6,7 @@ import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
 import DeleteModal from "../components/DeleteModal";
 import { EXAMS_LIST_ROUTE } from "../constants/routes";
 import { deleteQuestion, getQuestion } from "../services/question.service";
-import QuestionsDetails from "../exams/questions/QuestionDetails";
+import QuestionsDetails from "../exams/options/OptionDetails";
 import UpdateQuestion from "../exams/questions/UpdateQuestion";
 
 

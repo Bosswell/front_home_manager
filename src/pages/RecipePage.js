@@ -6,7 +6,7 @@ import { PageContext } from "../PageContext";
 import { DETAILS_MODE, INSERT_MODE, LIST_MODE } from "../constants/pageModes";
 import CreateRecipe from "../recipes/CreateRecipe";
 
-function RecipesPage() {
+function RecipePage() {
     const {setTitle, mode, setActionButtons, setMode} = useContext(PageContext);
 
     useEffect(() => {
@@ -31,4 +31,4 @@ function RecipesPage() {
     }
 }
 
-export default RecipesPage;
+export default RecipePage;

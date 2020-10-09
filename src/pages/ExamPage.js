@@ -7,7 +7,7 @@ import CreateExam from "../exams/CreateExam"
 import ExamsList from "../exams/ExamsList"
 
 
-function BackExamsPage() {
+function ExamPage() {
     const {setTitle, mode, setActionButtons} = useContext(PageContext);
 
     useEffect(() => {
@@ -30,4 +30,4 @@ function BackExamsPage() {
     }
 }
 
-export default BackExamsPage;
+export default ExamPage;

@@ -6,7 +6,7 @@ import { normalizeResponseErrors } from "../helpers/normalizers";
 import { PageContext } from "../PageContext";
 
 
-function AddTransactionPage() {
+function TransactionCreatePage() {
     const { setError, setLoading, clearNotifications, setActionButtons, setTitle } = useContext(PageContext);
     const [transactionTypes, setTransactionTypes] = useState([{}]);
 
@@ -36,4 +36,4 @@ function AddTransactionPage() {
     );
 }
 
-export default AddTransactionPage;
+export default TransactionCreatePage;
