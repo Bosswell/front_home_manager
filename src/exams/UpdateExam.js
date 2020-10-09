@@ -5,7 +5,7 @@ import ExamForm from "./ExamForm";
 import { PageContext } from "../PageContext";
 import { validateExamInput } from "../helpers/validateExamInput";
 
-function UpdateExam({ inputData, setInputData }) {
+function UpdateExam({ inputData, setInputData, setExam }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
     function handleClickForm() {
@@ -23,6 +23,9 @@ function UpdateExam({ inputData, setInputData }) {
                 return;
             }
             clearNotifications();
+            setExam(prevState => {
+                return Object.assign({}, prevState, { ...inputData, mode: inputData.mode.value });
+            });
 
             setAlert(response.message)
         }).finally(() => {

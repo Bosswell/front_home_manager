@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Question from "../exams/Question";
-import Option from "../exams/Option";
-import '../scss/exam.scss';
-import { validateExam } from "../services/exam.service";
+import Question from "./Question";
+import Option from "./Option";
+import '../../scss/exam.scss';
+import { validateExam } from "../../services/exam.service";
 import { Button } from "react-bootstrap";
 import Countdown from 'react-countdown';
-import { normalizeResponseErrors } from "../helpers/normalizers";
+import { normalizeResponseErrors } from "../../helpers/normalizers";
 
 
 function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, historyId }) {

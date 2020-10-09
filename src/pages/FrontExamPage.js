@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import '../scss/exam.scss';
 import '../scss/form.scss';
-import Exam from "../exams/Exam";
+import Exam from "../exams/front/Exam";
 import Loader from "../components/Loader";
 import Alert from "../components/Alert";
 import InputGroup from "../components/InputGroup";

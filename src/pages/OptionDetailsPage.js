@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Link, useParams} from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { deleteExam, getExam} from "../services/exam.service";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
-import ExamForm from "../exams/ExamForm";
 import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
 import { EXAMS_LIST_ROUTE } from "../constants/routes";
 import UpdateExam from "../exams/UpdateExam";
+import {getOption} from "../services/options.service";
 
 
-function ExamDetailsPage() {
+function OptionDetailsPage() {
     const {
         setError,
         setAlert,
@@ -45,6 +45,7 @@ function ExamDetailsPage() {
         timeout: 0
     });
     const { id } = useParams();
+    const history = useHistory();
 
     function handleDelete() {
         setShowDeleteModal(false);
@@ -64,7 +65,7 @@ function ExamDetailsPage() {
 
     useEffect(() => {
         switch (mode) {
-            case UPDATE_MODE: setTitle('Update exam'); break;
+            case UPDATE_MODE: setTitle('Update option'); break;
             case DETAILS_MODE:
             default:
                 setTitle('')
@@ -76,7 +77,7 @@ function ExamDetailsPage() {
         setMode(DETAILS_MODE);
         setActionButtons({delete: true, show: true, update: true});
 
-        getExam(id).then((response) => {
+        getOption(id).then((response) => {
             if (response.hasError) {
                 setActionButtons({show: false});
                 setError(normalizeResponseErrors(response));
@@ -106,11 +107,14 @@ function ExamDetailsPage() {
 
     return (
         <>
-            {mode === UPDATE_MODE ?
-                <UpdateExam setInputData={setInputData} inputData={inputData} setExam={setExam}/>
-                :
-                <ExamDetails exam={exam} setExam={setExam}/>
-            }
+            <nav className={'pointer btn-link navigation'} onClick={() => { history.goBack() }}>
+                Back to question details
+            </nav>
+            {/*{mode === UPDATE_MODE ?*/}
+            {/*    <UpdateExam setInputData={setInputData} inputData={inputData} setExam={setExam}/>*/}
+            {/*    :*/}
+            {/*    <ExamDetails exam={exam} setExam={setExam}/>*/}
+            {/*}*/}
             <DeleteModal
                 show={showDeleteModal}
                 setShow={setShowDeleteModal}
@@ -121,4 +125,4 @@ function ExamDetailsPage() {
     )
 }
 
-export default ExamDetailsPage;
+export default OptionDetailsPage;

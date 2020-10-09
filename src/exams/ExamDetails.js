@@ -3,14 +3,17 @@ import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import AsyncSelect from 'react-select/async';
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditor from "@ckeditor/ckeditor5-react";
-import {addQuestion, linkQuestion, unlinkQuestion} from "../services/question.service";
+import { useHistory } from 'react-router-dom'
+import { addQuestion, linkQuestion, unlinkQuestion } from "../services/question.service";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { Html5Entities } from 'html-entities';
 import { getUserQuestions } from "../services/user.service";
 import { debounce } from "throttle-debounce";
+import "../scss/exam-details.scss";
+import { QUESTION_DETAILS_ROUTE } from "../constants/routes";
+import { truncate } from "../helpers/truncate";
 
-const truncate = (input, positions) => input.length > positions ? `${input.substring(0, positions)}...` : input;
 
 function ExamDetails({ exam, setExam }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
@@ -18,6 +21,7 @@ function ExamDetails({ exam, setExam }) {
     const htmlEntities = new Html5Entities();
     const [showQuestionForm, setQuestionForm] = useState(false);
     const [questionQuery, setQuestionQuery] = useState('');
+    const history = useHistory();
 
     const loadOptions = (searchBy, callback) => {
         debounceCallback(searchBy, callback)
@@ -101,7 +105,6 @@ function ExamDetails({ exam, setExam }) {
         }
 
         const { data, message } = response;
-        console.log(data);
         setAlert(message);
         setExam(prevState => {
             const questions = [...prevState.questions];
@@ -122,6 +125,12 @@ function ExamDetails({ exam, setExam }) {
         })
     }
 
+    function handleContentChange(event, editor) {
+        const data = editor.getData();
+
+        setQuestionQuery(data);
+    }
+
     return (
         <>
             <Row>
@@ -135,7 +144,7 @@ function ExamDetails({ exam, setExam }) {
                     <div>Timeout: <b>{exam.timeout}</b></div>
                     <div>Mode: <b>{exam.mode}</b></div>
 
-                    <div className={'exam-questions'}>
+                    <div className={'entity-entries'}>
                         <div className={'async-select'}>
                             <div>Find question</div>
                             <AsyncSelect
@@ -146,11 +155,12 @@ function ExamDetails({ exam, setExam }) {
                             />
                         </div>
 
-                        <div className={'create-question-box'}>
+                        <div className={'create-box'}>
                             {!showQuestionForm ?
                                 <Button variant={'outline-success'} onClick={() => {setQuestionForm(true)}}>Create question</Button>
                                 :
                                 <form className={'form'}>
+                                    <h4>Create new question</h4>
                                     <CKEditor
                                         editor={ ClassicEditor }
                                         data={ questionQuery }
@@ -173,11 +183,11 @@ function ExamDetails({ exam, setExam }) {
                                 <ListGroup.Item key={question.id} className={'item-with-action'}>
                                     <div
                                         className={'text-info pointer btn-link'}
-                                        onClick={() => {}}
+                                        onClick={() => { history.push(QUESTION_DETAILS_ROUTE + question.id) }}
                                     >
-                                        { truncate(query, 20) }
+                                        { truncate(query, 35) }
                                     </div>
-                                    <div className={'text-danger pointer'} onClick={() => handleUnlink(question.id)}>
+                                    <div className={'text-danger pointer btn-link'} onClick={() => handleUnlink(question.id)}>
                                         unlink
                                     </div>
                                 </ListGroup.Item>
@@ -188,12 +198,6 @@ function ExamDetails({ exam, setExam }) {
             </Row>
         </>
     )
-
-    function handleContentChange(event, editor) {
-        const data = editor.getData();
-
-        setQuestionQuery(data);
-    }
 }
 
 export default ExamDetails;

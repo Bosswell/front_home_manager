@@ -1,18 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Link, useParams} from "react-router-dom";
-import { deleteExam, getExam} from "../services/exam.service";
+import {Link, useHistory, useParams} from "react-router-dom";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
-import ExamForm from "../exams/ExamForm";
-import { defaultMode, examModes } from "../constants/examModes";
-import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
 import { EXAMS_LIST_ROUTE } from "../constants/routes";
-import UpdateExam from "../exams/UpdateExam";
+import { deleteQuestion, getQuestion } from "../services/question.service";
+import QuestionsDetails from "../exams/questions/QuestionDetails";
+import UpdateQuestion from "../exams/questions/UpdateQuestion";
 
 
-function ExamDetailsPage() {
+function QuestionDetailPage() {
     const {
         setError,
         setAlert,
@@ -27,29 +25,21 @@ function ExamDetailsPage() {
     } = useContext(PageContext);
 
     const [isDeleted, setDeleted] = useState(false);
-    const [exam, setExam] = useState({
+    const [question, setQuestion] = useState({
         id: null,
-        name: null,
-        code: null,
-        isAvailable: null,
-        timeout: null,
-        hasVisibleResult: null,
-        mode: null
+        query: null,
+        questions: []
     });
     const [inputData, setInputData] = useState({
-        name: '',
-        code: '',
-        isAvailable: false,
-        hasVisibleResult: false,
-        mode: defaultMode,
-        timeout: 0
+        query: ''
     });
     const { id } = useParams();
+    const history = useHistory();
 
     function handleDelete() {
         setShowDeleteModal(false);
         setLoading(true);
-        deleteExam(id).then((response) => {
+        deleteQuestion(id).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
@@ -64,7 +54,7 @@ function ExamDetailsPage() {
 
     useEffect(() => {
         switch (mode) {
-            case UPDATE_MODE: setTitle('Update exam'); break;
+            case UPDATE_MODE: setTitle('Update question'); break;
             case DETAILS_MODE:
             default:
                 setTitle('')
@@ -76,7 +66,7 @@ function ExamDetailsPage() {
         setMode(DETAILS_MODE);
         setActionButtons({delete: true, show: true, update: true});
 
-        getExam(id).then((response) => {
+        getQuestion(id).then((response) => {
             if (response.hasError) {
                 setActionButtons({show: false});
                 setError(normalizeResponseErrors(response));
@@ -84,13 +74,8 @@ function ExamDetailsPage() {
             }
             clearNotifications();
 
-            setExam(response.data);
-            setInputData({
-                ...response.data,
-                mode: examModes.find((mode) => {
-                    return mode.value === response.data.mode;
-                })
-            })
+            setQuestion(response.data);
+            setInputData(response.data)
         }).finally(() => {
             setLoading(false);
         })
@@ -100,25 +85,29 @@ function ExamDetailsPage() {
         return <Link to={EXAMS_LIST_ROUTE}>Click to go to the exams list</Link>;
     }
 
-    if (!exam.id) {
+    if (!question.id) {
         return '';
     }
 
     return (
         <>
+            <nav className={'pointer btn-link navigation'} onClick={() => { history.goBack() }}>
+                Back to exam details
+            </nav>
+
             {mode === UPDATE_MODE ?
-                <UpdateExam setInputData={setInputData} inputData={inputData} setExam={setExam}/>
+                <UpdateQuestion inputData={inputData} setInputData={setInputData} setQuestion={setQuestion}/>
                 :
-                <ExamDetails exam={exam} setExam={setExam}/>
+                <QuestionsDetails question={question} setQuestion={setQuestion}/>
             }
             <DeleteModal
                 show={showDeleteModal}
                 setShow={setShowDeleteModal}
                 handleDelete={handleDelete}
-                entityName={'exam'}
+                entityName={'question'}
             />
         </>
     )
 }
 
-export default ExamDetailsPage;
+export default QuestionDetailPage;

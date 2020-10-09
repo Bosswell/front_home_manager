@@ -11,3 +11,5 @@ export const EXAMS_HISTORY_ROUTE = '/examsHistory';
 
 // /:id
 export const EXAM_DETAILS_ROUTE = '/exam/';
+export const QUESTION_DETAILS_ROUTE = '/question/';
+export const OPTION_DETAILS_ROUTE = '/option/';
