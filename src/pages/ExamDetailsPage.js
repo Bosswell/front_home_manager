@@ -67,7 +67,7 @@ function ExamDetailsPage() {
             case UPDATE_MODE: setTitle('Update exam'); break;
             case DETAILS_MODE:
             default:
-                setTitle('')
+                setTitle('Exam dashboard')
         }
     }, [mode])
 

@@ -21,20 +21,8 @@ export const getOption = (id) => {
         .catch(ErrorHandler);
 }
 
-// export const updateQuestion = (question) => {
-//     return axios.put(host + `/question/update`, { ...question })
-//         .then((resp) => { return resp.data; })
-//         .catch(ErrorHandler);
-// }
-//
-// export const unlinkQuestion = (question) => {
-//     return axios.post(host + `/question/unlink`, { ...question })
-//         .then((resp) => { return resp.data; })
-//         .catch(ErrorHandler);
-// }
-//
-// export const linkQuestion = (question) => {
-//     return axios.post(host + `/question/link`, { ...question })
-//         .then((resp) => { return resp.data; })
-//         .catch(ErrorHandler);
-// }
+export const updateOption = (option) => {
+    return axios.put(host + `/option/update`, { ...option })
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}

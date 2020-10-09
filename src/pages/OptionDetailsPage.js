@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-import { deleteExam } from "../services/exam.service";
+import { useParams, useHistory } from "react-router-dom";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
 import DeleteModal from "../components/DeleteModal";
-import { EXAMS_LIST_ROUTE } from "../constants/routes";
 import {deleteOption, getOption} from "../services/options.service";
 import OptionDetails from "../exams/options/OptionDetails";
 import UpdateOption from "../exams/options/UpdateOption";
@@ -59,7 +57,7 @@ function OptionDetailsPage() {
             case UPDATE_MODE: setTitle('Update option'); break;
             case DETAILS_MODE:
             default:
-                setTitle('Option details')
+                setTitle('Option dashboard')
         }
     }, [mode])
 

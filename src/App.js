@@ -7,16 +7,16 @@ import './scss/global.scss';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
-import TransactionsListPage from "./pages/TransactionsListPage";
+import TransactionListPage from "./pages/TransactionListPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
 import WrappedRoute, { PRIVATE_ACCESS_TYPE, PUBLIC_ACCESS_TYPE, UNAUTHENTICATED_ACCESS_TYPE } from "./hoc/WrappedRoute";
 import authProvider from "./providers/authProvider";
 import { AuthContext } from "./AuthContext";
-import AddTransactionPage from './pages/AddTransactionPage';
-import RecipesPage from "./pages/RecipesPage";
-import FrontExamPage from "./pages/FrontExamPage";
-import BackExamsPage from "./pages/BackExamsPage";
+import TransactionCreatePage from './pages/TransactionCreatePage';
+import RecipePage from "./pages/RecipePage";
+import ExamPublicPage from "./pages/ExamPublicPage";
+import ExamPage from "./pages/ExamPage";
 import ExamDetailsPage from "./pages/ExamDetailsPage";
 import {
     ADD_TRANSACTION_ROUTE, DASHBOARD_ROUTE,
@@ -38,12 +38,12 @@ function App() {
                 <Switch>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={[LOGIN_ROUTE, MAIN_ROUTE]} component={LoginPage}/>
                     <WrappedRoute accessType={UNAUTHENTICATED_ACCESS_TYPE} exact path={REGISTER_ROUTE} component={RegisterPage} />
-                    <WrappedRoute accessType={PUBLIC_ACCESS_TYPE} exact path={EXAM_ROUTE} component={FrontExamPage} />
+                    <WrappedRoute accessType={PUBLIC_ACCESS_TYPE} exact path={EXAM_ROUTE} component={ExamPublicPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={DASHBOARD_ROUTE} component={Dashboard} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={ADD_TRANSACTION_ROUTE} component={AddTransactionPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={TRANSACTIONS_LIST_ROUTE} component={TransactionsListPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={RECIPES_LIST_ROUTE} component={RecipesPage} />
-                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAMS_LIST_ROUTE} component={BackExamsPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={ADD_TRANSACTION_ROUTE} component={TransactionCreatePage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={TRANSACTIONS_LIST_ROUTE} component={TransactionListPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={RECIPES_LIST_ROUTE} component={RecipePage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAMS_LIST_ROUTE} component={ExamPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAM_DETAILS_ROUTE + ':id'} component={ExamDetailsPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={QUESTION_DETAILS_ROUTE + ':id'} component={QuestionDetailPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={OPTION_DETAILS_ROUTE + ':id'} component={OptionDetailsPage} />

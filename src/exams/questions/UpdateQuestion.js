@@ -1,23 +1,26 @@
 import React, { useContext } from "react";
+import { Button } from "react-bootstrap";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditor from "@ckeditor/ckeditor5-react";
 import { PageContext } from "../../PageContext";
 import { normalizeResponseErrors } from "../../helpers/normalizers";
 import "../../scss/entity-details.scss";
-import OptionForm from "./OptionForm";
-import { updateOption } from "../../services/options.service";
+import { updateQuestion } from "../../services/question.service";
+import QuestionForm from "./QuestionForm";
 
 
-function UpdateOption({ inputData, setInputData, setOption }) {
+function UpdateQuestion({ inputData, setInputData, setQuestion }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
     function handleClickForm() {
         setLoading(true);
-        updateOption(inputData).then((response) => {
+        updateQuestion(inputData).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
             }
             clearNotifications();
-            setOption(prevState => {
+            setQuestion(prevState => {
                 return Object.assign({}, prevState, inputData);
             });
 
@@ -27,9 +30,17 @@ function UpdateOption({ inputData, setInputData, setOption }) {
         })
     }
 
+    function handleContentChange(event, editor) {
+        const data = editor.getData();
+
+        setInputData(prevState => ({
+            ...prevState,
+            query: data
+        }));
+    }
+
     return (
-        <OptionForm
-            handleClickForm={handleClickForm}
+        <QuestionForm
             inputData={inputData}
             setInputData={setInputData}
             action={'Update'}
@@ -38,4 +49,4 @@ function UpdateOption({ inputData, setInputData, setOption }) {
     );
 }
 
-export default UpdateOption;
+export default UpdateQuestion;

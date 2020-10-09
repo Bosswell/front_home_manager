@@ -1,27 +1,24 @@
 import React, {useCallback, useContext, useState} from "react";
-import { Button, Col, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import AsyncSelect from 'react-select/async';
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import CKEditor from "@ckeditor/ckeditor5-react";
-import { useHistory } from 'react-router-dom'
 import { addQuestion, linkQuestion, unlinkQuestion } from "../services/question.service";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
-import { Html5Entities } from 'html-entities';
 import { getUserQuestions } from "../services/user.service";
 import { debounce } from "throttle-debounce";
-import "../scss/exam-details.scss";
-import { QUESTION_DETAILS_ROUTE } from "../constants/routes";
+import "../scss/entity-details.scss";
 import { truncate } from "../helpers/truncate";
+import QuestionForm from "./questions/QuestionForm";
+import QuestionList from "./questions/QuestionList";
+import { Html5Entities } from "html-entities";
 
 
 function ExamDetails({ exam, setExam }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
-    const htmlEntities = new Html5Entities();
     const [showQuestionForm, setQuestionForm] = useState(false);
-    const [questionQuery, setQuestionQuery] = useState('');
-    const history = useHistory();
+    const [inputData, setInputData] = useState({ query: '' });
+    const htmlEntities = new Html5Entities();
 
     const loadOptions = (searchBy, callback) => {
         debounceCallback(searchBy, callback)
@@ -51,10 +48,10 @@ function ExamDetails({ exam, setExam }) {
 
     function createQuestion() {
         setLoading(true);
-        addQuestion({ query: questionQuery, examId: exam.id }).then((response) => {
+        addQuestion({ ...inputData, examId: exam.id }).then((response) => {
             handleQuestionLinkResponse(response);
             setQuestionForm(false);
-            setQuestionQuery('');
+            setInputData({ query: '' });
         }).finally(() => {
             setLoading(false);
         })
@@ -125,78 +122,53 @@ function ExamDetails({ exam, setExam }) {
         })
     }
 
-    function handleContentChange(event, editor) {
-        const data = editor.getData();
-
-        setQuestionQuery(data);
+    function handleClickCreateQuestion() {
+        setQuestionForm(true);
     }
 
     return (
-        <>
-            <Row>
-                <Col lg={6}>
-                    <h3>Exam details</h3>
-                    <div>Id: <b>{exam.id}</b></div>
-                    <div>Name: <b>{exam.name}</b></div>
-                    <div>Code: <b>{exam.code}</b></div>
-                    <div>Is available? <b>{exam.isAvailable ? 'Yes' : 'No'}</b></div>
-                    <div>Has visible results after validation? <b>{exam.hasVisibleResult ? 'Yes' : 'No'}</b></div>
-                    <div>Timeout: <b>{exam.timeout}</b></div>
-                    <div>Mode: <b>{exam.mode}</b></div>
+        <Row>
+            <Col lg={6}>
+                <h4>Details</h4>
+                <div>Id: <b>{exam.id}</b></div>
+                <div>Name: <b>{exam.name}</b></div>
+                <div>Code: <b>{exam.code}</b></div>
+                <div>Is available? <b>{exam.isAvailable ? 'Yes' : 'No'}</b></div>
+                <div>Has visible results after validation? <b>{exam.hasVisibleResult ? 'Yes' : 'No'}</b></div>
+                <div>Timeout: <b>{exam.timeout}</b></div>
+                <div>Mode: <b>{exam.mode}</b></div>
 
-                    <div className={'entity-entries'}>
-                        <div className={'async-select'}>
-                            <div>Find question</div>
-                            <AsyncSelect
-                                cacheOptions
-                                loadOptions={loadOptions}
-                                defaultOptions
-                                onChange={onFinderChange}
-                            />
-                        </div>
-
-                        <div className={'create-box'}>
-                            {!showQuestionForm ?
-                                <Button variant={'outline-success'} onClick={() => {setQuestionForm(true)}}>Create question</Button>
-                                :
-                                <form className={'form'}>
-                                    <h4>Create new question</h4>
-                                    <CKEditor
-                                        editor={ ClassicEditor }
-                                        data={ questionQuery }
-                                        onChange={ handleContentChange }
-                                        required={true}
-                                    />
-                                    <Button variant={'success'} onClick={() => createQuestion()}>Create question</Button>
-                                </form>
-                            }
-                        </div>
+                <div className={'entity-entries'}>
+                    <div className={'async-select'}>
+                        <div>Find question</div>
+                        <AsyncSelect
+                            cacheOptions
+                            loadOptions={loadOptions}
+                            defaultOptions
+                            onChange={onFinderChange}
+                        />
                     </div>
-                </Col>
-                <Col lg={6}>
-                    <h3>Questions</h3>
-                        <ListGroup className={'entry-list'} variant="flush">
-                        {exam.questions.map((question) => {
-                            const query = htmlEntities.decode(question.query.replace(/<[^>]+>/g, ''));
 
-                            return (
-                                <ListGroup.Item key={question.id} className={'item-with-action'}>
-                                    <div
-                                        className={'text-info pointer btn-link'}
-                                        onClick={() => { history.push(QUESTION_DETAILS_ROUTE + question.id) }}
-                                    >
-                                        { truncate(query, 35) }
-                                    </div>
-                                    <div className={'text-danger pointer btn-link'} onClick={() => handleUnlink(question.id)}>
-                                        unlink
-                                    </div>
-                                </ListGroup.Item>
-                            )
-                        })}
-                    </ListGroup>
-                </Col>
-            </Row>
-        </>
+                    <div className={'create-box'}>
+                        {!showQuestionForm ?
+                            <Button variant={'outline-success'} onClick={handleClickCreateQuestion}>Create question</Button>
+                            :
+                            <QuestionForm
+                                inputData={inputData}
+                                setInputData={setInputData}
+                                handleFormClick={createQuestion}
+                                action={'Create'}
+                                showHeader={true}
+                            />
+                        }
+                    </div>
+                </div>
+            </Col>
+            <Col lg={6}>
+                <h4>Questions</h4>
+                <QuestionList questions={exam.questions} handleUnlink={handleUnlink}/>
+            </Col>
+        </Row>
     )
 }
 
