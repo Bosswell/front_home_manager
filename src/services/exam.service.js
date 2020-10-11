@@ -55,3 +55,10 @@ export const updateExam = (exam) => {
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
+
+export const checkExamValidity = (id) => {
+    return axios
+        .get(host + '/exam/check/validity/' + id)
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}

@@ -5,7 +5,7 @@ import { isMobile } from 'react-device-detect';
 import {PageContext} from "./PageContext";
 import {Col, Container, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {DELETE_MODE, DETAILS_MODE, INSERT_MODE, LIST_MODE, UPDATE_MODE} from "./constants/pageModes";
+import { DELETE_MODE, DETAILS_MODE, INSERT_MODE, LIST_MODE, UPDATE_MODE } from "./constants/pageModes";
 import Alert from "./components/Alert";
 import Loader from "./components/Loader";
 
@@ -23,7 +23,12 @@ function PrivateLayout({ children }) {
         show: false,
         delete: false,
         create: false,
-        update: false
+        update: false,
+        info: {
+            show: false,
+            text: '',
+            fn: () => {}
+        }
     })
 
     useEffect(() => {
@@ -89,6 +94,9 @@ function PrivateLayout({ children }) {
                                         <div className={'top__action-buttons'}>
                                             {actionButtons.update && renderEditButtons()}
                                             {actionButtons.create && renderCreateButtons()}
+                                            {actionButtons.info &&
+                                                <Button variant={'outline-info'} onClick={actionButtons.info.fn}>{actionButtons.info.text}</Button>
+                                            }
                                             {actionButtons.delete && <Button variant={'danger'} onClick={() => { setShowDeleteModal(true); setMode(DELETE_MODE) }}>Delete</Button>}
                                         </div>
                                     }

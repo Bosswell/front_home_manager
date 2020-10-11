@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import {Link, useParams} from "react-router-dom";
-import { deleteExam, getExam} from "../services/exam.service";
+import {checkExamValidity, deleteExam, getExam} from "../services/exam.service";
 import { PageContext } from "../PageContext";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { DETAILS_MODE, UPDATE_MODE } from "../constants/pageModes";
-import ExamForm from "../exams/ExamForm";
 import { defaultMode, examModes } from "../constants/examModes";
 import ExamDetails from "../exams/ExamDetails";
 import DeleteModal from "../components/DeleteModal";
@@ -62,6 +61,21 @@ function ExamDetailsPage() {
         })
     }
 
+    function handleExamValidity() {
+        setLoading(true);
+        checkExamValidity(id).then((response) => {
+            if (response.hasError) {
+                setError(normalizeResponseErrors(response));
+                return;
+            }
+            clearNotifications();
+
+            setAlert('Your exam seems to be valid!');
+        }).finally(() => {
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
         switch (mode) {
             case UPDATE_MODE: setTitle('Update exam'); break;
@@ -74,7 +88,16 @@ function ExamDetailsPage() {
     useEffect(() => {
         setLoading(true);
         setMode(DETAILS_MODE);
-        setActionButtons({delete: true, show: true, update: true});
+        setActionButtons({
+            delete: true,
+            show: true,
+            update: true,
+            info: {
+                show: true,
+                text: 'Check validity',
+                fn: handleExamValidity
+            }
+        });
 
         getExam(id).then((response) => {
             if (response.hasError) {

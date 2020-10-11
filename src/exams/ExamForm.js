@@ -1,13 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import InputGroup from "../components/InputGroup";
 import Switch from "react-switch";
 import Select from "react-select";
 import { examModes } from "../constants/examModes";
 import { Button, Col, Row } from "react-bootstrap";
 import { inputNormalizer, INT_TYPE } from "../helpers/inputNormalizer";
-import { addExam } from "../services/exam.service";
-import { PageContext } from "../PageContext";
-import { normalizeResponseErrors } from "../helpers/normalizers";
 
 
 function ExamForm({ action, inputData, setInputData, handleClickForm }) {
