@@ -7,7 +7,7 @@ export const ADD_TRANSACTION_ROUTE = '/addTransaction';
 export const TRANSACTIONS_LIST_ROUTE = '/transactionsList';
 export const RECIPES_LIST_ROUTE = '/recipesList';
 export const EXAMS_LIST_ROUTE = '/examsList';
-export const EXAMS_HISTORY_ROUTE = '/examsHistory';
+export const EXAMS_HISTORY_ROUTE = '/examsHistoryList';
 
 // /:id
 export const EXAM_DETAILS_ROUTE = '/exam/';

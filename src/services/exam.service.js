@@ -62,3 +62,14 @@ export const checkExamValidity = (id) => {
         .then((resp) => { return resp.data; })
         .catch(ErrorHandler);
 }
+
+export const getHistoryList = (params) => {
+    return axios
+        .get(host + '/exam/history/list', {
+            params: {
+                options: params
+            }
+        })
+        .then((resp) => { return resp.data; })
+        .catch(ErrorHandler);
+}
