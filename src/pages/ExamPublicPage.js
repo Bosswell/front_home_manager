@@ -54,6 +54,10 @@ function ExamPublicPage() {
             setError(null);
 
             const { exam, historyId } = response.data;
+            if (!exam.questions) {
+                exam.questions = [];
+            }
+
             exam.questions = exam.questions.sort(() => Math.random() - 0.5)
 
             setHistoryId(historyId);

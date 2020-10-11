@@ -23,7 +23,7 @@ function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, hist
         }
     }, [])
 
-    const questions = exam.data.questions.length ? exam.data.questions.map((question, index) => {
+    const questions = exam.data.questions ? exam.data.questions.map((question, index) => {
         return (
             <Question query={question.query} index={index + 1}>
                 {question.options.length !== 0 &&
