@@ -1,8 +1,12 @@
 import React from "react";
-import {Button, Col, ListGroup, Row, Table} from "react-bootstrap";
+import { Button, Col, FormControl, Row, Table } from "react-bootstrap";
 import Select from "react-select";
-import { filterDateFromOptions, isIncomeOptions, sortingOptions } from "../../constants/transactionListOptions";
 import ReactPaginate from "react-paginate";
+import DatePicker from "react-datepicker";
+import Switch from "react-switch";
+import { sortingOptions } from "../../constants/examHistoryListOptions";
+import CustomTimeInput from "../../components/CustomTimeInput";
+
 
 function HistoryListView(
     {
@@ -11,11 +15,10 @@ function HistoryListView(
         sortingWay,
         filters,
         handlePageChange,
-        handleTransactionTypeFilterChange,
-        handleDateFromFilterChange,
-        handleIsIncomeFilterChange,
         handleApplyFilters,
-        historyList
+        historyList,
+        handleStartDateChange,
+        handleIsActiveChange
     }
 ) {
     return (
@@ -23,24 +26,25 @@ function HistoryListView(
             <Col lg={12}>
                 <div className={'list-filters'}>
                     <div className={'filters'}>
-                        <div className={'filters--select'}>
-                            <Select
-                                value={filters.dateFrom.obj}
-                                onChange={handleDateFromFilterChange}
-                                options={filterDateFromOptions}
-                                placeholder={'Date from'}
-                                isClearable={true}
-                            />
-                        </div>
-                        <div className={'filters--select'}>
-                            <Select
-                                value={filters.transactionFlow.obj}
-                                onChange={handleIsIncomeFilterChange}
-                                options={isIncomeOptions}
-                                placeholder={'Transaction flow'}
-                                isClearable={true}
-                            />
-                        </div>
+                        <DatePicker
+                            dateFormat="dd/MM/yyyy"
+                            selected={filters.dateStart}
+                            onChange={handleStartDateChange}
+                            startDate={filters.dateStart}
+                            customInput={<FormControl />}
+                            onFocus={(e) => e.target.readOnly = true}
+                            showTimeInput
+                            customTimeInput={<CustomTimeInput />}
+                        />
+
+                        <div>Is active?</div>
+                        <Switch
+                            onChange={handleIsActiveChange}
+                            checked={filters.isActive}
+                            checkedIcon={false}
+                            uncheckedIcon={false}
+                        />
+
                         <Button className={'filters--button'} onClick={handleApplyFilters} variant="outline-dark">Apply filters</Button>
                     </div>
                     <div className={'sorting-select'}>
@@ -48,27 +52,36 @@ function HistoryListView(
                     </div>
                 </div>
 
-                <Table striped bordered hover size="sm">
+                <Table striped bordered hover size="sm" className={'table-list'}>
                     <thead>
                         <tr>
                             <th>User nb.</th>
                             <th>Username</th>
                             <th>Exam name</th>
                             <th>Started at</th>
+                            <th>Finished at</th>
                             <th>Is active?</th>
-                            <th>User key</th>
+                            <th>Exam mode</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {historyList.results.map((item) => {
+                        {historyList.results.map(({ user_number, username, exam_name, started_at, finished_at, is_active, mode, timeout }) => {
+                            const isActive = !!parseInt(is_active);
+                            const isAbandoned = Date.parse(started_at) + timeout * 60000 < (new Date().getTime()) && isActive;
+
                             return (
                                 <tr>
-                                    <td>1</td>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
+                                    <td>{ user_number}</td>
+                                    <td>{ username }</td>
+                                    <td>{ exam_name }</td>
+                                    <td>{ started_at }</td>
+                                    <td>{ isAbandoned ? <span className={'text-danger'}>Abandoned</span> : finished_at }</td>
+                                    <td>
+                                        <span className={ isActive ? 'text-success' : 'text-danger' }>
+                                            { isActive ? 'Yes' : 'No'}
+                                        </span>
+                                    </td>
+                                    <td>{ mode }</td>
                                 </tr>
                             )
                         })}

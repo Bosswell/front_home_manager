@@ -1,23 +1,23 @@
 export const sortingOptions = [
     {
-        label: "Creation date - Ascending",
-        value: "t.created_at,asc"
+        label: "Started date - Descending",
+        value: "eh.started_at,desc"
     },
     {
-        label: "Creation date - Descending",
-        value: "t.created_at,desc"
+        label: "Finished date - Descending",
+        value: "eh.finished_at,desc"
     },
     {
-        label: "Position number - Ascending",
-        value: "t.id,asc"
+        label: "User number - Ascending",
+        value: "eh.user_number,asc"
     },
     {
-        label: "Position number - Descending",
-        value: "t.id,desc"
+        label: "User number - Descending",
+        value: "eh.user_number,desc"
     }
 ]
 
-export const defaultSorting = {
-    label: "Creation date - Descending",
-    value: "t.created_at,desc"
+export const defaultSorting =  {
+    label: "Started date - Descending",
+    value: "eh.started_at,desc"
 };

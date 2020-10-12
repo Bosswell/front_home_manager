@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from "react";
-import {PageContext} from "../../PageContext";
+import { PageContext } from "../../PageContext";
 import useQuery from "../../hooks/useQuery";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import useListSorter from "../../hooks/useListSorter";
-import {normalizeResponseErrors} from "../../helpers/normalizers";
+import { normalizeResponseErrors } from "../../helpers/normalizers";
 import HistoryListView from "./HistoryListView";
-import {getHistoryList} from "../../services/exam.service";
-import {defaultSorting, sortingOptions} from "../../constants/examHistoryListOptions";
+import { getHistoryList } from "../../services/exam.service";
+import { defaultSorting, sortingOptions } from "../../constants/examHistoryListOptions";
 
 function HistoryList() {
     const {setLoading, setError, setAlert, setTitle, clearNotifications, setActionButtons} = useContext(PageContext);
@@ -22,15 +22,10 @@ function HistoryList() {
     });
     const [sortingWay] = useListSorter(params, sortingOptions, defaultSorting);
     const [filters, setFilters] = useState({
-        dateFrom: {
-            lastDays: null,
-            obj: ''
-        },
-        transactionFlow: {
-            isIncome: null,
-            obj: ''
-        },
-        isActive: null // TODO dodać date picker
+        dateStart: new Date((new Date()).setDate(1)),
+        isActive: null,
+        userNumber: null,
+        username: null
     });
     const [historyList, setHistoryList] = useState({
         nbPages: 0,
@@ -51,21 +46,20 @@ function HistoryList() {
 
             let filters = {};
 
-            if (filterBy.hasOwnProperty('lastDays')) {
-                const dateFromObj = filterDateFromOptions.find(obj => obj.value === filterBy.lastDays);
-                filters.dateFrom = {
-                    lastDays: filterBy.lastDays,
-                    obj: dateFromObj ?? ''
-                };
+            if (filterBy.hasOwnProperty('isActive')) {
+                filters.isActive = filterBy.isActive;
             }
 
-            if (filterBy.hasOwnProperty('isIncome')) {
-                const isIncome = filterBy.isIncome === 'true';
-                const isIncomeObj = isIncomeOptions.find(obj => obj.value === isIncome);
-                filters.transactionFlow = {
-                    isIncome: isIncome,
-                    obj: isIncomeObj ?? ''
-                };
+            if (filterBy.hasOwnProperty('username')) {
+                filters.username = filterBy.username;
+            }
+
+            if (filterBy.hasOwnProperty('userNumber')) {
+                filters.userNumber = filterBy.userNumber;
+            }
+
+            if (filterBy.hasOwnProperty('dateStart')) {
+                filters.dateStart = new Date(filterBy.dateStart) * 1000;
             }
 
             return {
@@ -106,26 +100,6 @@ function HistoryList() {
         }));
     }
 
-    function handleDateFromFilterChange(selected) {
-        setFilters(prevState => ({
-            ...prevState,
-            dateFrom: {
-                lastDays: selected ? selected.value : null,
-                obj: selected
-            }
-        }));
-    }
-
-    function handleIsIncomeFilterChange(selected) {
-        setFilters(prevState => ({
-            ...prevState,
-            transactionFlow: {
-                isIncome: selected ? selected.value : null,
-                obj: selected
-            }
-        }));
-    }
-
     function handleSortingSelectChange({ value }) {
         const [name, direction] = value.split(',');
 
@@ -144,20 +118,39 @@ function HistoryList() {
             ...prevState,
             nbPage: 1,
             filterBy: {
-                ...(filters.dateFrom.lastDays && {lastDays: filters.dateFrom.lastDays}),
-                ...(filters.transactionFlow.isIncome !== null && {isIncome: filters.transactionFlow.isIncome})
+                ...(filters.dateStart && {dateStart: filters.dateStart.getTime() / 1000}),
+                ...(filters.isActive && {isActive: filters.isActive}),
+                ...(filters.userNumber && {userNumber: filters.userNumber}),
+                ...(filters.username && {username: filters.username}),
             }
+        }));
+    }
+
+    function handleStartDateChange(date) {
+        setFilters(prevState => ({
+            ...prevState,
+            dateStart: date
+        }));
+    }
+
+    function handleIsActiveChange() {
+        setFilters(prevState => ({
+            ...prevState,
+            isActive: !prevState.isActive
         }));
     }
 
     return (
         <HistoryListView
             params={params}
+            filters={filters}
             sortingWay={sortingWay}
             handleApplyFilters={handleApplyFilters}
             handleSortingSelectChange={handleSortingSelectChange}
             handlePageChange={handlePageChange}
             historyList={historyList}
+            handleStartDateChange={handleStartDateChange}
+            handleIsActiveChange={handleIsActiveChange}
         />
     )
 }

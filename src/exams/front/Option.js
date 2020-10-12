@@ -21,7 +21,7 @@ function Option({ id, index, content, handleOnClick, correctOptions, checkedOpti
 
     return (
         <div className={'question--option' + className} onClick={() => {setClicked(prevState => !prevState); handleOnClick()}}>
-            { index + 1 }. { content }
+            { index + 1 }. <span dangerouslySetInnerHTML={({__html: content})} />
         </div>
     );
 }

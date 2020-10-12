@@ -20,13 +20,14 @@ import ExamPage from "./pages/ExamPage";
 import ExamDetailsPage from "./pages/ExamDetailsPage";
 import {
     ADD_TRANSACTION_ROUTE, DASHBOARD_ROUTE,
-    EXAM_DETAILS_ROUTE, EXAM_ROUTE,
+    EXAM_DETAILS_ROUTE, EXAM_ROUTE, EXAMS_HISTORY_ROUTE,
     EXAMS_LIST_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, OPTION_DETAILS_ROUTE, QUESTION_DETAILS_ROUTE,
     RECIPES_LIST_ROUTE, REGISTER_ROUTE,
     TRANSACTIONS_LIST_ROUTE
 } from "./constants/routes";
 import QuestionDetailPage from "./pages/QuestionDetailPage";
 import OptionDetailsPage from "./pages/OptionDetailsPage";
+import ExamHistoryPage from "./pages/ExamHistoryPage";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAM_DETAILS_ROUTE + ':id'} component={ExamDetailsPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={QUESTION_DETAILS_ROUTE + ':id'} component={QuestionDetailPage} />
                     <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={OPTION_DETAILS_ROUTE + ':id'} component={OptionDetailsPage} />
+                    <WrappedRoute accessType={PRIVATE_ACCESS_TYPE} path={EXAMS_HISTORY_ROUTE} component={ExamHistoryPage} />
 
                     <Route path="*" component={NotFound}/>
                 </Switch>
