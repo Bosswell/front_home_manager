@@ -7,10 +7,15 @@ import { normalizeResponseErrors } from "../../helpers/normalizers";
 import HistoryListView from "./HistoryListView";
 import { getHistoryList } from "../../services/exam.service";
 import { defaultSorting, sortingOptions } from "../../constants/examHistoryListOptions";
+import { inputNormalizer } from "../../helpers/inputNormalizer";
+import isDateValid from "../../helpers/isDateValid";
+import moment from 'moment';
+
 
 function HistoryList() {
-    const {setLoading, setError, setAlert, setTitle, clearNotifications, setActionButtons} = useContext(PageContext);
+    const {setLoading, setError, clearNotifications, setActionButtons} = useContext(PageContext);
 
+    const monthStartDate = new Date((new Date()).setDate(1));
     const query = useQuery();
     const history = useHistory();
     const [params, setParams] = useState(() => {
@@ -21,12 +26,17 @@ function HistoryList() {
         }
     });
     const [sortingWay] = useListSorter(params, sortingOptions, defaultSorting);
-    const [filters, setFilters] = useState({
-        dateStart: new Date((new Date()).setDate(1)),
+    const defaultFilters = {
+        dateStart: {
+            obj: monthStartDate,
+            normalized: moment(monthStartDate).format('Y/M/D H:mm:s')
+        },
         isActive: null,
-        userNumber: null,
-        username: null
-    });
+        userNumber: '',
+        userGroup: '',
+        username: ''
+    };
+    const [filters, setFilters] = useState(defaultFilters);
     const [historyList, setHistoryList] = useState({
         nbPages: 0,
         results: []
@@ -58,8 +68,18 @@ function HistoryList() {
                 filters.userNumber = filterBy.userNumber;
             }
 
+            if (filterBy.hasOwnProperty('userGroup')) {
+                filters.userGroup = filterBy.userGroup;
+            }
+
             if (filterBy.hasOwnProperty('dateStart')) {
-                filters.dateStart = new Date(filterBy.dateStart) * 1000;
+                const momentDate = moment(filterBy.dateStart);
+                const date = momentDate.toDate();
+
+                filters.dateStart = {
+                    obj: date,
+                    normalized: momentDate.format('Y/M/D H:mm:s')
+                };
             }
 
             return {
@@ -71,6 +91,7 @@ function HistoryList() {
 
     useEffect(() => {
         setLoading(true);
+
         getHistoryList(params).then(response => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
@@ -118,10 +139,11 @@ function HistoryList() {
             ...prevState,
             nbPage: 1,
             filterBy: {
-                ...(filters.dateStart && {dateStart: filters.dateStart.getTime() / 1000}),
+                ...(filters.dateStart.normalized && {dateStart: filters.dateStart.normalized}),
                 ...(filters.isActive && {isActive: filters.isActive}),
                 ...(filters.userNumber && {userNumber: filters.userNumber}),
-                ...(filters.username && {username: filters.username}),
+                ...(filters.userGroup && {userGroup: filters.userGroup}),
+                ...(filters.username && {username: filters.username})
             }
         }));
     }
@@ -129,7 +151,10 @@ function HistoryList() {
     function handleStartDateChange(date) {
         setFilters(prevState => ({
             ...prevState,
-            dateStart: date
+            dateStart: {
+                obj: date,
+                normalized: moment(date).format('Y/M/D H:mm:s')
+            }
         }));
     }
 
@@ -138,6 +163,17 @@ function HistoryList() {
             ...prevState,
             isActive: !prevState.isActive
         }));
+    }
+
+    function handleFilterInputChange({ target }) {
+        setFilters(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
+    }
+
+    function handleClearFilters() {
+        setFilters({ ...defaultFilters});
+        handleApplyFilters();
     }
 
     return (
@@ -151,6 +187,8 @@ function HistoryList() {
             historyList={historyList}
             handleStartDateChange={handleStartDateChange}
             handleIsActiveChange={handleIsActiveChange}
+            handleFilterInputChange={handleFilterInputChange}
+            handleClearFilters={handleClearFilters}
         />
     )
 }

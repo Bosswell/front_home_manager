@@ -10,7 +10,8 @@ export const inputNormalizer = ({ dataset, name, value }) => {
                 value = value === 'true';
                 break;
             case INT_TYPE:
-                value = parseInt(value);
+                const number = parseInt(value);
+                value = Number.isNaN(number) ? '' : number;
                 break;
             case FLOAT_TYPE:
                 value = parseFloat(value);

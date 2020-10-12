@@ -21,7 +21,8 @@ function ExamPublicPage() {
         code: '5f7a1cea75738',
         examId: 4,
         username: 'Jakub Batko',
-        userNumber: 1
+        userNumber: 1,
+        userGroup: null
     });
     const [exam, setExam] = useState({
         isStarted: false,
@@ -93,6 +94,7 @@ function ExamPublicPage() {
                     <InputGroup value={inputData.examId} onChange={handleInputChange} type={'number'} name={'examId'} label={'Exam id'}/>
                     <InputGroup value={inputData.username} onChange={handleInputChange} name={'username'} label={'First and last name'}/>
                     <InputGroup value={inputData.userNumber} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
+                    <InputGroup value={inputData.userGroup} onChange={handleInputChange} name={'userGroup'} label={'Your group number'}/>
 
                     <Button variant={'outline-dark'} onClick={handleFormClick}>Start exam</Button>
                 </form>
