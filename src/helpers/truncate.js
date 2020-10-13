@@ -1,0 +1,1 @@
+export const truncate = (input, positions) => input.length > positions ? `${input.substring(0, positions)}...` : input;

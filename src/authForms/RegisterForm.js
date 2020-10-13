@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
-import AuthService from "../services/user.service";
 import Alert from "../components/Alert";
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import { inputNormalizer } from "../helpers/inputNormalizer";
+import {registerUser} from "../services/user.service";
 
 
 function RegisterForm({ setIsOk, setLoading }) {
@@ -16,7 +17,9 @@ function RegisterForm({ setIsOk, setLoading }) {
     const [errors, setErrors] = useState([]);
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleSubmit(event) {
@@ -27,13 +30,13 @@ function RegisterForm({ setIsOk, setLoading }) {
         }
 
         setLoading(true);
-
-        AuthService.register(inputData).then((response) => {
+        registerUser(inputData).then((response) => {
             if (response.hasError) {
                 setErrors(normalizeResponseErrors(response));
-            } else {
-                setIsOk(true);
+                return;
             }
+
+            setIsOk(true);
         }).finally(() => {
             setLoading(false);
         });

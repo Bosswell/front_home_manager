@@ -29,8 +29,8 @@ function RecipesListView(
                     </div>
                 </div>
 
-                <ListGroup className={'transaction-list'} variant="flush">
-                    {!recipeListInfo && <div>Empty list</div>}
+                <ListGroup className={'entry-list'} variant="flush">
+                    {!recipeListInfo.results.length && <div>There is no available recipes</div>}
 
                     {recipeListInfo.results.map((item) => {
                         return (

@@ -6,6 +6,7 @@ import Select from "react-select";
 import Switch from "react-switch";
 import { taxPercentageOptions } from "../constants/transactionOptions";
 import { PageContext } from "../PageContext";
+import { FLOAT_TYPE, inputNormalizer } from "../helpers/inputNormalizer";
 
 
 function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
@@ -31,7 +32,9 @@ function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
     }, [selected, transactionTypes]);
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleUpdateTransaction() {
@@ -87,6 +90,7 @@ function EditTransactionModal({ selected, setSelectedItem, transactionTypes }) {
                         <label htmlFor={'amount'}>Amount - tax included (PLN)</label>
                         <input
                             onChange={handleInputChange}
+                            data-scalar={FLOAT_TYPE}
                             type={'number'}
                             id={'amount'}
                             name={'amount'}

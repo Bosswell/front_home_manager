@@ -5,6 +5,8 @@ import { AuthContext } from "../AuthContext";
 import authProvider from "../providers/authProvider";
 import Alert from "../components/Alert";
 import { normalizeResponseErrors } from "../helpers/normalizers";
+import {inputNormalizer} from "../helpers/inputNormalizer";
+import {REGISTER_ROUTE} from "../constants/routes";
 
 
 function LoginForm({ setLoading }) {
@@ -16,7 +18,9 @@ function LoginForm({ setLoading }) {
     });
 
     function handleInputChange({ target }) {
-        setInputData(Object.assign({}, inputData, {[target.name]: target.value}))
+        setInputData(prevState => {
+            return Object.assign({}, prevState, inputNormalizer(target));
+        })
     }
 
     function handleSubmit(event) {
@@ -66,7 +70,7 @@ function LoginForm({ setLoading }) {
             <form className={'form --vertical'} onSubmit={handleSubmit}>
                 <InputGroup onChange={handleInputChange} name={'email'} type={'email'} label={'Address email'} value={inputData.email}/>
                 <InputGroup onChange={handleInputChange} name={'password'} type={'password'} label={'Password'} value={inputData.password}/>
-                <Link to={'/register'}><small className={'text-right'}>Don't have account yet? Click to create!</small></Link>
+                <Link to={REGISTER_ROUTE}><small className={'text-right'}>Don't have account yet? Click to create!</small></Link>
 
                 <button className={'--bg-charcoal --btn-full'}>Sign in</button>
             </form>
