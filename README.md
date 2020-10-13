@@ -14,8 +14,8 @@
 
 <h3>Demo page</h3>
 https://home-manager.jakub-batko.pl
-  Login: <b>demo@demo.com</b>
-  Pass: <b>demo1234</b>
+  Login: <b>demo@demo.com</b> <br />
+  Pass: <b>demo1234</b> <br />
   
   
 <h3>Publish exam:</h3>
