@@ -11,18 +11,18 @@ function QuestionList({ questions, handleUnlink }) {
 
     return (
         <ListGroup className={'entry-list'} variant="flush">
-            {questions.map((question) => {
-                const query = htmlEntities.decode(question.query.replace(/<[^>]+>/g, ''));
+            {questions.map(({ id, query }) => {
+                const text = htmlEntities.decode(query.replace(/<[^>]+>/g, ''));
 
                 return (
-                    <ListGroup.Item key={question.id} className={'item-with-action'}>
+                    <ListGroup.Item key={id} className={'item-with-action'}>
                         <div
                             className={'text-info pointer btn-link'}
-                            onClick={() => { history.push(QUESTION_DETAILS_ROUTE + question.id) }}
+                            onClick={() => { history.push(QUESTION_DETAILS_ROUTE + id) }}
                         >
-                            { truncate(query, 35) }
+                            { id }. { truncate(text, 35) }
                         </div>
-                        <div className={'text-danger pointer btn-link'} onClick={() => handleUnlink(question.id)}>
+                        <div className={'text-danger pointer btn-link'} onClick={() => handleUnlink(id)}>
                             unlink
                         </div>
                     </ListGroup.Item>
