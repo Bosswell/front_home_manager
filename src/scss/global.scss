@@ -187,6 +187,7 @@ menu {
 
 .filters-btn-row {
   display: flex;
+  flex-wrap: wrap;
   width: 300px;
   gap: 10px;
   margin-top: 10px;
