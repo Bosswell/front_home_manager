@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Question from "./Question";
 import Option from "./Option";
 import '../../scss/exam.scss';

@@ -119,7 +119,7 @@ function HistoryListView(
                     <tbody>
                         {historyList.results.map(({ user_number, username, exam_name, started_at, finished_at, is_active, mode, timeout, user_group, percentage }) => {
                             const isActive = !!parseInt(is_active);
-                            const isAbandoned = Date.parse(started_at) + timeout + abandonedDelayMinutes * 60000 < (new Date().getTime()) && isActive;
+                            const isAbandoned = Date.parse(started_at) + (timeout + abandonedDelayMinutes) * 60000 < (new Date().getTime()) && isActive;
 
                             return (
                                 <tr>

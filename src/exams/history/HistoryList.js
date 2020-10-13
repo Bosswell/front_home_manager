@@ -31,7 +31,7 @@ function HistoryList() {
             obj: monthStartDate,
             normalized: moment(monthStartDate).format('Y/M/D H:mm:s')
         },
-        isActive: null,
+        isActive: false,
         userNumber: '',
         userGroup: '',
         username: '',
@@ -178,8 +178,7 @@ function HistoryList() {
     }
 
     function handleClearFilters() {
-        setFilters({ ...defaultFilters});
-        handleApplyFilters();
+        setFilters(defaultFilters);
     }
 
     return (

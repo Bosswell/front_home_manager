@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 import { startExam } from "../services/exam.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { getUserId } from "../helpers/userHelper";
-import {inputNormalizer} from "../helpers/inputNormalizer";
+import { inputNormalizer } from "../helpers/inputNormalizer";
 
 
 function ExamPublicPage() {
@@ -18,11 +18,11 @@ function ExamPublicPage() {
     const [snippets, setSnippets] = useState([]);
     const [historyId, setHistoryId] = useState(0);
     const [inputData, setInputData] = useState({
-        code: '5f7a1cea75738',
-        examId: 4,
-        username: 'Jakub Batko',
-        userNumber: 1,
-        userGroup: null
+        code: '',
+        examId: '',
+        username: '',
+        userNumber: '',
+        userGroup: ''
     });
     const [exam, setExam] = useState({
         isStarted: false,

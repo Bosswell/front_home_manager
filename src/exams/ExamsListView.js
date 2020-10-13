@@ -1,8 +1,11 @@
 import React from "react";
-import { Col, ListGroup, Row } from "react-bootstrap";
+import {Alert, Col, ListGroup, Row} from "react-bootstrap";
 import Select from "react-select";
 import { sortingOptions } from "../constants/examsListOptions";
 import ReactPaginate from "react-paginate";
+import { Link } from "react-router-dom";
+import { EXAM_ROUTE } from "../constants/routes";
+import { APP_URL } from "../config";
 
 function ExamsListView(
     {
@@ -16,6 +19,12 @@ function ExamsListView(
 ) {
     return (
         <Row>
+            <Col lg={12}>
+                <Alert variant={'info'}>
+                    <Alert.Heading>Tip of the day..</Alert.Heading>
+                    <span>To start the exam, go to <Link to={EXAM_ROUTE}>{ APP_URL }/exam</Link> and that's it!</span>
+                </Alert>
+            </Col>
             <Col lg={12}>
                 <div className={'list-filters'}>
                     <div className={'sorting-select'}>
