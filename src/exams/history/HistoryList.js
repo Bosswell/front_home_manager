@@ -34,7 +34,8 @@ function HistoryList() {
         isActive: null,
         userNumber: '',
         userGroup: '',
-        username: ''
+        username: '',
+        examId: ''
     };
     const [filters, setFilters] = useState(defaultFilters);
     const [historyList, setHistoryList] = useState({
@@ -70,6 +71,10 @@ function HistoryList() {
 
             if (filterBy.hasOwnProperty('userGroup')) {
                 filters.userGroup = filterBy.userGroup;
+            }
+
+            if (filterBy.hasOwnProperty('examId')) {
+                filters.examId = filterBy.examId;
             }
 
             if (filterBy.hasOwnProperty('dateStart')) {
@@ -143,7 +148,8 @@ function HistoryList() {
                 ...(filters.isActive && {isActive: filters.isActive}),
                 ...(filters.userNumber && {userNumber: filters.userNumber}),
                 ...(filters.userGroup && {userGroup: filters.userGroup}),
-                ...(filters.username && {username: filters.username})
+                ...(filters.username && {username: filters.username}),
+                ...(filters.examId && {examId: filters.examId})
             }
         }));
     }

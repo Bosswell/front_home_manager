@@ -6,12 +6,12 @@ import OptionForm from "./OptionForm";
 import { updateOption } from "../../services/options.service";
 
 
-function UpdateOption({ inputData, setInputData, setOption }) {
+function UpdateOption({ inputData, setInputData, setOption, optionId }) {
     const {setError, setAlert, setLoading, clearNotifications} = useContext(PageContext);
 
     function handleClickForm() {
         setLoading(true);
-        updateOption(inputData).then((response) => {
+        updateOption({ ...inputData, optionId: optionId}).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;

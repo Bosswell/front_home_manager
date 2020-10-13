@@ -100,7 +100,7 @@ function OptionDetailsPage() {
                 Back to question details
             </nav>
             {mode === UPDATE_MODE ?
-                <UpdateOption setInputData={setInputData} inputData={inputData} setOption={option}/>
+                <UpdateOption setInputData={setInputData} inputData={inputData} setOption={setOption} optionId={id}/>
                 :
                 <OptionDetails option={option}/>
             }
