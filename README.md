@@ -12,6 +12,12 @@
   <li>Protection against exam cheating</li>
 </ol>
 
+<h3>Demo page</h3>
+https://home-manager.jakub-batko.pl
+  Login: <b>demo@demo.com</b>
+  Pass: <b>demo1234</b>
+  
+  
 <h3>Publish exam:</h3>
 <ol>
   <li>Sign in</li>
