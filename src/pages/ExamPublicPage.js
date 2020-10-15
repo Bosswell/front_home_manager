@@ -18,11 +18,11 @@ function ExamPublicPage() {
     const [snippets, setSnippets] = useState([]);
     const [historyId, setHistoryId] = useState(0);
     const [inputData, setInputData] = useState({
-        code: null,
-        examId: null,
-        username: null,
+        code: '',
+        examId: 0,
+        username: '',
         userNumber: null,
-        userGroup: null
+        userGroup: ''
     });
     const [exam, setExam] = useState({
         isStarted: false,
@@ -45,7 +45,9 @@ function ExamPublicPage() {
         })
     }
 
-    function handleFormClick() {
+    function handleFormClick(event) {
+        event.preventDefault();
+
         setLoading(true);
         startExam({ ...inputData, userId: getUserId()}).then((response) => {
             if (response.hasError) {
@@ -96,7 +98,7 @@ function ExamPublicPage() {
                     <InputGroup value={inputData.userNumber} data-scalar={INT_TYPE} type={'number'} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
                     <InputGroup value={inputData.userGroup} onChange={handleInputChange} name={'userGroup'} label={'Your group number'}/>
 
-                    <Button variant={'outline-dark'} onClick={handleFormClick}>Start exam</Button>
+                    <Button variant={'outline-dark'} onSubmit={handleFormClick}>Start exam</Button>
                 </form>
             </>}
 
