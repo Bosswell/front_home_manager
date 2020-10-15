@@ -17,6 +17,7 @@ function ExamPublicPage() {
     const [error, setError] = useState(null);
     const [snippets, setSnippets] = useState([]);
     const [historyId, setHistoryId] = useState(0);
+    const [examMode, setExamMode] = useState('standard');
     const [inputData, setInputData] = useState({
         code: '',
         examId: 0,
@@ -54,7 +55,7 @@ function ExamPublicPage() {
             }
             setError(null);
 
-            const { exam, historyId } = response.data;
+            const { exam, historyId, mode } = response.data;
             if (!exam.questions) {
                 exam.questions = [];
             }
@@ -62,6 +63,7 @@ function ExamPublicPage() {
             exam.questions = exam.questions.sort(() => Math.random() - 0.5)
 
             setHistoryId(historyId);
+            setExamMode(mode);
             setExam(prevState => ({
                 ...prevState,
                 isStarted: true,
@@ -108,6 +110,7 @@ function ExamPublicPage() {
                 snippets={snippets}
                 setSnippets={setSnippets}
                 historyId={historyId}
+                examMode={examMode}
             />}
         </div>
     )

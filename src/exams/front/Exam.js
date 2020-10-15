@@ -8,7 +8,7 @@ import Countdown from 'react-countdown';
 import { normalizeResponseErrors } from "../../helpers/normalizers";
 
 
-function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, historyId }) {
+function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, historyId, examMode }) {
     const renderer = ({ minutes, seconds, completed }) => {
         if (completed) {
             handleFinish();
@@ -107,15 +107,33 @@ function Exam({ setLoading, setError, snippets, setSnippets, exam, setExam, hist
         })
     }
 
+    function renderSummaryBox() {
+        return (
+            <div className={'summary-box'}>
+                <div><b>Your test is done!</b></div>
+                { renderSummaryResult() }
+            </div>
+        )
+    }
+
+    function renderSummaryResult() {
+        switch (examMode) {
+            case 'subtraction':
+                return (
+                    <div>Result: {exam.correctPoints}(correct), {exam.totalPoints}(total points), {exam.incorrectPoints}(incorrect), it's a {exam.percentage}%</div>
+                )
+            case 'standard':
+            default:
+                return (
+                    <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
+                )
+        }
+    }
+
     return (
         <div className={'exam' + (!exam.isFinished ? ' --active' : '')}>
             <h2>{ exam.data.name }</h2>
-            {exam.isFinished &&
-                <div className={'summary-box'}>
-                    <div><b>Your test is done!</b></div>
-                    <div>Result: {exam.correctPoints}/{exam.totalPoints}, it's a {exam.percentage}%</div>
-                </div>
-            }
+            {exam.isFinished && renderSummaryBox()}
             <div className={'exam--top' + (exam.isFinished ? ' --center' : '')}>
                 {!exam.isFinished ?
                     <Button className={'rel-exam-button'} variant={'danger'} onClick={() => window.location.reload()}>Stop exam</Button>
