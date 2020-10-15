@@ -17,7 +17,7 @@ function UpdateExam({ inputData, setInputData, setExam }) {
         }
 
         setLoading(true);
-        updateExam({ ...inputData, mode: inputData.mode.value }).then((response) => {
+        updateExam(inputData).then((response) => {
             if (response.hasError) {
                 setError(normalizeResponseErrors(response));
                 return;
