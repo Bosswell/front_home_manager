@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 import { startExam } from "../services/exam.service";
 import { normalizeResponseErrors } from "../helpers/normalizers";
 import { getUserId } from "../helpers/userHelper";
-import { inputNormalizer } from "../helpers/inputNormalizer";
+import {inputNormalizer, INT_TYPE} from "../helpers/inputNormalizer";
 
 
 function ExamPublicPage() {
@@ -18,11 +18,11 @@ function ExamPublicPage() {
     const [snippets, setSnippets] = useState([]);
     const [historyId, setHistoryId] = useState(0);
     const [inputData, setInputData] = useState({
-        code: '',
-        examId: '',
-        username: '',
-        userNumber: '',
-        userGroup: ''
+        code: null,
+        examId: null,
+        username: null,
+        userNumber: null,
+        userGroup: null
     });
     const [exam, setExam] = useState({
         isStarted: false,
@@ -91,9 +91,9 @@ function ExamPublicPage() {
                 <h1 className={'text-center'}>Find your exam</h1>
                 <form className={'form'}>
                     <InputGroup value={inputData.code} onChange={handleInputChange} name={'code'} label={'Exam code'}/>
-                    <InputGroup value={inputData.examId} onChange={handleInputChange} type={'number'} name={'examId'} label={'Exam id'}/>
+                    <InputGroup value={inputData.examId} data-scalar={INT_TYPE} onChange={handleInputChange} type={'number'} name={'examId'} label={'Exam id'}/>
                     <InputGroup value={inputData.username} onChange={handleInputChange} name={'username'} label={'First and last name'}/>
-                    <InputGroup value={inputData.userNumber} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
+                    <InputGroup value={inputData.userNumber} data-scalar={INT_TYPE} type={'number'} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
                     <InputGroup value={inputData.userGroup} onChange={handleInputChange} name={'userGroup'} label={'Your group number'}/>
 
                     <Button variant={'outline-dark'} onClick={handleFormClick}>Start exam</Button>
