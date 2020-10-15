@@ -45,9 +45,7 @@ function ExamPublicPage() {
         })
     }
 
-    function handleFormClick(event) {
-        event.preventDefault();
-
+    function handleFormClick() {
         setLoading(true);
         startExam({ ...inputData, userId: getUserId()}).then((response) => {
             if (response.hasError) {
@@ -98,7 +96,7 @@ function ExamPublicPage() {
                     <InputGroup value={inputData.userNumber} data-scalar={INT_TYPE} type={'number'} onChange={handleInputChange} name={'userNumber'} label={'Your number'}/>
                     <InputGroup value={inputData.userGroup} onChange={handleInputChange} name={'userGroup'} label={'Your group number'}/>
 
-                    <Button variant={'outline-dark'} onSubmit={handleFormClick}>Start exam</Button>
+                    <Button variant={'outline-dark'} onClick={handleFormClick}>Start exam</Button>
                 </form>
             </>}
 
