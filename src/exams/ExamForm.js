@@ -14,10 +14,10 @@ function ExamForm({ action, inputData, setInputData, handleClickForm }) {
         })
     }
 
-    function handleSelectChange({ value }) {
+    function handleSelectChange(selected) {
         setInputData(prevState => ({
             ...prevState,
-            mode: value
+            mode: selected
         }));
     }
 
